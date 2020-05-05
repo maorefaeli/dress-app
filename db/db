@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# DB port (host is localhost)
+port=27018
+
+function readArchiveName() {
+    local DEFAULT_ARCHIVE=Minimal
+    read -p "Archive name (defaults to '${DEFAULT_ARCHIVE}'): " -r
+    archive=${REPLY:-$DEFAULT_ARCHIVE}.gz
+}
+
+if [[ $1 == 'start' ]]; then
+    mongod --config ./mongod.conf
+	echo "DressApp DB is up on localhost:$port"
+
+elif [[ $1 == 'stop' ]]; then
+    # Hard kill all mongo processes
+    # kill -2 `pgrep mongo`
+    
+    mongo admin --port=$port --eval "db.shutdownServer()"
+    echo "DressApp DB is down"
+
+elif [[ $1 == 'wipe' ]]; then
+    mongorestore --port=$port --drop --gzip --archive=dump/Empty.gz
+    echo "DressApp DB got wiped and refreshed"
+
+elif [[ $1 == 'restore' ]]; then
+    readArchiveName
+    mongorestore --port=$port --drop --gzip --archive=dump/$archive
+    echo "DressApp DB got restored"
+
+elif [[ $1 == 'dump' ]]; then
+    readArchiveName    
+    mongodump --port=$port --db DressApp --gzip --archive > dump/$archive
+    echo "New DressApp DB dump is ready to be commited on ${archive}"
+
+fi
