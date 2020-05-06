@@ -1,0 +1,29 @@
+{
+  "name": "dress-app-server",
+  "version": "1.0.0",
+  "description": "DressApp Server",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maorefaeli/dress-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/maorefaeli/dress-app/issues"
+  },
+  "homepage": "https://github.com/maorefaeli/dress-app#readme",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "connect-mongo": "^3.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "mongoose": "^5.9.12",
+    "morgan": "^1.10.0",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0"
+  }
+}
