@@ -34,4 +34,6 @@ UserSchema.set('toJSON', {
     transform: function (doc, ret) { delete ret._id }
 });
 
+UserSchema.index({ username: 1 });
+
 module.exports = User = mongoose.model('User', UserSchema, 'Users');
