@@ -1,0 +1,26 @@
+name: Build Android and iOS
+
+on: [push, pull_request]
+
+jobs:          
+  remove-old-artifacts:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Remove old artifacts
+      uses: c-hive/gha-remove-artifacts@v1
+      with:
+        age: '10 ms'
+
+  build-android:
+      needs: remove-old-artifacts
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - name: Build Android Release
+          run: |
+            ./gradlew assembleRelease -PMYAPP_UPLOAD_STORE_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}' -PMYAPP_UPLOAD_KEY_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}'
+        - name: Upload Artifact
+          uses: actions/upload-artifact@v1
+          with:
+            name: app-release.apk
+            path: app/build/outputs/apk/release/
