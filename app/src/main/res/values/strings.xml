@@ -18,4 +18,9 @@
     <string name="search">Search…</string>
     <string name="or">or</string>
     <string name="guest"><u>Continue as a guest</u></string>
+    <string name="place_order">Place your order</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="order">Order Now</string>
+    <string name="choose_dates">Choose dates:</string>
 </resources>

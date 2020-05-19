@@ -2,38 +2,58 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@drawable/post_background"
+    android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/postTitle"
+            android:textSize="25sp"
+            android:paddingBottom="3dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/postDescription"
+            android:id="@+id/dates"
+            android:textSize="18sp"
+            android:padding="2dp"
+            android:drawableStart="@drawable/outline_event_black_18dp"
+            android:drawablePadding="3dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/fromDate"
+            android:id="@+id/address"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:padding="2dp"
+            android:drawablePadding="3dp"
+            android:drawableStart="@drawable/outline_home_black_18dp"/>
 
         <TextView
-            android:id="@+id/toDate"
+            android:id="@+id/owner"
+            android:padding="2dp"
+            android:textSize="18sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:drawablePadding="3dp"
+            android:drawableStart="@drawable/outline_perm_contact_calendar_black_18dp"/>
 
     </LinearLayout>
 
     <ImageView
         android:id="@+id/postImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:padding="10dp"
+        android:scaleType="fitXY"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/dress"/>
 
 </LinearLayout>

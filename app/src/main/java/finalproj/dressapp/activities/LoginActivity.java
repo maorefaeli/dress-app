@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         mGuest.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                guestLogin();
             }
         });
 
@@ -72,6 +72,12 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+    }
+
+    private void guestLogin() {
+        showProgress(true);
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
     }
 
     private void attemptLogin() {

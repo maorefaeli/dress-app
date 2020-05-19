@@ -1,14 +1,24 @@
 package finalproj.dressapp.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import finalproj.dressapp.R;
+import finalproj.dressapp.fragments.ItemDialogFragment;
 import finalproj.dressapp.models.Post;
 
 public class HomeActivity extends AppCompatActivity {
@@ -20,15 +30,42 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // get from DB
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2020, 5, 10);
         this.posts.add(new Post("Very nice dress", "this dress is very nice", "Shai",
-                "/drss.jpg", new Date(2020, 6, 5), new Date(2020, 6, 29), 100));
+                "/dress.jpg", "Bialik 126 Ramat Gan", System.currentTimeMillis(), calendar.getTimeInMillis(), 100));
 
         postsContainer = (LinearLayout) findViewById(R.id.postsContainer);
 
-        for (Post post: posts) {
-            LinearLayout postContainer = new LinearLayout(getApplicationContext());
-
+        for (final Post post: posts) {
+            LinearLayout postContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.post_template, null);
+            addPostData(postContainer, post);
+            postsContainer.addView(postContainer);
+            final HomeActivity activity = this;
+            postContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ItemDialogFragment dialogFragment = new ItemDialogFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("description", post.description);
+                    bundle.putString("imgSrc", post.imageUrl);
+                    bundle.putInt("cost", post.cost);
+                    bundle.putLong("minDate", post.from);
+                    bundle.putLong("maxDate", post.to);
+                    dialogFragment.setArguments(bundle);
+                    dialogFragment.show(activity.getFragmentManager(), "ItemDialog");
+                }
+            });
         }
+    }
+
+    private void addPostData(LinearLayout post, Post postData) {
+        ((TextView) post.findViewById(R.id.postTitle)).setText(postData.title);
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+
+        String dates = dateFormat.format(postData.from) + " - " + dateFormat.format(postData.to);
+        ((TextView) post.findViewById(R.id.dates)).setText(dates);
+        ((TextView) post.findViewById(R.id.owner)).setText(postData.ownerName);
+        ((TextView) post.findViewById(R.id.address)).setText(postData.address);
     }
 }

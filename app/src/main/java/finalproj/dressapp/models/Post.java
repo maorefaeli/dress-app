@@ -10,16 +10,18 @@ public class Post {
     public String description;
     public String ownerName;
     public String imageUrl;
-    public Date from;
-    public Date to;
+    public String address;
+    public long from;
+    public long to;
     public int cost;
 
     public Post(String title, String description, String ownerName,
-                String imageUrl, Date from, Date to, int cost) {
+                String imageUrl, String address, long from, long to, int cost) {
         this.title = title;
         this.description = description;
         this.ownerName = ownerName;
         this.imageUrl = imageUrl;
+        this.address = address;
         this.from = from;
         this.to = to;
         this.cost = cost;
