@@ -1,7 +1,5 @@
 
-package com.journaldev.retrofitintro;
-
-import com.journaldev.retrofitintro.pojo.MultipleResource;
+package finalproj.dressapp.httpclient;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -20,7 +18,7 @@ class APIClient {
 
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("https://myserverurl.com")
+                .baseUrl("http://localhost:3000")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();
