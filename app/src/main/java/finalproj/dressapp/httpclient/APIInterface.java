@@ -1,6 +1,7 @@
 package finalproj.dressapp.httpclient;
 
 import finalproj.dressapp.httpclient.models.ServerCheck;
+import finalproj.dressapp.httpclient.models.UserCredentials;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -10,7 +11,16 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
-interface APIInterface {
-    @GET("/")
+public interface APIInterface {
+    @GET("check")
     Call<ServerCheck> doServerCheck();
+
+    @GET("logout")
+    Call<Boolean> doLogout();
+
+    @POST("login")
+    Call<Boolean> doLogin(@Body UserCredentials userCredentials);
+
+    @POST("users/register")
+    Call<Boolean> doRegister(@Body UserCredentials userCredentials);
 }

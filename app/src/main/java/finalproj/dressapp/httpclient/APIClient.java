@@ -5,16 +5,16 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-class APIClient {
+public class APIClient {
 
     private static Retrofit retrofit = null;
 
-    static Retrofit getClient() {
+    public static Retrofit getClient() {
 
         OkHttpClient client = new OkHttpClient.Builder().build();
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:3000")
+                .baseUrl("http://localhost:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();

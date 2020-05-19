@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.use('/users', require('./users'));
 
-router.get('/', (req, res) => {
+router.get('/check', (req, res) => {
     res.send({ msg: 'Hello! Server is up' });
 });
 
@@ -23,6 +23,7 @@ router.post('/login', passport.authenticate('local', { failWithError: true }),
 // Handle logout
 router.get('/logout', function(req, res) {
     req.logout();
+    return res.json(true);
 });
 
 // Default request catcher

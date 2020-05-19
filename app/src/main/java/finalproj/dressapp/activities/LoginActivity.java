@@ -17,6 +17,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import android.app.AlertDialog;
+import finalproj.dressapp.httpclient.APIClient;
+import finalproj.dressapp.httpclient.APIInterface;
+import finalproj.dressapp.httpclient.models.ServerCheck;
+import finalproj.dressapp.httpclient.models.UserCredentials;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import finalproj.dressapp.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -31,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_login);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
@@ -115,9 +125,37 @@ public class LoginActivity extends AppCompatActivity {
         if (cancel) {
             focusView.requestFocus();
         } else {
+            UserCredentials userCredentials = new UserCredentials(email, password);
+
             showProgress(true);
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
+            APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+
+            Call<Boolean> call = apiInterface.doLogin(userCredentials);
+            call.enqueue(new Callback<Boolean>() {
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    showProgress(false);
+                    if (response.code() == 200) {
+                        Boolean didLogin = response.body();
+                        if (didLogin) {
+                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Boolean> call, Throwable t) {
+                    showProgress(false);
+                    new AlertDialog.Builder(LoginActivity.this)
+                        .setTitle("failure")
+                        .setMessage(t.getMessage())
+                        .show();
+                    call.cancel();
+                }
+            });
+            
+            
         }
     }
 
