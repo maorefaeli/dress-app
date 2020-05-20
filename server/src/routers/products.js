@@ -16,6 +16,20 @@ const isProductContainErrors = (product) => {
     return '';
 };
 
+
+// @route POST api/products/add
+// @desc Add product
+// @access Public
+router.get('/:id', async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        return res.json(product);
+    } catch (error){
+        console.log(error);
+        res.status(400).json({"error":"Problem removing product"})
+    }
+});
+
 // @route POST api/products/add
 // @desc Add product
 // @access Public
@@ -72,7 +86,7 @@ router.post('/:id', auth.isAdminLoggedIn, async (req, res) => {
             fromdate,
             todate
         };
-        
+
         const error = isProductContainErrors(product);
         if (error) {
             return res.status(400).json({ error });
