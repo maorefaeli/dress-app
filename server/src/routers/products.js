@@ -45,4 +45,45 @@ router.post('/add', auth.isAdminLoggedIn, async (req, res) => {
     }
 });
 
+//  @route DELETE api/products/:id
+//  @desc Delete specific product
+//  @access Public
+router.delete('/:id', auth.isAdminLoggedIn, async (req, res) => {
+    try {
+        await Product.findByIdAndRemove(req.params.id);
+        return res.json(true);
+    } catch (error){
+        console.log(error);
+        res.status(400).json({"error":"Problem removing product"})
+    }
+});
+
+//  @route POST api/products/:id
+//  @desc Edit specific product
+//  @access Public
+router.post('/:id', auth.isAdminLoggedIn, async (req, res) => {
+    try {
+        const { user, name, price, image, fromdate, todate } = req.body;
+        const product {
+            user,
+            name,
+            price,
+            image,
+            fromdate,
+            todate
+        };
+        
+        const error = isProductContainErrors(product);
+        if (error) {
+            return res.status(400).json({ error });
+        }
+
+        const newProduct = await Product.findByIdAndUpdate(req.params.id, product, { new: true });
+        return res.json(newProduct);
+    } catch (error){
+        console.log(error);
+        res.status(400).json({"error":"Problem editing product"})
+    }
+});
+
 module.exports = router;
