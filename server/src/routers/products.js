@@ -78,7 +78,7 @@ router.delete('/:id', auth.isAdminLoggedIn, async (req, res) => {
 router.post('/:id', auth.isAdminLoggedIn, async (req, res) => {
     try {
         const { user, name, price, image, fromdate, todate } = req.body;
-        const product {
+        const product = {
             user,
             name,
             price,
