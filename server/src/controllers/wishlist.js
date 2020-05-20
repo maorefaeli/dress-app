@@ -5,10 +5,10 @@ exports.findMinimumCycle = async (userId) => {
 
 };
 
-exports.handleUserDeletion = (userId) => {
+exports.handleUserDeletion = async (userId) => {
 
 };
 
-exports.handleProductDeletion = (userId) => {
+exports.handleProductDeletion = async (productId) => {
 
 };
