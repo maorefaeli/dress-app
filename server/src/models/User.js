@@ -8,16 +8,28 @@ const encryptPassword = (password) => crypto.encodeSHA256(password);
 const UserSchema = new Schema({
     username: {
         type: String,
-        required: true
+        required: true,
     },
     password: {
         type: String,
-        required: true
+        required: true,
     },
     isAdmin: {
         type: Boolean,
-        required: false
+        required: false,
     },
+    wishlist: [{
+        _id: false,
+        user: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+        },
+        items: {
+            type: [Number],
+            // type: [Schema.Types.ObjectId],
+            // ref: 'Product',
+        },
+    }],
 });
 
 UserSchema.methods.isPasswordValid = function(password) {
@@ -35,5 +47,7 @@ UserSchema.set('toJSON', {
 });
 
 UserSchema.index({ username: 1 });
+UserSchema.index({ 'wishlist.user': 1 });
+UserSchema.index({ 'wishlist.items': 1 });
 
 module.exports = User = mongoose.model('User', UserSchema, 'Users');
