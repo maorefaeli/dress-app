@@ -3,6 +3,7 @@ const router = express.Router();
 const validators = require('../utils/validators');
 const auth = require('../utils/auth');
 const wishlist = require('../controllers/wishlist');
+const ObjectID = require('mongodb').ObjectID;
 const User = require('../models/User');
 
 // @route POST users/register
@@ -45,7 +46,7 @@ router.post('/register', async (req, res) => {
 router.get('/cycle/:id', async (req, res) => {
     try {
         const userId = new ObjectID(req.params.id);
-        const cycle = wishlist.findMinimumCycle(userId);
+        const cycle = await wishlist.findMinimumCycle(userId);
         return res.json(cycle || []);
     } catch (error){
         console.log(error);
