@@ -1,0 +1,18 @@
+name: Deploy server
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - uses: akhileshns/heroku-deploy@v3.0.4 # This is the action
+          with:
+            heroku_api_key: "c65a8581-36ee-4bb0-bef5-2c129a78c807"
+            heroku_app_name: "dress-app" #Must be unique in Heroku
+            heroku_email: "sdoraky16@gmail.com"
+            appdir: "server" #OPTIONAL and DEFAULT - "". This is useful if the api you're deploying is in a subfolder
