@@ -25,9 +25,8 @@ const UserSchema = new Schema({
             ref: 'User',
         },
         items: {
-            type: [Number],
-            // type: [Schema.Types.ObjectId],
-            // ref: 'Product',
+            type: [Schema.Types.ObjectId],
+            ref: 'Product',
         },
     }],
 });
