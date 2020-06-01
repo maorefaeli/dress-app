@@ -13,6 +13,13 @@ import android.app.AlertDialog;
 import android.text.TextUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import finalproj.dressapp.httpclient.models.UserRegistration;
+import finalproj.dressapp.httpclient.APIClient;
+import finalproj.dressapp.httpclient.APIInterface;
+import finalproj.dressapp.Utils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import finalproj.dressapp.R;
 
@@ -24,7 +31,7 @@ public class RegisterActivity extends AppCompatActivity {
     private AutoCompleteTextView mEmailView;
     private TextView mLinkToLogin;
     private Button mRegister;
-    
+
     static Pattern namePattern = Pattern.compile("^[a-zA-Z]{2,}$");
     static Pattern passwordPattern = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{6,16}$");
     static Pattern emailPattern = Pattern.compile("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$");
@@ -108,6 +115,37 @@ public class RegisterActivity extends AppCompatActivity {
         
         if (cancel) {
             focusView.requestFocus();
+        }
+        else {
+            UserRegistration userRegistration = new UserRegistration(firstName, lastName, email, password);
+
+            Utils.showPopupProgressSpinner(this, true);
+            APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+
+            Call<Boolean> call = apiInterface.doRegister(userRegistration);
+            call.enqueue(new Callback<Boolean>() {
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    Utils.showPopupProgressSpinner( RegisterActivity.this, false);
+                    if (response.code() == 200) {
+                        Boolean didLogin = response.body();
+                        if (didLogin) {
+                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Boolean> call, Throwable t) {
+                    Utils.showPopupProgressSpinner( RegisterActivity.this, false);
+                    new AlertDialog.Builder(RegisterActivity.this)
+                        .setTitle("failure")
+                        .setMessage(t.getMessage())
+                        .show();
+                    call.cancel();
+                }
+            });
         }
     }
 }

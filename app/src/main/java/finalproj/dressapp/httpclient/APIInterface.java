@@ -2,6 +2,7 @@ package finalproj.dressapp.httpclient;
 
 import finalproj.dressapp.httpclient.models.ServerCheck;
 import finalproj.dressapp.httpclient.models.UserCredentials;
+import finalproj.dressapp.httpclient.models.UserRegistration;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -22,5 +23,5 @@ public interface APIInterface {
     Call<Boolean> doLogin(@Body UserCredentials userCredentials);
 
     @POST("users/register")
-    Call<Boolean> doRegister(@Body UserCredentials userCredentials);
+    Call<Boolean> doRegister(@Body UserRegistration userRegistration);
 }
