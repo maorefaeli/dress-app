@@ -1,8 +1,15 @@
 *.iml
 .gradle
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
+.idea/
+app/.idea/
 .DS_Store
 /build
 /captures
+.project
+.classpath
+.settings/org.eclipse.buildship.core.prefs
+app/.settings/org.eclipse.buildship.core.prefs
+.idea/gradle.xml
+.idea/misc.xml
+.idea/modules.xml
