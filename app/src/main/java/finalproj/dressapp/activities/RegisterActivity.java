@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.AutoCompleteTextView;
 import android.app.AlertDialog;
 import android.text.TextUtils;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import finalproj.dressapp.R;
 
@@ -22,6 +24,10 @@ public class RegisterActivity extends AppCompatActivity {
     private AutoCompleteTextView mEmailView;
     private TextView mLinkToLogin;
     private Button mRegister;
+    
+    static Pattern namePattern = Pattern.compile("^[a-zA-Z]{2,}$");
+    static Pattern passwordPattern = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{6,16}$");
+    static Pattern emailPattern = Pattern.compile("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +73,41 @@ public class RegisterActivity extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
+        Matcher firstNameMatch = namePattern.matcher(firstName);
+        Matcher lastNameMatch = namePattern.matcher(lastName);
+        Matcher emailMatcher = emailPattern.matcher(email);
+        Matcher passwordMatcher = passwordPattern.matcher(password);
+
         // Check for a valid first name.
-        if (!TextUtils.isEmpty(firstName)) {
-            mFirstNameView.setError("First name can't be empty.");
+        if (!firstNameMatch.find()) {
+            mFirstNameView.setError("First name has to be at least 2 characters long and can't contain numbers.");
             focusView = mFirstNameView;
             cancel = true;
+        };
+
+        // Check for a valid last name.
+        if (!lastNameMatch.find()) {
+            mLastNameView.setError("Last name has to be at least 2 characters long and can't contain numbers.");
+            focusView = mLastNameView;
+            cancel = true;
+        };
+
+        // Check for a valid email.
+        if (!emailMatcher.find()) {
+            mEmailView.setError("Email format is wrong");
+            focusView = mEmailView;
+            cancel = true;
+        };
+
+        // Check for a valid password.
+        if (!passwordMatcher.find()) {
+            mPasswordView.setError("Password length needs to be between 6 to 16 characters, contain at least one upper case, one lower case and one number.");
+            focusView = mPasswordView;
+            cancel = true;
+        };
+        
+        if (cancel) {
+            focusView.requestFocus();
         }
     }
 }
