@@ -13,3 +13,4 @@ app/.settings/org.eclipse.buildship.core.prefs
 .idea/gradle.xml
 .idea/misc.xml
 .idea/modules.xml
+.vscode/settings.json

@@ -128,8 +128,8 @@ public class RegisterActivity extends AppCompatActivity {
                 public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                     Utils.showPopupProgressSpinner( RegisterActivity.this, false);
                     if (response.code() == 200) {
-                        Boolean didLogin = response.body();
-                        if (didLogin) {
+                        Boolean didRegister = response.body();
+                        if (didRegister) {
                             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(intent);
                         }
