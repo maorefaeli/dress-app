@@ -23,4 +23,8 @@
     <string name="to">To</string>
     <string name="order">Order Now</string>
     <string name="choose_dates">Choose dates:</string>
+    <string name="orders">Orders</string>
+    <string name="cloths">My Cloths</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
 </resources>

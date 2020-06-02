@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/orders"
+        android:enabled="true"
+        android:icon="@drawable/baseline_playlist_add_check_black_36dp"
+        android:title="@string/orders"/>
+    <item
+        android:id="@+id/myCloth"
+        android:enabled="true"
+        android:icon="@drawable/baseline_checkroom_black_36dp"
+        android:title="@string/cloths"/>
+    <item
+        android:id="@+id/home"
+        android:enabled="true"
+        android:icon="@drawable/baseline_home_black_36dp"
+        android:title="@string/home"/>
+    <item
+        android:id="@+id/profile"
+        android:enabled="true"
+        android:icon="@drawable/baseline_perm_contact_calendar_black_36dp"
+        android:title="@string/profile"/>
+</menu>
