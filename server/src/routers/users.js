@@ -56,6 +56,7 @@ router.post('/register', async (req, res) => {
 router.get('/profile/:username', async (req, res) => {
     try {
         const profile = await User.find({username: req.params.username});
+        delete profile.password
         return res.json(profile);
     } catch (error){
         console.log(error);
