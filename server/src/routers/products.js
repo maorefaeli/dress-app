@@ -3,8 +3,9 @@ const router = express.Router();
 const validators = require('../utils/validators');
 const auth = require('../utils/auth');
 
-// Load User model
+// Load Product model
 const Product = require('../models/Product');
+const Wishlist = require('../controllers/wishlist');
 
 const isProductContainErrors = (product) => {
     if (!validators.isNonEmptyString(product.user)) return 'User cannot be empty';
@@ -65,6 +66,7 @@ router.post('/add', auth.isAdminLoggedIn, async (req, res) => {
 router.delete('/:id', auth.isAdminLoggedIn, async (req, res) => {
     try {
         await Product.findByIdAndRemove(req.params.id);
+        await Wishlist.handleProductDeletion(req.params.id);
         return res.json(true);
     } catch (error){
         console.log(error);
