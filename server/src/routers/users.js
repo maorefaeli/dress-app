@@ -50,6 +50,19 @@ router.post('/register', async (req, res) => {
     }
 });
 
+//  @route GET users/profile/:id
+//  @desc Get specific user
+//  @access Private
+router.get('/profile/:username', async (req, res) => {
+    try {
+        const profile = await User.find({username: req.params.username});
+        return res.json(profile);
+    } catch (error){
+        console.log(error);
+        res.status(400).json({"error":"Problem getting profile"})
+    }
+});
+
 //  @route GET users/cycle/:id
 //  @desc Get cycle of wishlist items by users
 //  @access Public
