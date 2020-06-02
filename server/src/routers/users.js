@@ -11,10 +11,18 @@ const User = require('../models/User');
 // @access Public
 router.post('/register', async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { username, password, firstName, lastName } = req.body;
 
         if (!validators.isNonEmptyString(username)) {
             return res.status(400).json({"error": "name cannot be empty"});
+        }
+
+        if (!validators.isNonEmptyString(firstName)) {
+            return res.status(400).json({"error": "First name connot be empty"});
+        }
+
+        if (!validators.isNonEmptyString(lastName)) {
+            return res.status(400).json({"error": "last name connot be empty"});
         }
 
         if (!validators.isNonEmptyString(password)) {
@@ -29,6 +37,8 @@ router.post('/register', async (req, res) => {
 
         user = new User({
             username,
+            firstName,
+            lastName,
             password: User.encryptPassword(password)
         });
 
