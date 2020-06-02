@@ -21,11 +21,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".activities.RegisterActivity">`
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="centerCrop"
+        android:src="@drawable/app_logo_small" />
+
     <TextView
         android:id="@+id/registerScreen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="10dp"
         android:text="Registration"
         android:textSize="25dp"
         android:textStyle="bold"
@@ -74,6 +81,17 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10" />
+    <TextView
+        android:id="@+id/passwordConfirmTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confirm Password" />
+    <EditText
+        android:id="@+id/confirmPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10" />        
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="wrap_content"
@@ -82,10 +100,10 @@
     <TextView android:id="@+id/linkToLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:text="Already A Member? Login here"
         android:gravity="center"
         android:textSize="20dp"
-        android:textColor="#3F51B5"
+        android:textColor="#3882c2"
         android:onClick="test"/>
 </LinearLayout>

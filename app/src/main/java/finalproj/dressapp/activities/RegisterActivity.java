@@ -28,6 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText mFirstNameView;
     private EditText mLastNameView;
     private EditText mPasswordView;
+    private EditText mConfirmPassView;
     private AutoCompleteTextView mEmailView;
     private TextView mLinkToLogin;
     private Button mRegister;
@@ -44,6 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
         mFirstNameView = (EditText) findViewById(R.id.firstName);
         mLastNameView = (EditText) findViewById(R.id.lastName);
         mPasswordView = (EditText) findViewById(R.id.password);
+        mConfirmPassView = (EditText) findViewById(R.id.confirmPassword);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
         mLinkToLogin = (TextView) findViewById(R.id.linkToLogin);
@@ -70,12 +72,14 @@ public class RegisterActivity extends AppCompatActivity {
         mLastNameView.setError(null);
         mEmailView.setError(null);
         mPasswordView.setError(null);
+        mConfirmPassView.setError(null);
         
         // Store values at the time of the login attempt.
         String firstName = mFirstNameView.getText().toString();
         String lastName = mLastNameView.getText().toString();
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+        String confirmPass = mConfirmPassView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -101,7 +105,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Check for a valid email.
         if (!emailMatcher.find()) {
-            mEmailView.setError("Email format is wrong");
+            mEmailView.setError("Email format is wrong.");
             focusView = mEmailView;
             cancel = true;
         };
@@ -111,8 +115,14 @@ public class RegisterActivity extends AppCompatActivity {
             mPasswordView.setError("Password length needs to be between 6 to 16 characters, contain at least one upper case, one lower case and one number.");
             focusView = mPasswordView;
             cancel = true;
+        }
+        // Check if the passwords match (Only if the password is valid).
+        else if (!password.equals(confirmPass)) {
+            mConfirmPassView.setError("The passwords do not match.");
+            focusView = mConfirmPassView;
+            cancel = true;
         };
-        
+
         if (cancel) {
             focusView.requestFocus();
         }
