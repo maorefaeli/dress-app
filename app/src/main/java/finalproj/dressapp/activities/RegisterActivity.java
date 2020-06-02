@@ -144,6 +144,10 @@ public class RegisterActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     }
+                    else if (response.code() == 403) {
+                        mEmailView.setError("User already exists for the given email");
+                        View focusView = mEmailView;
+                    }
                 }
 
                 @Override
