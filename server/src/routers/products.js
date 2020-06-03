@@ -34,7 +34,7 @@ router.get('/:id', async (req, res) => {
 // @route POST api/products/add
 // @desc Add product
 // @access Public
-router.post('/add', auth.isAdminLoggedIn, async (req, res) => {
+router.post('/add', auth.isLoggedIn, async (req, res) => {
     try {
         const { user, name, price, image, fromdate, todate } = req.body;
         let newProduct = new Product ({
@@ -63,7 +63,7 @@ router.post('/add', auth.isAdminLoggedIn, async (req, res) => {
 //  @route DELETE api/products/:id
 //  @desc Delete specific product
 //  @access Public
-router.delete('/:id', auth.isAdminLoggedIn, async (req, res) => {
+router.delete('/:id', auth.isLoggedIn, async (req, res) => {
     try {
         await Product.findByIdAndRemove(req.params.id);
         await Wishlist.handleProductDeletion(req.params.id);
@@ -77,7 +77,7 @@ router.delete('/:id', auth.isAdminLoggedIn, async (req, res) => {
 //  @route POST api/products/:id
 //  @desc Edit specific product
 //  @access Public
-router.post('/:id', auth.isAdminLoggedIn, async (req, res) => {
+router.post('/:id', auth.isLoggedIn, async (req, res) => {
     try {
         const { user, name, price, image, fromdate, todate } = req.body;
         const product = {

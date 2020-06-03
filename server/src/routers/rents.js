@@ -17,7 +17,7 @@ const isRentContainErrors = (rent) => {
 // @route POST api/rents/add
 // @desc Add rent
 // @access Private
-router.post('/add', auth.isAdminLoggedIn, async (req, res) => {
+router.post('/add', auth.isLoggedIn, async (req, res) => {
     try {
         const { user, product, fromdate, todate } = req.body;
         let newRent = new Rent ({

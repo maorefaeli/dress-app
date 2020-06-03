@@ -4,6 +4,7 @@ const router = express.Router();
 
 router.use('/users', require('./users'));
 router.use('/products', require('./products'));
+router.use('/rents', require('./rents'));
 
 router.get('/check', (req, res) => {
     res.send({ msg: 'Hello! Server is up' });
