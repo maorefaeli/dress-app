@@ -27,4 +27,6 @@
     <string name="cloths">My Cloths</string>
     <string name="home">Home</string>
     <string name="profile">Profile</string>
+    <string name="Open">Open</string>
+    <string name="Close">Close</string>
 </resources>

@@ -1,27 +1,26 @@
 package finalproj.dressapp.activities;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import finalproj.dressapp.R;
+import finalproj.dressapp.Utils;
 import finalproj.dressapp.fragments.ItemDialogFragment;
 import finalproj.dressapp.models.Post;
 
 public class HomeActivity extends AppCompatActivity {
+    private ActionBarDrawerToggle toggle;
     private List<Post> posts = new ArrayList<>();
     private LinearLayout postsContainer;
 
@@ -29,15 +28,15 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        toggle = Utils.setNavigation(this, getSupportActionBar());
         Calendar calendar = Calendar.getInstance();
         calendar.set(2020, 5, 10);
         this.posts.add(new Post("Very nice dress", "this dress is very nice", "Shai",
                 "/dress.jpg", "Bialik 126 Ramat Gan", System.currentTimeMillis(), calendar.getTimeInMillis(), 100));
 
-        postsContainer = (LinearLayout) findViewById(R.id.postsContainer);
+        postsContainer = findViewById(R.id.postsContainer);
 
-        for (final Post post: posts) {
+        for (final Post post : posts) {
             LinearLayout postContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.post_template, null);
             addPostData(postContainer, post);
             postsContainer.addView(postContainer);
@@ -57,6 +56,14 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(toggle.onOptionsItemSelected(item))
+            return true;
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void addPostData(LinearLayout post, Post postData) {
