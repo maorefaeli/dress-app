@@ -28,13 +28,13 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        if(Utils.getUserName(HomeActivity.this).length() == 0)
-        {
-            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-            startActivity(intent);
-        }
-        else
-        {
+        // if(Utils.getUserName(HomeActivity.this).length() == 0)
+        // {
+        //     Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        //     startActivity(intent);
+        // }
+        // else
+        // {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_home);
             toggle = Utils.setNavigation(this, getSupportActionBar());
@@ -65,7 +65,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 });
             }
-        }
+        // }
     }
 
     @Override

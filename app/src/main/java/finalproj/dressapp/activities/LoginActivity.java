@@ -140,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.code() == 200) {
                         Boolean didLogin = response.body();
                         if (didLogin) {
-                            Utils.setUserName(LoginActivity.this, email);
+                            // Utils.setUserName(LoginActivity.this, email);
                             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                             startActivity(intent);
                         }
