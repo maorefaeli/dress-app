@@ -2,7 +2,10 @@ package finalproj.dressapp;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -11,17 +14,45 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import finalproj.dressapp.activities.HomeActivity;
+import finalproj.dressapp.activities.LoginActivity;
 
 public class Utils {
     static ProgressDialog dialog = null;
+    static final String PREF_USER_NAME= "username";
+        
+    public static void showPopupProgressSpinner(Activity activity, Boolean isShowing, String text) {
 
-    public static void showPopupProgressSpinner(Activity activity, Boolean isShowing) {
         if (isShowing) {
-            dialog = ProgressDialog.show(activity, "", "Just a moment...", true);
+            dialog = ProgressDialog.show(activity, "", text, true);
         } else {
             dialog.dismiss();
         }
 
+    }
+
+    static SharedPreferences getSharedPreferences(Context ctx) {
+        return PreferenceManager.getDefaultSharedPreferences(ctx);
+    }
+
+    public static String getUserName(Context ctx)
+    {
+        return getSharedPreferences(ctx).getString(PREF_USER_NAME, "");
+    }
+    
+    public static void setUserName(Context ctx, String userName) 
+    {
+        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+        editor.putString(PREF_USER_NAME, userName);
+        editor.commit();
+    }
+
+    public static void clearUserName(final Activity activity, Context ctx) 
+    {
+        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+        editor.clear();
+        editor.commit();
+        Intent intent = new Intent(activity, LoginActivity.class);
+        activity.startActivity(intent);
     }
 
     public static ActionBarDrawerToggle setNavigation(final Activity activity, ActionBar actionBar) {

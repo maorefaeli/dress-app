@@ -5,7 +5,7 @@
         android:title="@string/home"/>
     <item android:id="@+id/myCloth"
         android:icon="@drawable/baseline_checkroom_black_36dp"
-        android:title="@string/cloths"/>
+        android:title="@string/clothes"/>
     <item android:id="@+id/myOrders"
         android:icon="@drawable/baseline_playlist_add_check_black_36dp"
         android:title="@string/orders"/>

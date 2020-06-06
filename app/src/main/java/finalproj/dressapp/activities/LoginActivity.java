@@ -16,7 +16,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import finalproj.dressapp.Utils;
 import android.app.AlertDialog;
 import finalproj.dressapp.httpclient.APIClient;
 import finalproj.dressapp.httpclient.APIInterface;
@@ -29,6 +29,7 @@ import retrofit2.Response;
 import finalproj.dressapp.R;
 
 public class LoginActivity extends AppCompatActivity {
+    
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -99,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        final String email = mEmailView.getText().toString().toLowerCase();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -139,6 +140,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.code() == 200) {
                         Boolean didLogin = response.body();
                         if (didLogin) {
+                            Utils.setUserName(LoginActivity.this, email);
                             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                             startActivity(intent);
                         }
@@ -203,7 +205,5 @@ public class LoginActivity extends AppCompatActivity {
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
-
-
 }
 
