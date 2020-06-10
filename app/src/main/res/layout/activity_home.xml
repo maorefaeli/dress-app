@@ -36,7 +36,15 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:padding="10dp" />
+            android:padding="10dp" >
+
+            <!-- Will be moved to profile! -->
+            <Button
+                android:id="@+id/logoutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logout" />
+        </LinearLayout>
     </LinearLayout>
 
     <android.support.design.widget.NavigationView

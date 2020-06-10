@@ -3,6 +3,7 @@ package finalproj.dressapp.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,51 +43,59 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_login);
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        if(Utils.getUserName(getApplicationContext()).length() != 0)
+        {
+            goToHome();
+        }
+        else
+        {
+            setContentView(R.layout.activity_login);
+            mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
+            mPasswordView = (EditText) findViewById(R.id.password);
+            mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                    if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                        attemptLogin();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-        });
+            });
 
-        mGuest = (TextView) findViewById(R.id.continueAsGuest);
-        mGuest.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                guestLogin();
-            }
-        });
+            mGuest = (TextView) findViewById(R.id.continueAsGuest);
+            mGuest.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    guestLogin();
+                }
+            });
 
-        mRegister = (TextView) findViewById(R.id.register);
-        mRegister.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
-                startActivity(intent);
-            }
-        });
+            mRegister = (TextView) findViewById(R.id.register);
+            mRegister.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                    startActivity(intent);
+                }
+            });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
+            Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+            mEmailSignInButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    attemptLogin();
+                }
+            });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+            mLoginFormView = findViewById(R.id.login_form);
+            mProgressView = findViewById(R.id.login_progress);
+        }
     }
 
     private void guestLogin() {
+        Utils.setGuestStatus(true);
         showProgress(true);
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
@@ -140,9 +149,8 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.code() == 200) {
                         Boolean didLogin = response.body();
                         if (didLogin) {
-                            // Utils.setUserName(LoginActivity.this, email);
-                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                            startActivity(intent);
+                            Utils.setUserName(getApplicationContext(), email);
+                            goToHome();
                         }
                     }
                 }
@@ -168,6 +176,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean isPasswordValid(String password) {
         return password.length() > 6;
+    }
+
+    private void goToHome() {
+        Utils.setGuestStatus(false);
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     /**

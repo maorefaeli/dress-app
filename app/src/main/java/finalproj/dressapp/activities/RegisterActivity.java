@@ -161,8 +161,11 @@ public class RegisterActivity extends AppCompatActivity {
                                     if (response.code() == 200) {
                                         Boolean didLogin = response.body();
                                         if (didLogin) {
+                                            Utils.setGuestStatus(false);
+                                            Utils.setUserName(getApplicationContext(), finalEmail);
                                             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                                             startActivity(intent);
+                                            finish();
                                         }
                                     }
                                 }

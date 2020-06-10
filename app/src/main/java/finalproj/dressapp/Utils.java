@@ -17,6 +17,7 @@ import finalproj.dressapp.activities.HomeActivity;
 import finalproj.dressapp.activities.LoginActivity;
 
 public class Utils {
+    static Boolean isGuest;
     static ProgressDialog dialog = null;
     static final String PREF_USER_NAME= "username";
         
@@ -30,8 +31,17 @@ public class Utils {
 
     }
 
+    public static void setGuestStatus(Boolean setGuest) {
+        isGuest = setGuest;
+    }
+
+    public static Boolean getGuestStatus() {
+        return isGuest;
+    }
+
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
+    //    return ctx.getSharedPreferences(PREF_USER_NAME, 0);
     }
 
     public static String getUserName(Context ctx)
