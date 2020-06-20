@@ -45,12 +45,13 @@ router.post('/add', auth.isLoggedIn, async (req, res) => {
         }
 
         let rentingProduct = Product.findById(product);
-        let availabilityDate = {
+        let rentingDate = {
             "fromdate": fromdate,
             "todate": todate
         }
-        rentingProduct.availabilitydates.push(availabilityDate);
+        rentingProduct.rentingDates.push(rentingDate);
         const newProduct = await Product.findByIdAndUpdate(product, rentingProduct, { new: true });
+        console.log(newProduct);
 
         newRent = await newRent.save();
         res.json(newRent);

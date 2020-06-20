@@ -17,7 +17,7 @@ const isProductContainErrors = (product) => {
     return '';
 };
 
-// @route GET api/products
+// @route GET /products
 // @desc Get all products
 // @access Public
 router.get('/', async (req, res) => {
@@ -26,11 +26,11 @@ router.get('/', async (req, res) => {
         return res.json(products);
     } catch (error){
         console.log(error);
-        res.status(400).json({"error":"Problem removing product"})
+        res.status(400).json({"error":"Problem getting products"});
     }
 });
 
-// @route GET api/products/:id
+// @route GET /products/:id
 // @desc Get product by its ID
 // @access Public
 router.get('/:id', async (req, res) => {
@@ -39,11 +39,11 @@ router.get('/:id', async (req, res) => {
         return res.json(product);
     } catch (error){
         console.log(error);
-        res.status(400).json({"error":"Problem removing product"})
+        res.status(400).json({"error":"Problem getting product"});
     }
 });
 
-// @route GET api/products/user/:id
+// @route GET /products/user/:id
 // @desc Get user's product by their ID
 // @access Private
 router.get('/user/:user', auth.isLoggedIn, async (req, res) => {
@@ -52,13 +52,13 @@ router.get('/user/:user', auth.isLoggedIn, async (req, res) => {
         return res.json(products);
     } catch (error){
         console.log(error);
-        res.status(400).json({"error":"Problem getting products"})
+        res.status(400).json({"error":"Problem getting products"});
     }
 });
 
-// @route POST api/products/add
-// @desc Add product
-// @access Public
+// @route POST /products/add
+// @desc Add new product
+// @access Private
 router.post('/add', auth.isLoggedIn, async (req, res) => {
     try {
         const { user, name, price, image, fromdate, todate } = req.body;
@@ -90,9 +90,9 @@ router.post('/add', auth.isLoggedIn, async (req, res) => {
     }
 });
 
-//  @route DELETE api/products/:id
+//  @route DELETE /products/:id
 //  @desc Delete specific product
-//  @access Public
+//  @access Private
 router.delete('/:id', auth.isLoggedIn, async (req, res) => {
     try {
         await Product.findByIdAndRemove(req.params.id);
@@ -100,13 +100,13 @@ router.delete('/:id', auth.isLoggedIn, async (req, res) => {
         return res.json(true);
     } catch (error){
         console.log(error);
-        res.status(400).json({"error":"Problem removing product"})
+        res.status(400).json({"error":"Problem removing product"});
     }
 });
 
-//  @route POST api/products/:id
+//  @route POST /products/:id
 //  @desc Edit specific product
-//  @access Public
+//  @access Private
 router.post('/:id', auth.isLoggedIn, async (req, res) => {
     try {
         const { user, name, price, image, fromdate, todate } = req.body;
@@ -128,7 +128,7 @@ router.post('/:id', auth.isLoggedIn, async (req, res) => {
         return res.json(newProduct);
     } catch (error){
         console.log(error);
-        res.status(400).json({"error":"Problem editing product"})
+        res.status(400).json({"error":"Problem editing product"});
     }
 });
 
