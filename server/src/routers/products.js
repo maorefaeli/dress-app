@@ -56,6 +56,20 @@ router.get('/user/:user', auth.isLoggedIn, async (req, res) => {
     }
 });
 
+// @route POST /products/addwish
+// @desc Add new product to wishlist
+// @access Private
+router.post('/addwish', auth.isLoggedIn, async (req, res) => {
+    try {
+        const { user, product } = req.body;
+        const updatedUser = await Wishlist.addItemToWishList(user,product);
+        return res.json(true);
+    } catch (error){
+        console.log(error);
+        res.status(400).json({"error":"Problem adding product to wishlist"});
+    }
+});
+
 // @route POST /products/add
 // @desc Add new product
 // @access Private
