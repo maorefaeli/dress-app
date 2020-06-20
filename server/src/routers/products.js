@@ -30,8 +30,8 @@ router.get('/', async (req, res) => {
     }
 });
 
-// @route POST api/products/add
-// @desc Add product
+// @route GET api/products/:id
+// @desc Get product by its ID
 // @access Public
 router.get('/:id', async (req, res) => {
     try {
@@ -40,6 +40,19 @@ router.get('/:id', async (req, res) => {
     } catch (error){
         console.log(error);
         res.status(400).json({"error":"Problem removing product"})
+    }
+});
+
+// @route GET api/products/user/:id
+// @desc Get user's product by their ID
+// @access Private
+router.get('/user/:user', auth.isLoggedIn, async (req, res) => {
+    try {
+        const products = await Product.find({user:req.params.user});
+        return res.json(products);
+    } catch (error){
+        console.log(error);
+        res.status(400).json({"error":"Problem getting products"})
     }
 });
 

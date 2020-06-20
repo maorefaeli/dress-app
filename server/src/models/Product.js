@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Availability = require('./Availability');
 const Schema = mongoose.Schema;
 
 // Create Schema
