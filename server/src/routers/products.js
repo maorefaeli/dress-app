@@ -49,13 +49,18 @@ router.get('/:id', async (req, res) => {
 router.post('/add', auth.isLoggedIn, async (req, res) => {
     try {
         const { user, name, price, image, fromdate, todate } = req.body;
+        let rentingDates = {
+            "fromdate": fromdate-1,
+            "todate": todate-1
+        }
         let newProduct = new Product ({
             user,
             name,
             price,
             image,
             fromdate,
-            todate
+            todate,
+            rentingDates
         });
 
         let error = isProductContainErrors(newProduct);

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Availability = require('./Availability');
 const Schema = mongoose.Schema;
 
 // Create Schema
@@ -26,6 +27,10 @@ const ProductSchema = new Schema({
     },
     image: {
         type: String,
+        required: false
+    },
+    rentingDates: {
+        type: [Date, Date],
         required: false
     }
 });
