@@ -29,7 +29,10 @@ const ProductSchema = new Schema({
         required: false
     },
     rentingDates: {
-        type: [Date, Date],
+        type: [{
+            fromdate: Date,
+            todate: Date
+        }],
         required: false
     }
 });

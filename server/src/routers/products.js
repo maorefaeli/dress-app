@@ -8,7 +8,7 @@ const Product = require('../models/Product');
 const Wishlist = require('../controllers/wishlist');
 
 const isProductContainErrors = (product) => {
-    if (!validators.isNonEmptyString(product.user)) return 'User cannot be empty';
+    //if (!validators.isNonEmptyString(product.user)) return 'User cannot be empty';
     if (!validators.isNonEmptyString(product.name)) return 'Name cannot be empty';
     if (!validators.isPositiveNumber(product.price)) return 'Price must be positive';
     return '';
@@ -72,14 +72,19 @@ router.post('/addwish', auth.isLoggedIn, async (req, res) => {
 // @access Private
 router.post('/add', auth.isLoggedIn, async (req, res) => {
     try {
-        const UserId = req.user.id;
+        const user = req.user.id;
         const { name, price, image, fromdate, todate } = req.body;
+        
+        const toDateFrom = new Date(fromdate);
+        const toDateTo = new Date(todate);
+
         let rentingDates = {
-            "fromdate": fromdate-1,
-            "todate": todate-1
+            "fromdate": new Date(toDateFrom.getTime() - (48*60*60*1000)),
+            "todate": new Date(toDateFrom.getTime() - (24*60*60*1000))
         }
+
         let newProduct = new Product ({
-            UserId,
+            user,
             name,
             price,
             image,
