@@ -17,11 +17,11 @@ const ProductSchema = new Schema({
         required: true
     },
     fromdate: {
-        type: Date,
+        type: String,
         required: true
     },
     todate: {
-        type: Date,
+        type: String,
         required: true
     },
     image: {

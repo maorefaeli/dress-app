@@ -8,12 +8,26 @@ import android.content.Intent;
 import android.icu.util.Calendar;
 import android.icu.util.GregorianCalendar;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import finalproj.dressapp.activities.MyClothesActivity;
+import finalproj.dressapp.Utils;
+import finalproj.dressapp.httpclient.APIClient;
+import finalproj.dressapp.httpclient.APIInterface;
+import finalproj.dressapp.httpclient.models.Product;
 import finalproj.dressapp.R;
 
 public class AddClothDialogFragment extends DialogFragment {
@@ -102,7 +116,32 @@ public class AddClothDialogFragment extends DialogFragment {
         dialogContainer.findViewById(R.id.addCloth).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                EditText name = (EditText) dialogContainer.findViewById(R.id.itemDescription);
+                EditText cost = (EditText) dialogContainer.findViewById(R.id.cost);
+                ImageView image = (ImageView) dialogContainer.findViewById(R.id.itemImage);
+    
+                Product product = new Product(name.getText().toString(), Integer.parseInt(cost.getText().toString()), Utils.LongToDateFormat(minDate), Utils.LongToDateFormat(maxDate), image.toString());
+                APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+    
+                Call<Product> call = apiInterface.doAddItem(product, Utils.getUserId(getActivity().getApplicationContext()));
+                call.enqueue(new Callback<Product>() {
+                    @Override
+                    public void onResponse(Call<Product> call, Response<Product> response) {
+    
+                        if (response.code() == 200) {
+                            dialog.dismiss();
+                        }
+                    }
+    
+                    @Override
+                    public void onFailure(Call<Product> call, Throwable t) {
+                        new AlertDialog.Builder(getActivity())
+                            .setTitle("failure")
+                            .setMessage(t.getMessage())
+                            .show();
+                        call.cancel();
+                    }
+                });
             }
         });
         return dialog;

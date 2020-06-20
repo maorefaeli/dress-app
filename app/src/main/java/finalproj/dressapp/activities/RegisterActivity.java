@@ -129,14 +129,14 @@ public class RegisterActivity extends AppCompatActivity {
         }
         else {
 
+            Utils.showPopupProgressSpinner(this, true, "Juat a moment...");
+            
             firstName = firstName.toLowerCase();
             lastName = lastName.toLowerCase();
             email = email.toLowerCase();
 
             UserRegistration userRegistration = new UserRegistration(firstName, lastName, email, password);
             APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-
-            Utils.showPopupProgressSpinner(this, true, "Juat a moment...");
 
             Call<Boolean> call = apiInterface.doRegister(userRegistration);
             final String finalEmail = email;

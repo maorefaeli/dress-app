@@ -13,15 +13,19 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
+import java.text.SimpleDateFormat;
+
 import finalproj.dressapp.activities.HomeActivity;
 import finalproj.dressapp.activities.LoginActivity;
 import finalproj.dressapp.activities.MyClothesActivity;
 import finalproj.dressapp.activities.ProfileActivity;
 
 public class Utils {
+    static SimpleDateFormat dateformatYYYYMMDD = new SimpleDateFormat("yyyy-MM-dd");
     static Boolean isGuest;
     static ProgressDialog dialog = null;
-    static final String PREF_USER_NAME= "username";
+    static final String PREF_USER_NAME = "username";
+    static final String PREF_UDER_ID = "userid";
         
     public static void showPopupProgressSpinner(Activity activity, Boolean isShowing, String text) {
 
@@ -58,6 +62,17 @@ public class Utils {
         editor.commit();
     }
 
+    public static String getUserId(Context ctx)
+    {
+        return getSharedPreferences(ctx).getString(PREF_UDER_ID, "");
+    }
+    
+    public static void setUserId(Context ctx, String userid) 
+    {
+        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+        editor.putString(PREF_UDER_ID, userid);
+        editor.commit();
+    }
     public static void clearUserName(final Activity activity)
     {
         SharedPreferences.Editor editor = getSharedPreferences(activity.getApplicationContext()).edit();
@@ -65,6 +80,12 @@ public class Utils {
         editor.commit();
         Intent intent = new Intent(activity, LoginActivity.class);
         activity.startActivity(intent);
+    }
+
+    public static String LongToDateFormat(Long oldDate)
+    {
+        StringBuilder newDate = new StringBuilder( dateformatYYYYMMDD.format( oldDate ) );
+        return newDate.toString();
     }
 
     public static ActionBarDrawerToggle setNavigation(final Activity activity, DrawerLayout dl, ActionBar actionBar) {

@@ -19,6 +19,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import finalproj.dressapp.Utils;
 import android.app.AlertDialog;
+
+import java.util.List;
+
 import finalproj.dressapp.httpclient.APIClient;
 import finalproj.dressapp.httpclient.APIInterface;
 import finalproj.dressapp.httpclient.models.UserCredentials;
@@ -148,6 +151,9 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.code() == 200) {
                         Boolean didLogin = response.body();
                         if (didLogin) {
+                            List<String> Cookielist = response.headers().values("Set-Cookie");
+                            String userId = (Cookielist.get(0).split(";"))[0];
+                            Utils.setUserId(getApplicationContext(), userId);
                             Utils.setUserName(getApplicationContext(), email);
                             goToHome();
                         }
