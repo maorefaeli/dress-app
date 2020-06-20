@@ -15,7 +15,7 @@ exports.addItemToWishList = async (userId, productId) => {
     try {
         const user = await User.findById(userId);
         let { productUserId } = await Product.findById(productId);
-        await Promise.all(user.wishlist.forEach(wish => {
+        await Promise.all(user.wishlist.map(async wish => {
             if (wish.user._id.equals(productUserId)) {
                 if (!(wish.items.includes(productId))) {
                     wish.items.push(productId);
