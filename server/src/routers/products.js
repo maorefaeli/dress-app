@@ -17,6 +17,18 @@ const isProductContainErrors = (product) => {
     return '';
 };
 
+// @route GET api/products
+// @desc Get all products
+// @access Public
+router.get('/', async (req, res) => {
+    try {
+        const products = await Product.find();
+        return res.json(products);
+    } catch (error){
+        console.log(error);
+        res.status(400).json({"error":"Problem removing product"})
+    }
+});
 
 // @route POST api/products/add
 // @desc Add product
