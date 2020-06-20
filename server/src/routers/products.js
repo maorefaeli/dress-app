@@ -11,9 +11,6 @@ const isProductContainErrors = (product) => {
     if (!validators.isNonEmptyString(product.user)) return 'User cannot be empty';
     if (!validators.isNonEmptyString(product.name)) return 'Name cannot be empty';
     if (!validators.isPositiveNumber(product.price)) return 'Price must be positive';
-    if (!validators.isNonEmptyString(product.image)) return 'Image mcannot be empty';
-    if (!validators.isNonEmptyString(product.fromdate)) return 'From date availible cannot be empty';
-    if (!validators.isNonEmptyString(product.todate)) return 'To date availible cannot be empty';
     return '';
 };
 
