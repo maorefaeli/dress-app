@@ -58,9 +58,9 @@ public class Utils {
         editor.commit();
     }
 
-    public static void clearUserName(final Activity activity, Context ctx) 
+    public static void clearUserName(final Activity activity)
     {
-        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+        SharedPreferences.Editor editor = getSharedPreferences(activity.getApplicationContext()).edit();
         editor.clear();
         editor.commit();
         Intent intent = new Intent(activity, LoginActivity.class);
@@ -98,6 +98,9 @@ public class Utils {
                     case R.id.profile:
                         intent = new Intent(activity.getApplicationContext(), ProfileActivity.class);
                         activity.startActivity(intent);
+                        return true;
+                    case R.id.logout:
+                        clearUserName(activity);
                         return true;
                 }
 

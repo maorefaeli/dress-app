@@ -57,15 +57,6 @@ public class HomeActivity extends DressAppActivity {
                 }
             });
         }
-
-        // Will be moved to profile!
-        Button mLogoutButton = (Button) findViewById(R.id.logoutButton);
-        mLogoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logOut();
-            }
-        });
     }
 
     @Override
@@ -90,10 +81,5 @@ public class HomeActivity extends DressAppActivity {
         ((TextView) post.findViewById(R.id.dates)).setText(dates);
         ((TextView) post.findViewById(R.id.owner)).setText(postData.ownerName);
         ((TextView) post.findViewById(R.id.address)).setText(postData.address);
-    }
-
-    //Will be moved to profile!
-    private void logOut() {
-        Utils.clearUserName(this, getApplicationContext());
     }
 }

@@ -87,7 +87,7 @@ public class ItemDialogFragment extends DialogFragment {
             }
         });
 
-        dialogContainer.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
+        dialogContainer.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
