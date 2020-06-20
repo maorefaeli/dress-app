@@ -72,13 +72,14 @@ router.post('/addwish', auth.isLoggedIn, async (req, res) => {
 // @access Private
 router.post('/add', auth.isLoggedIn, async (req, res) => {
     try {
-        const { user, name, price, image, fromdate, todate } = req.body;
+        const UserId = req.user.id;
+        const { name, price, image, fromdate, todate } = req.body;
         let rentingDates = {
             "fromdate": fromdate-1,
             "todate": todate-1
         }
         let newProduct = new Product ({
-            user,
+            UserId,
             name,
             price,
             image,
@@ -120,9 +121,10 @@ router.delete('/:id', auth.isLoggedIn, async (req, res) => {
 //  @access Private
 router.post('/:id', auth.isLoggedIn, async (req, res) => {
     try {
-        const { user, name, price, image, fromdate, todate } = req.body;
+        const UserId = req.user.id;
+        const { name, price, image, fromdate, todate } = req.body;
         const product = {
-            user,
+            UserId,
             name,
             price,
             image,
