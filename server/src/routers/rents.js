@@ -44,9 +44,10 @@ router.get('/history/:id', auth.isLoggedIn, async (req, res) => {
 // @access Private
 router.post('/add', auth.isLoggedIn, async (req, res) => {
     try {
-        const { user, product, fromdate, todate } = req.body;
+        const UserId = req.user.id;
+        const { product, fromdate, todate } = req.body;
         let newRent = new Rent ({
-            user,
+            UserId,
             product,
             fromdate,
             todate

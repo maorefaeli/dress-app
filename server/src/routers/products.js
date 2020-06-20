@@ -11,9 +11,6 @@ const isProductContainErrors = (product) => {
     if (!validators.isNonEmptyString(product.user)) return 'User cannot be empty';
     if (!validators.isNonEmptyString(product.name)) return 'Name cannot be empty';
     if (!validators.isPositiveNumber(product.price)) return 'Price must be positive';
-    if (!validators.isNonEmptyString(product.image)) return 'Image mcannot be empty';
-    if (!validators.isNonEmptyString(product.fromdate)) return 'From date availible cannot be empty';
-    if (!validators.isNonEmptyString(product.todate)) return 'To date availible cannot be empty';
     return '';
 };
 
@@ -75,13 +72,14 @@ router.post('/addwish', auth.isLoggedIn, async (req, res) => {
 // @access Private
 router.post('/add', auth.isLoggedIn, async (req, res) => {
     try {
-        const { user, name, price, image, fromdate, todate } = req.body;
+        const UserId = req.user.id;
+        const { name, price, image, fromdate, todate } = req.body;
         let rentingDates = {
             "fromdate": fromdate-1,
             "todate": todate-1
         }
         let newProduct = new Product ({
-            user,
+            UserId,
             name,
             price,
             image,
@@ -123,9 +121,10 @@ router.delete('/:id', auth.isLoggedIn, async (req, res) => {
 //  @access Private
 router.post('/:id', auth.isLoggedIn, async (req, res) => {
     try {
-        const { user, name, price, image, fromdate, todate } = req.body;
+        const UserId = req.user.id;
+        const { name, price, image, fromdate, todate } = req.body;
         const product = {
-            user,
+            UserId,
             name,
             price,
             image,
