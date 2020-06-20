@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.icu.util.Calendar;
 import android.icu.util.GregorianCalendar;
 import android.os.Bundle;
@@ -12,14 +13,16 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import finalproj.dressapp.R;
 
 public class AddClothDialogFragment extends DialogFragment {
+    public static final int PICK_IMAGE = 1;
     private long minDate;
     private long maxDate;
+    private ImageView imageView;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -32,6 +35,18 @@ public class AddClothDialogFragment extends DialogFragment {
         final Dialog dialog = builder.create();
 
         minDate = System.currentTimeMillis();
+
+        imageView = dialogContainer.findViewById(R.id.itemImage);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+            }
+        });
+
         final EditText fromDate = dialogContainer.findViewById(R.id.fromDate);
         fromDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,7 +57,6 @@ public class AddClothDialogFragment extends DialogFragment {
 
                 final DatePicker date = dateContainer.findViewById(R.id.date);
                 date.setMinDate(minDate);
-                date.setMaxDate(maxDate);
 
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -68,7 +82,6 @@ public class AddClothDialogFragment extends DialogFragment {
 
                 final DatePicker date = dateContainer.findViewById(R.id.date);
                 date.setMinDate(minDate);
-                date.setMaxDate(maxDate);
 
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -97,4 +110,11 @@ public class AddClothDialogFragment extends DialogFragment {
         return dialog;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == PICK_IMAGE) {
+
+        }
+    }
 }
