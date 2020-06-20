@@ -26,6 +26,19 @@ router.post('/test', async (req, res) => {
     res.json(newProduct);
 });
 
+// @route GET /history/:id
+// @desc Get product renting history
+// @access Private
+router.get('/history/:id', auth.isLoggedIn, async (req, res) => {
+    try {
+        const rentingHistory = await Rent.find({"product":req.params.id});
+        return res.json(rentingHistory);
+    } catch (error) {
+        console.log(error);
+        req.status(400).json({"error":"Problem getting renting history"});
+    }
+});
+
 // @route POST api/rents/add
 // @desc Add rent
 // @access Private
