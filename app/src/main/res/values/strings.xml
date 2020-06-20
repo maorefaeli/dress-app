@@ -16,9 +16,12 @@
     </string>
     <string name="no_account_yet">Don\'t have an account yet?</string>
     <string name="search">Search…</string>
+    <string name="item_description">Item description…</string>
+    <string name="cost">Cost</string>
     <string name="or">or</string>
     <string name="guest"><u>Continue as a guest</u></string>
     <string name="place_order">Place your order</string>
+    <string name="add_cloth">Add new cloth</string>
     <string name="from">From</string>
     <string name="to">To</string>
     <string name="order">Order Now</string>

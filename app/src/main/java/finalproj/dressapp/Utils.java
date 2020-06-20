@@ -15,6 +15,8 @@ import android.view.MenuItem;
 
 import finalproj.dressapp.activities.HomeActivity;
 import finalproj.dressapp.activities.LoginActivity;
+import finalproj.dressapp.activities.MyClothesActivity;
+import finalproj.dressapp.activities.ProfileActivity;
 
 public class Utils {
     static Boolean isGuest;
@@ -65,8 +67,7 @@ public class Utils {
         activity.startActivity(intent);
     }
 
-    public static ActionBarDrawerToggle setNavigation(final Activity activity, ActionBar actionBar) {
-        DrawerLayout dl = activity.findViewById(R.id.activity_main);
+    public static ActionBarDrawerToggle setNavigation(final Activity activity, DrawerLayout dl, ActionBar actionBar) {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(activity, dl,R.string.Open, R.string.Close);
 
         dl.addDrawerListener(toggle);
@@ -83,17 +84,24 @@ public class Utils {
                 switch(id)
                 {
                     case R.id.myCloth:
-//                        Toast.makeText(HomeActivity.this, "My Account", Toast.LENGTH_SHORT).show();break;
+                        intent = new Intent(activity.getApplicationContext(), MyClothesActivity.class);
+                        activity.startActivity(intent);
+                        return true;
                     case R.id.myOrders:
-//                        Toast.makeText(HomeActivity.this, "Settings",Toast.LENGTH_SHORT).show();break;
+                        intent = new Intent(activity.getApplicationContext(), HomeActivity.class);
+                        activity.startActivity(intent);
+                        break;
                     case R.id.home:
                         intent = new Intent(activity.getApplicationContext(), HomeActivity.class);
                         activity.startActivity(intent);
+                        return true;
                     case R.id.profile:
-//                        intent = new Intent(activity.getApplicationContext())
-                    default:
+                        intent = new Intent(activity.getApplicationContext(), ProfileActivity.class);
+                        activity.startActivity(intent);
                         return true;
                 }
+
+                return true;
             }
         });
 

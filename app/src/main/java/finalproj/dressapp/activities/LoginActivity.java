@@ -21,7 +21,6 @@ import finalproj.dressapp.Utils;
 import android.app.AlertDialog;
 import finalproj.dressapp.httpclient.APIClient;
 import finalproj.dressapp.httpclient.APIInterface;
-import finalproj.dressapp.httpclient.models.ServerCheck;
 import finalproj.dressapp.httpclient.models.UserCredentials;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -97,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
     private void guestLogin() {
         Utils.setGuestStatus(true);
         showProgress(true);
-        Intent intent = new Intent(this, HomeActivity.class);
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         startActivity(intent);
     }
 

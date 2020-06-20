@@ -2,9 +2,7 @@ package finalproj.dressapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
+import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -22,8 +20,7 @@ import finalproj.dressapp.Utils;
 import finalproj.dressapp.fragments.ItemDialogFragment;
 import finalproj.dressapp.models.Post;
 
-public class HomeActivity extends AppCompatActivity {
-    private ActionBarDrawerToggle toggle;
+public class HomeActivity extends DressAppActivity {
     private List<Post> posts = new ArrayList<>();
     private LinearLayout postsContainer;
 
@@ -32,7 +29,7 @@ public class HomeActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        toggle = Utils.setNavigation(this, getSupportActionBar());
+        toggle = Utils.setNavigation(this, (DrawerLayout) findViewById(R.id.activity_main), getSupportActionBar());
         Calendar calendar = Calendar.getInstance();
         calendar.set(2020, 5, 10);
         this.posts.add(new Post("Very nice dress", "this dress is very nice", "Shai",
@@ -83,14 +80,6 @@ public class HomeActivity extends AppCompatActivity {
             startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(startMain);
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(toggle.onOptionsItemSelected(item))
-            return true;
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void addPostData(LinearLayout post, Post postData) {
