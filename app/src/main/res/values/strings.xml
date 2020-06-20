@@ -38,4 +38,6 @@
     <string name="address">Address</string>
     <string name="firstName">First name</string>
     <string name="lastName">Last name</string>
+    <string name="logout">Logout</string>
+    <string name="cancel">Cancel</string>
 </resources>

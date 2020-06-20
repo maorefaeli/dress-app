@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.icu.util.Calendar;
 import android.icu.util.GregorianCalendar;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -94,7 +92,7 @@ public class AddClothDialogFragment extends DialogFragment {
             }
         });
 
-        dialogContainer.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
+        dialogContainer.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
