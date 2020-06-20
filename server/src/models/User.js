@@ -53,7 +53,7 @@ UserSchema.set('toJSON', {
     transform: function (doc, ret) { delete ret._id }
 });
 
-UserSchema.index({ username: 1 });
+UserSchema.index({ username: 1 }, { unique: true });
 UserSchema.index({ 'wishlist.user': 1 });
 UserSchema.index({ 'wishlist.items': 1 });
 

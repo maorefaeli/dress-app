@@ -50,6 +50,8 @@ mongoose
         useFindAndModify: false,
         useCreateIndex: true,
         useUnifiedTopology:  true,
+        autoCreate: true,
+        autoIndex: true,
     })
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err));
