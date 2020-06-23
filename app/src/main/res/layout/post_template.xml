@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/post_background"
     android:elevation="25dp"
     android:layoutDirection="ltr"
@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="10dp">
 
         <ImageView
@@ -26,7 +26,7 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="10dp">
 
@@ -42,8 +42,8 @@
             android:id="@+id/dates"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/outline_event_black_18dp"
             android:drawablePadding="3dp"
+            android:drawableStart="@drawable/outline_event_black_18dp"
             android:padding="2dp"
             android:textSize="12sp" />
 
@@ -51,8 +51,8 @@
             android:id="@+id/address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/outline_home_black_18dp"
             android:drawablePadding="3dp"
+            android:drawableStart="@drawable/outline_home_black_18dp"
             android:padding="2dp"
             android:textSize="12sp" />
 
@@ -60,8 +60,8 @@
             android:id="@+id/owner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/outline_perm_contact_calendar_black_18dp"
             android:drawablePadding="3dp"
+            android:drawableStart="@drawable/outline_perm_contact_calendar_black_18dp"
             android:padding="2dp"
             android:textSize="12sp" />
     </LinearLayout>
@@ -76,8 +76,8 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/icons8_heart_26" />
     </LinearLayout>

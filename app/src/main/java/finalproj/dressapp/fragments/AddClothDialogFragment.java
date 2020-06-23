@@ -98,7 +98,10 @@ public class AddClothDialogFragment extends DialogFragment {
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1) + "/" + (date.getYear() - 2000);
+                        Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth());
+                        maxDate = calendar.getTimeInMillis();
+                        String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1)
+                                + "/" + (date.getYear() - 2000);
                         toDate.setText(dateString);
                     }
                 });

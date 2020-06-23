@@ -2,7 +2,10 @@ package finalproj.dressapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.app.AlertDialog;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -14,13 +17,25 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import finalproj.dressapp.httpclient.models.Product;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import finalproj.dressapp.activities.LoginActivity;
 import finalproj.dressapp.R;
 import finalproj.dressapp.Utils;
+import finalproj.dressapp.RecycleViewAdapter;
 import finalproj.dressapp.fragments.ItemDialogFragment;
 import finalproj.dressapp.models.Post;
+import finalproj.dressapp.httpclient.APIClient;
+import finalproj.dressapp.httpclient.APIInterface;
 
 public class HomeActivity extends DressAppActivity {
+    private RecycleViewAdapter mAdapter;
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private List<Product> products;
     private List<Post> posts = new ArrayList<>();
     private LinearLayout postsContainer;
 
@@ -29,34 +44,45 @@ public class HomeActivity extends DressAppActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        Call <List<Product>> call = apiInterface.getAllItems();
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if (response.code() == 200) {
+
+                    recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+
+                    // use this setting to improve performance if you know that changes
+                    // in content do not change the layout size of the RecyclerView
+                    recyclerView.setHasFixedSize(true);
+
+                    // use a linear layout manager
+                    layoutManager = new LinearLayoutManager(HomeActivity.this);
+                    recyclerView.setLayoutManager(layoutManager);
+
+                    products = response.body();
+
+                    //specify an adapter
+                    mAdapter = new RecycleViewAdapter(HomeActivity.this, HomeActivity.this, products);
+                    recyclerView.setAdapter(mAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                new AlertDialog.Builder(HomeActivity.this)
+                    .setTitle("failure")
+                    .setMessage(t.getMessage())
+                    .show();
+                call.cancel();
+            }
+        });
+
         toggle = Utils.setNavigation(this, (DrawerLayout) findViewById(R.id.activity_main), getSupportActionBar());
         Calendar calendar = Calendar.getInstance();
         calendar.set(2020, 5, 10);
-        this.posts.add(new Post("Very nice dress", "this dress is very nice", "Shai",
-                "/dress.jpg", "Bialik 126 Ramat Gan", System.currentTimeMillis(), calendar.getTimeInMillis(), 100));
-
-        postsContainer = findViewById(R.id.postsContainer);
-
-        for (final Post post : posts) {
-            LinearLayout postContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.post_template, null);
-            addPostData(postContainer, post);
-            postsContainer.addView(postContainer);
-            final HomeActivity activity = this;
-            postContainer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ItemDialogFragment dialogFragment = new ItemDialogFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("description", post.description);
-                    bundle.putString("imgSrc", post.imageUrl);
-                    bundle.putInt("cost", post.cost);
-                    bundle.putLong("minDate", post.from);
-                    bundle.putLong("maxDate", post.to);
-                    dialogFragment.setArguments(bundle);
-                    dialogFragment.show(activity.getFragmentManager(), "ItemDialog");
-                }
-            });
-        }
     }
 
     @Override
@@ -71,15 +97,5 @@ public class HomeActivity extends DressAppActivity {
             startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(startMain);
         }
-    }
-
-    private void addPostData(LinearLayout post, Post postData) {
-        ((TextView) post.findViewById(R.id.postTitle)).setText(postData.title);
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
-
-        String dates = dateFormat.format(postData.from) + " - " + dateFormat.format(postData.to);
-        ((TextView) post.findViewById(R.id.dates)).setText(dates);
-        ((TextView) post.findViewById(R.id.owner)).setText(postData.ownerName);
-        ((TextView) post.findViewById(R.id.address)).setText(postData.address);
     }
 }

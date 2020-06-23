@@ -1,5 +1,7 @@
 package finalproj.dressapp.httpclient;
 
+import java.util.List;
+
 import finalproj.dressapp.httpclient.models.ServerCheck;
 import finalproj.dressapp.httpclient.models.UserCredentials;
 import finalproj.dressapp.httpclient.models.UserRegistration;
@@ -29,7 +31,7 @@ public interface APIInterface {
     Call<Boolean> doRegister(@Body UserRegistration userRegistration);
 
     @GET("products/")
-    Call<Product> getAllItems();
+    Call<List<Product>> getAllItems();
 
     @POST("products/add")
     Call<Product> doAddItem(@Body Product product, @Header("Cookie") String cookie);

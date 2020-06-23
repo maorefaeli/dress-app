@@ -13,7 +13,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import finalproj.dressapp.activities.HomeActivity;
 import finalproj.dressapp.activities.LoginActivity;
@@ -86,6 +88,30 @@ public class Utils {
     {
         StringBuilder newDate = new StringBuilder( dateformatYYYYMMDD.format( oldDate ) );
         return newDate.toString();
+    }
+
+    public static Long DateFormatToLong(String oldDate)
+    {
+        Long newDate;
+        newDate = System.currentTimeMillis();
+        try {
+            Date dateFormat = dateformatYYYYMMDD.parse(oldDate);
+            newDate = dateFormat.getTime();
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return newDate;
+    }
+
+    public static String DateFormatToShow(String oldDate)
+    {
+        String day = oldDate.substring(8, 10);
+        String month = oldDate.substring(5, 7);
+        String year = oldDate.substring(0, 4);
+
+        return day + "." + month + "." + year;
     }
 
     public static ActionBarDrawerToggle setNavigation(final Activity activity, DrawerLayout dl, ActionBar actionBar) {
