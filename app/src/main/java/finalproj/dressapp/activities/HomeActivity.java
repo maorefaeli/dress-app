@@ -1,35 +1,27 @@
 package finalproj.dressapp.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.AlertDialog;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import finalproj.dressapp.R;
+import finalproj.dressapp.RecycleViewAdapter;
+import finalproj.dressapp.Utils;
+import finalproj.dressapp.httpclient.APIClient;
+import finalproj.dressapp.httpclient.APIInterface;
 import finalproj.dressapp.httpclient.models.Product;
+import finalproj.dressapp.models.Post;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import finalproj.dressapp.activities.LoginActivity;
-import finalproj.dressapp.R;
-import finalproj.dressapp.Utils;
-import finalproj.dressapp.RecycleViewAdapter;
-import finalproj.dressapp.fragments.ItemDialogFragment;
-import finalproj.dressapp.models.Post;
-import finalproj.dressapp.httpclient.APIClient;
-import finalproj.dressapp.httpclient.APIInterface;
 
 public class HomeActivity extends DressAppActivity {
     private RecycleViewAdapter mAdapter;

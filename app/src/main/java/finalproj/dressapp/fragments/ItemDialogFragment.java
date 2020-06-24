@@ -38,7 +38,7 @@ public class ItemDialogFragment extends DialogFragment {
 //        ((ImageView) dialogContainer.findViewById(R.id.itemImage)).setImageURI(Uri.parse(params.getString("imageSrc")));
         ((TextView) dialogContainer.findViewById(R.id.itemDescription)).setText(params.getString("description"));
         ((TextView) dialogContainer.findViewById(R.id.cost)).setText(String.valueOf(params.getInt("cost")));
-        final EditText fromDate = (EditText) dialogContainer.findViewById(R.id.fromDate);
+        final EditText fromDate = dialogContainer.findViewById(R.id.fromDate);
         fromDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,7 +46,7 @@ public class ItemDialogFragment extends DialogFragment {
                 LinearLayout dateContainer = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.date_picker, null);
                 builder.setView(dateContainer);
 
-                final DatePicker date = ((DatePicker) dateContainer.findViewById(R.id.date));
+                final DatePicker date = dateContainer.findViewById(R.id.date);
                 date.setMinDate(minDate);
                 date.setMaxDate(maxDate);
 
@@ -64,7 +64,7 @@ public class ItemDialogFragment extends DialogFragment {
             }
         });
 
-        final EditText toDate = (EditText) dialogContainer.findViewById(R.id.toDate);
+        final EditText toDate = dialogContainer.findViewById(R.id.toDate);
         toDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +72,7 @@ public class ItemDialogFragment extends DialogFragment {
                 LinearLayout dateContainer = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.date_picker, null);
                 builder.setView(dateContainer);
 
-                final DatePicker date = ((DatePicker) dateContainer.findViewById(R.id.date));
+                final DatePicker date = dateContainer.findViewById(R.id.date);
                 date.setMinDate(minDate);
                 date.setMaxDate(maxDate);
 
