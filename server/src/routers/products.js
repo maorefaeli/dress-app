@@ -5,7 +5,7 @@ const auth = require('../utils/auth');
 
 // Load Product model
 const Product = require('../models/Product');
-const Wishlist = require('../controllers/wishlist');
+const WishlistController = require('../controllers/wishlist');
 
 const isProductContainErrors = (product) => {
     //if (!validators.isNonEmptyString(product.user)) return 'User cannot be empty';
@@ -59,7 +59,7 @@ router.get('/user/:user', auth.isLoggedIn, async (req, res) => {
 router.post('/addwish', auth.isLoggedIn, async (req, res) => {
     try {
         const { user, product } = req.body;
-        const updatedUser = await Wishlist.addItemToWishList(user,product);
+        await WishlistController.addProductToWishList(user, product);
         return res.json(true);
     } catch (error){
         console.log(error);
@@ -113,7 +113,7 @@ router.post('/add', auth.isLoggedIn, async (req, res) => {
 router.delete('/:id', auth.isLoggedIn, async (req, res) => {
     try {
         await Product.findByIdAndRemove(req.params.id);
-        await Wishlist.handleProductDeletion(req.params.id);
+        await WishlistController.handleProductDeletion(req.params.id);
         return res.json(true);
     } catch (error){
         console.log(error);

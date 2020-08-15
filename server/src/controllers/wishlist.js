@@ -10,6 +10,38 @@ const MAX_CYCLE_PARTICIPANTS = 5;
  * Add a product to a user's wishlist and find new cycles
  */
 exports.addProductToWishlist = async (userId, productId) => {
+    const user = await User.findById(userId);
+    const product = await Product.findById(productId);
+    if (!user || !product) return;
+
+    if (!user.wishlist) {
+        user.wishlist = [];
+    }
+
+    let isFound = false;
+    user.wishlist.forEach(wish => {
+        if (wish.user.equals(product.user)) {
+            isFound = true;
+
+            if (!wish.products) {
+                wish.products = [];
+            }
+
+            if (!wish.products.includes(productId)) {
+                wish.products.push(productId);
+            }
+        }
+    })
+
+    if (!isFound) {
+        user.wishlist.push({
+            user: product.user,
+            products: [productId]
+        });
+    }
+
+    await User.findByIdAndUpdate(userId, user);
+    await findCycles(userId);
 };
 
 const removeProductFromPendingCycles = async (userId, productId) => {
@@ -106,32 +138,4 @@ exports.handleProductDeletion = async (productId) => {
  */
 exports.handleUserDeletion = async (userId) => { 
     await PendingCycle.deleteMany({ 'participants.user': { $in: [userId] } });
-};
-
-exports.addItemToWishList = async (userId, productId) => {
-    const User = require('../models/User');
-    const Product = require('../models/Product');
-    try {
-        const user = await User.findById(userId);
-        let { productUserId } = await Product.findById(productId);
-        await Promise.all(user.wishlist.map(async wish => {
-            if (wish.user._id.equals(productUserId)) {
-                if (!(wish.items.includes(productId))) {
-                    wish.items.push(productId);
-                    const updateUser = await User.findByIdAndUpdate(userId, user, { new: true });
-                    return updateUser;
-                }
-            }
-        }));
-        let newWish = {
-            "user":productUserId,
-            "items":[productId]
-        };
-        user.wishlist.push(newWish);
-        const updateUser = await User.findByIdAndUpdate(userId, user, { new: true });
-        return updateUser;
-    } catch (error) {
-        console.log(error);
-        res.status(400).json({"error":"problem adding product to wishlist"});
-    }
 };
