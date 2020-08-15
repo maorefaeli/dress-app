@@ -65,7 +65,7 @@ router.get('/profile/:username', async (req, res) => {
 });
 
 //  @route GET users/cycle/:id
-//  @desc Get cycle of wishlist items by users
+//  @desc Get cycle of wishlist products by users
 //  @access Public
 router.get('/cycle/:id', async (req, res) => {
     try {
@@ -92,7 +92,7 @@ router.get('/populateTestData', async (req, res) => {
             if (target) {
                 user.wishlist = [{
                     user: target,
-                    items: [index],
+                    products: [index],
                 }];
             }
 
@@ -115,7 +115,7 @@ router.get('/populateTestData', async (req, res) => {
             }
         }
 
-        await User.findByIdAndUpdate(cycleStartId, { $push: { wishlist: { user: prevUserId, items: [amount] } }});
+        await User.findByIdAndUpdate(cycleStartId, { $push: { wishlist: { user: prevUserId, products: [amount] } }});
 
         return res.json(true);
     } catch (error){
