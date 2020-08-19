@@ -55,7 +55,7 @@ router.post('/register', async (req, res) => {
 //  @access Private
 router.get('/profile/:username', async (req, res) => {
     try {
-        const profile = await User.find({username: req.params.username});
+        const [profile] = await User.find({username: req.params.username});
         delete profile.password
         return res.json(profile);
     } catch (error){
