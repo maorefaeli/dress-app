@@ -68,7 +68,7 @@ router.post('/addwish', auth.isLoggedIn, async (req, res) => {
     }
 });
 
-// @route POST /products/add
+// @route POST /products/add    	
 // @desc Add new product
 // @access Private
 router.post('/add', auth.isLoggedIn, async (req, res) => {
