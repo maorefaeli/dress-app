@@ -58,7 +58,8 @@ router.get('/user/:user', auth.isLoggedIn, async (req, res) => {
 // @access Private
 router.post('/addwish', auth.isLoggedIn, async (req, res) => {
     try {
-        const { user, product } = req.body;
+        const user = req.user.id;
+        const { product } = req.body;
         const updatedUser = await Wishlist.addItemToWishList(user,product);
         return res.json(true);
     } catch (error){
