@@ -1,10 +1,22 @@
 const User = require('../models/User');
 const PendingCycle = require('../models/PendingCycle');
 const Product = require('../models/Product');
+const RentController = require('./rentController');
 
 // Maximum depth of users in a cycle
 const MAX_CYCLE_PARTICIPANTS = 5;
 
+// logged in user added new item to wishlist
+// Find all cycles in depth 5.
+// For each cycle found:
+//      check if cycle exist via hash code (participants users hashing)
+//          if exist then skip
+//      check all products available at some time
+//          if available then add PendingCycle
+
+const findCycles = async (userId) => {
+
+};
 
 /**
  * Add a product to a user's wishlist and find new cycles
@@ -65,9 +77,9 @@ const removeProductFromPendingCycles = async (userId, productId) => {
                 } else {
                     cyclesToUpdate.push(cycle);
 
-                    // If it was accepted already, null it and its dates
-                    if (participant.acceptedProduct.equals(productId)) {
-                        participant.acceptedProduct = null;
+                    // If it was requested already, null it and its dates
+                    if (participant.requestedProduct.equals(productId)) {
+                        participant.requestedProduct = null;
                         participant.fromDate = null;
                         participant.toDate = null;
                     }
@@ -138,4 +150,72 @@ exports.handleProductDeletion = async (productId) => {
  */
 exports.handleUserDeletion = async (userId) => { 
     await PendingCycle.deleteMany({ 'participants.user': { $in: [userId] } });
+};
+
+const isOrderValid = (product, fromDate, toDate) => {
+    if (product.fromdate > fromDate || product.todate < toDate) return false;
+
+    if (product.rentingDates && product.rentingDates.length) {
+        for (let index = 0; index < product.rentingDates.length; index++) {
+            const rt = product.rentingDates[index];
+            if (!(rt.todate < fromDate && rt.fromdate > toDate)) {
+                return false;
+            }
+        }
+    }
+
+    return true;  
+};
+
+const validateCycle = async (cycleId) => {
+    const cycle = await PendingCycle.findById(cycleId).populate('requestedProduct');
+
+    let isCycleValid = true;
+    let isCycleChanged = false;
+
+    cycle.participants.forEach(participant => {
+        // If there still a participant not requested a product the cycle is not completed
+        if (!participant.requestedProduct) {
+            isCycleValid = false;
+            return;
+        }
+
+        // If order not valid due to dates, reset the requested product
+        if (!isOrderValid(participant.requestedProduct, participant.fromDate, participant.toDate)) {
+            isCycleValid = false;
+            
+            participant.requestedProduct = null;
+            participant.fromDate = null;
+            participant.toDate = null;
+            isCycleChanged = true;
+        }
+
+        // Save the product id and not the entire entity
+        participant.requestedProduct = participant.requestedProduct._id;
+    });
+
+    if (isCycleChanged) {
+        await PendingCycle.findOneAndUpdate(cycle._id, cycle);
+    } else if (isCycleValid) {
+        await Promise.all(participant.map(p => RentController.addRent(p.user, p.requestedProduct, p.fromDate, p.toDate)));
+        await PendingCycle.findByIdAndDelete(cycle._id);
+        console.log("Cycle", cycle, "is completed and deleted");
+    }
+};
+
+exports.requestProductOnCycle = async (cycleId, userId, productId, fromDate, toDate) => {
+    const cycle = await PendingCycle.findById(cycleId);
+    const product = await Product.findById(productId);
+
+    if (isOrderValid(product, fromDate, toDate)) {
+        cycle.participants.forEach(p => {
+            if (p.user.equals(userId) && p.products.includes(productId)) {
+                p.requestedProduct = productId;
+                p.fromDate = fromDate;
+                p.toDate = toDate;
+            }
+        });
+        await PendingCycle.findByIdAndUpdate(cycleId, cycle);
+        await validateCycle(cycle);
+    }
 };

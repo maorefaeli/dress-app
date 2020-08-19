@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const validators = require('../utils/validators');
 const auth = require('../utils/auth');
-const wishlist = require('../controllers/wishlist');
+const wishlist = require('../controllers/wishlistController');
 const ObjectID = require('mongodb').ObjectID;
 const User = require('../models/User');
 

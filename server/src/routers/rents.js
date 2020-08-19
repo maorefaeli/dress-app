@@ -6,12 +6,13 @@ const auth = require('../utils/auth');
 // Load Product and Rent models
 const Product = require('../models/Product');
 const Rent = require('../models/Rent');
+const RentController = require('../controllers/rentController');
 
 const isRentContainErrors = (rent) => {
     if (!validators.isNonEmptyString(rent.user)) return 'User cannot be empty';
-    if (!validators.isNonEmptyString(rent.product)) return 'User cannot be empty';
-    if (!validators.isNonEmptyString(rent.fromdate)) return 'From date availible cannot be empty';
-    if (!validators.isNonEmptyString(rent.todate)) return 'To date availible cannot be empty';
+    if (!validators.isNonEmptyString(rent.product)) return 'Product cannot be empty';
+    if (!validators.isNonEmptyString(rent.fromdate)) return 'From date available cannot be empty';
+    if (!validators.isNonEmptyString(rent.todate)) return 'To date available cannot be empty';
     return '';
 };
 
@@ -44,30 +45,8 @@ router.get('/history/:id', auth.isLoggedIn, async (req, res) => {
 // @access Private
 router.post('/add', auth.isLoggedIn, async (req, res) => {
     try {
-        const user = req.user.id;
         const { product, fromdate, todate } = req.body;
-        let newRent = new Rent ({
-            user,
-            product,
-            fromdate,
-            todate
-        });
-
-        let error = isRentContainErrors(newRent);
-        if (error) {
-            return res.status(400).json({ error });
-        }
-
-        let rentingProduct = Product.findById(product);
-        let rentingDate = {
-            "fromdate": fromdate,
-            "todate": todate
-        }
-        rentingProduct.rentingDates.push(rentingDate);
-        const newProduct = await Product.findByIdAndUpdate(product, rentingProduct, { new: true });
-        console.log(newProduct);
-
-        newRent = await newRent.save();
+        const newRent = await RentController.addRent(req.user.id, product, fromdate, todate);
         res.json(newRent);
     } catch (e) {
         console.log(e);

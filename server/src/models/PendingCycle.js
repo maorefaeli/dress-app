@@ -22,7 +22,7 @@ const PendingCycleSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: "Product",
         }],
-        acceptedProduct: {
+        requestedProduct: {
             type: Schema.Types.ObjectId,
             ref: "Product",
             required: false
