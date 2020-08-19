@@ -15,6 +15,9 @@
         <activity android:name=".activities.MyClothesActivity"
             android:label=""/>
 
+        <activity android:name=".activities.WishListActivity"
+            android:label=""/>
+
         <activity android:name=".activities.ProfileActivity"
             android:label="" />
 

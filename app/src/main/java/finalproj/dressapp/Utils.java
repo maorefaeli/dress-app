@@ -21,6 +21,7 @@ import finalproj.dressapp.activities.HomeActivity;
 import finalproj.dressapp.activities.LoginActivity;
 import finalproj.dressapp.activities.MyClothesActivity;
 import finalproj.dressapp.activities.ProfileActivity;
+import finalproj.dressapp.activities.WishListActivity;
 
 public class Utils {
     static SimpleDateFormat dateformatYYYYMMDD = new SimpleDateFormat("yyyy-MM-dd");
@@ -144,6 +145,10 @@ public class Utils {
                         return true;
                     case R.id.profile:
                         intent = new Intent(activity.getApplicationContext(), ProfileActivity.class);
+                        activity.startActivity(intent);
+                        return true;
+                    case R.id.wishList:
+                        intent = new Intent(activity.getApplicationContext(), WishListActivity.class);
                         activity.startActivity(intent);
                         return true;
                     case R.id.logout:
