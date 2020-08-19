@@ -5,7 +5,7 @@ const auth = require('../utils/auth');
 
 // Load Product model
 const Product = require('../models/Product');
-const Wishlist = require('../controllers/wishlist');
+const WishlistController = require('../controllers/wishlistController');
 
 const isProductContainErrors = (product) => {
     //if (!validators.isNonEmptyString(product.user)) return 'User cannot be empty';
@@ -53,22 +53,7 @@ router.get('/user/:user', auth.isLoggedIn, async (req, res) => {
     }
 });
 
-// @route POST /products/addwish
-// @desc Add new product to wishlist
-// @access Private
-router.post('/addwish', auth.isLoggedIn, async (req, res) => {
-    try {
-        const user = req.user.id;
-        const { product } = req.body;
-        const updatedUser = await Wishlist.addItemToWishList(user,product);
-        return res.json(true);
-    } catch (error){
-        console.log(error);
-        res.status(400).json({"error":"Problem adding product to wishlist"});
-    }
-});
-
-// @route POST /products/add    	
+// @route POST /products/add
 // @desc Add new product
 // @access Private
 router.post('/add', auth.isLoggedIn, async (req, res) => {
@@ -76,14 +61,6 @@ router.post('/add', auth.isLoggedIn, async (req, res) => {
         const user = req.user.id;
         const { name, price, image, fromdate, todate } = req.body;
         
-        const toDateFrom = new Date(fromdate);
-        const toDateTo = new Date(todate);
-
-        let rentingDates = {
-            "fromdate": new Date(toDateFrom.getTime() - (48*60*60*1000)),
-            "todate": new Date(toDateFrom.getTime() - (24*60*60*1000))
-        }
-
         let newProduct = new Product ({
             user,
             name,
@@ -91,7 +68,6 @@ router.post('/add', auth.isLoggedIn, async (req, res) => {
             image,
             fromdate,
             todate,
-            rentingDates
         });
 
         let error = isProductContainErrors(newProduct);
@@ -114,7 +90,7 @@ router.post('/add', auth.isLoggedIn, async (req, res) => {
 router.delete('/:id', auth.isLoggedIn, async (req, res) => {
     try {
         await Product.findByIdAndRemove(req.params.id);
-        await Wishlist.handleProductDeletion(req.params.id);
+        await WishlistController.handleProductDeletion(req.params.id);
         return res.json(true);
     } catch (error){
         console.log(error);

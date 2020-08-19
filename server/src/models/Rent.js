@@ -29,4 +29,6 @@ RentSchema.set('toJSON', {
     transform: function (doc, ret) { delete ret._id }
 });
 
+RentSchema.index({ user: 1 });
+
 module.exports = Rent = mongoose.model('Rent', RentSchema, 'Rents');
