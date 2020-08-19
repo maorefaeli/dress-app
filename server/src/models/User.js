@@ -32,10 +32,10 @@ const UserSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'User',
         },
-        items: {
-            type: [Schema.Types.ObjectId],
+        products: [{
+            type: Schema.Types.ObjectId,
             ref: 'Product',
-        },
+        }],
     }],
 });
 
@@ -55,6 +55,6 @@ UserSchema.set('toJSON', {
 
 UserSchema.index({ username: 1 }, { unique: true });
 UserSchema.index({ 'wishlist.user': 1 });
-UserSchema.index({ 'wishlist.items': 1 });
+UserSchema.index({ 'wishlist.products': 1 });
 
 module.exports = User = mongoose.model('User', UserSchema, 'Users');
