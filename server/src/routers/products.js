@@ -41,6 +41,19 @@ router.get('/:id', async (req, res) => {
 });
 
 // @route GET /products/user/:id
+// @desc Get logged in user products list.
+// @access Private
+router.get('/user/me', auth.isLoggedIn, async (req, res) => {
+    try {
+        const products = await Product.find({user:req.user.id});
+        return res.json(products);
+    } catch (error){
+        console.log(error);
+        res.status(400).json({"error":"Problem getting products"});
+    }
+});
+
+// @route GET /products/user/:id
 // @desc Get user's product by their ID
 // @access Private
 router.get('/user/:user', auth.isLoggedIn, async (req, res) => {
