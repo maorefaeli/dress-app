@@ -21,6 +21,7 @@
     <string name="or">or</string>
     <string name="guest"><u>Continue as a guest</u></string>
     <string name="place_order">Place your order</string>
+    <string name="please_review">Please review your experience</string>
     <string name="add_cloth">Add new cloth</string>
     <string name="from">From</string>
     <string name="to">To</string>
@@ -48,6 +49,7 @@
     <string name="logout">Logout</string>
     <string name="cancel">Cancel</string>
     <string name="yes">Yes</string>
+    <string name="ok">OK</string>
     <string name="title_activity_wish_list">WishListActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
