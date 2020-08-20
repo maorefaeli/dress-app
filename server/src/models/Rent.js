@@ -13,6 +13,11 @@ const RentSchema = new Schema({
         ref: "Product",
         required: true
     },
+    rentFromUser: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
     fromdate: {
         type: Date,
         required: true

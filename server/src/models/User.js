@@ -37,6 +37,10 @@ const UserSchema = new Schema({
             ref: 'Product',
         }],
     }],
+    avg: {
+        type: Number,
+        required: false,
+    }
 });
 
 UserSchema.methods.isPasswordValid = function(password) {

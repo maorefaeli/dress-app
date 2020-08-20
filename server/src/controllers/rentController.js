@@ -2,12 +2,13 @@ const validators = require('../utils/validators');
 const Product = require('../models/Product');
 const Rent = require('../models/Rent');
 
-exports.addRent = async (userId, productId, fromdate, todate) => {
+exports.addRent = async (userId, productId, fromdate, todate, rentFromUser) => {
     let newRent = new Rent ({
         user: userId,
         product: productId,
         fromdate,
-        todate
+        todate,
+        rentFromUser: rentFromUser
     });
 
     let error = isRentContainErrors(newRent);
