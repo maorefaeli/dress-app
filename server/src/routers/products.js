@@ -11,6 +11,8 @@ const isProductContainErrors = (product) => {
     //if (!validators.isNonEmptyString(product.user)) return 'User cannot be empty';
     if (!validators.isNonEmptyString(product.name)) return 'Name cannot be empty';
     if (!validators.isPositiveNumber(product.price)) return 'Price must be positive';
+    if (!product.fromdate) return 'fromdate cannot be empty';
+    if (!product.todate) return 'fromdate cannot be empty';
     return '';
 };
 
@@ -102,8 +104,15 @@ router.post('/add', auth.isLoggedIn, async (req, res) => {
 //  @access Private
 router.delete('/:id', auth.isLoggedIn, async (req, res) => {
     try {
-        await Product.findByIdAndRemove(req.params.id);
-        await WishlistController.handleProductDeletion(req.params.id);
+        const productId = req.params.id;
+
+        const product = await Product.findById(productId);
+        if (!product.user.equals(userId)) {
+            return res.status(404).json({"error": "Product not belongs to user"});
+        }
+
+        await Product.findByIdAndRemove(productId);
+        await WishlistController.handleProductDeletion(productId);
         return res.json(true);
     } catch (error){
         console.log(error);
@@ -116,10 +125,17 @@ router.delete('/:id', auth.isLoggedIn, async (req, res) => {
 //  @access Private
 router.post('/:id', auth.isLoggedIn, async (req, res) => {
     try {
-        const UserId = req.user.id;
+        const productId = req.params.id;
+        const userId = req.user.id;
         const { name, price, image, fromdate, todate } = req.body;
-        const product = {
-            UserId,
+
+        let product = await Product.findById(productId);
+        if (!product.user.equals(userId)) {
+            return res.status(404).json({"error": "Product not belongs to user"});
+        }
+
+        product = {
+            user: userId,
             name,
             price,
             image,
@@ -132,7 +148,7 @@ router.post('/:id', auth.isLoggedIn, async (req, res) => {
             return res.status(400).json({ error });
         }
 
-        const newProduct = await Product.findByIdAndUpdate(req.params.id, product, { new: true });
+        const newProduct = await Product.findByIdAndUpdate(productId, product, { new: true });
         return res.json(newProduct);
     } catch (error){
         console.log(error);
