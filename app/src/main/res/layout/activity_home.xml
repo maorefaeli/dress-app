@@ -39,12 +39,13 @@
         android:layout_height="match_parent"/>
         
         <LinearLayout
-            android:id="@+id/postsContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="10dp"/>
+        android:id="@+id/postsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="10dp"/>
+        
     </LinearLayout>
 
     <android.support.design.widget.NavigationView

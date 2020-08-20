@@ -40,7 +40,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// @route GET /products/user/:id
+// @route GET /products/user/me
 // @desc Get logged in user products list.
 // @access Private
 router.get('/user/me', auth.isLoggedIn, async (req, res) => {

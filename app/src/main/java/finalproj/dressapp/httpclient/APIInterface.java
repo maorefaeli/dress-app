@@ -10,11 +10,13 @@ import finalproj.dressapp.Utils;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface APIInterface {
@@ -33,6 +35,21 @@ public interface APIInterface {
     @GET("products/")
     Call<List<Product>> getAllItems();
 
+    @GET("products/user/me")
+    Call<List<Product>> getAllMyItems();
+
+    @GET("products/user/{userid}")
+    Call<List<Product>> getAllSpecificUserItems(@Path("username") String userid);
+
     @POST("products/add")
     Call<Product> doAddItem(@Body Product product, @Header("Cookie") String cookie);
+
+    @GET("users/profile/{username}")
+    Call<UserRegistration> getUserDetails(@Path("username") String userName);
+
+    @POST("wishlist/add")
+    Call<Boolean> addToWishlist(@Body String product);
+
+    @DELETE("products/addwish/")
+    Call<Boolean> removeFromWishlist(@Body String product);
 }

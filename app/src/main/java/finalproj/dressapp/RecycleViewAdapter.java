@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         public TextView datesTextView;
         public TextView ownerTextView;
         public TextView addressTextView;
+        public TextView wishlistIcon;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -47,6 +49,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
             datesTextView = (TextView) itemView.findViewById(R.id.dates);
             ownerTextView = (TextView) itemView.findViewById(R.id.owner);
             addressTextView = (TextView) itemView.findViewById(R.id.address);
+            wishlistIcon = (TextView) itemView.findViewById(R.id.postTitleWishlistIcon);
         }
     }
 
@@ -78,6 +81,17 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         ownerTextView.setText("Owner's name here");
         TextView addressTextView = holder.addressTextView;
         addressTextView.setText("Default Addrress, 220, Tel Aviv");
+        
+        // Setting the product ID on the wishlist icon for when the user presses it.
+        TextView wishlistIcon = holder.wishlistIcon;
+        wishlistIcon.setTag(currentProduct.isInWishlist);
+        ((View)wishlistIcon.getParent()).setTag(currentProduct.id);
+
+        if (currentProduct.isInWishlist) {
+            wishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26_full, 0);
+        }
+
+        // TODO: if item is in favourites set icon to full else empty.
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,17 +115,17 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         return mDataset.size();
     }
 
-    // convenience method for getting data at click position
-    Product getItem(int id) {
+    // Convenience method for getting data at click position
+    public Product getItem(int id) {
         return mDataset.get(id);
     }
 
-    // allows clicks events to be caught
+    // Allows clicks events to be caught
     public void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 
-    // parent activity will implement this method to respond to click events
+    // Parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
     }

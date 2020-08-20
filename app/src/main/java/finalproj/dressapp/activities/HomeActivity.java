@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.LinearLayout;
+import android.view.View;
+import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -18,7 +18,6 @@ import finalproj.dressapp.Utils;
 import finalproj.dressapp.httpclient.APIClient;
 import finalproj.dressapp.httpclient.APIInterface;
 import finalproj.dressapp.httpclient.models.Product;
-import finalproj.dressapp.models.Post;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,8 +27,6 @@ public class HomeActivity extends DressAppActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private List<Product> products;
-    private List<Post> posts = new ArrayList<>();
-    private LinearLayout postsContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +43,17 @@ public class HomeActivity extends DressAppActivity {
 
                     recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
-                    // use this setting to improve performance if you know that changes
-                    // in content do not change the layout size of the RecyclerView
+                    // Use this setting to improve performance if you know that changes
+                    // in content do not change the layout size of the RecyclerView.
                     recyclerView.setHasFixedSize(true);
 
-                    // use a linear layout manager
+                    // Use a linear layout manager.
                     layoutManager = new LinearLayoutManager(HomeActivity.this);
                     recyclerView.setLayoutManager(layoutManager);
 
                     products = response.body();
 
-                    //specify an adapter
+                    // Specify an adapter.
                     mAdapter = new RecycleViewAdapter(HomeActivity.this, HomeActivity.this, products);
                     recyclerView.setAdapter(mAdapter);
                 }
@@ -79,10 +76,12 @@ public class HomeActivity extends DressAppActivity {
 
     @Override
     public void onBackPressed() {
+        // For guests, go back to login screen.
         if (Utils.getGuestStatus()) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);        
         }
+        // For users, go back to the android home screen.
         else {
             Intent startMain = new Intent(Intent.ACTION_MAIN);
             startMain.addCategory(Intent.CATEGORY_HOME);
@@ -90,4 +89,56 @@ public class HomeActivity extends DressAppActivity {
             startActivity(startMain);
         }
     }
+
+    public void onAddToWishlist(final View view)
+    {
+        final TextView mWishlistIcon = view.findViewById(R.id.postTitleWishlistIcon);
+
+        final String productId = (String) ((View)view.getParent()).getTag();
+        final Boolean isInwishlist = (Boolean) view.getTag();
+        view.setTag(!isInwishlist);
+
+        // Adding the item to the user's wishlist.
+        if (isInwishlist){
+            APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+            Call <Boolean> call = apiInterface.addToWishlist(productId);
+            call.enqueue(new Callback<Boolean>() {
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    if (response.code() == 200) {
+                        mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26, 0);
+                     }
+                }
+    
+                public void onFailure(Call<Boolean> call, Throwable t) {
+                    new AlertDialog.Builder(HomeActivity.this)
+                        .setTitle("Couldn't add item: " + productId)
+                        .setMessage(t.getMessage())
+                        .show();
+                    call.cancel();
+                }
+            });
+        }
+        // Removing the item from the user's wishlist.
+        else {
+            // APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+            // Call <Boolean> call = apiInterface.removeFromWishlist(productId);
+            // call.enqueue(new Callback<Boolean>() {
+            //     @Override
+            //     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+            //         if (response.code() == 200) {
+                         mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26_full, 0);
+            //          }
+            //     }
+    
+            //     public void onFailure(Call<Boolean> call, Throwable t) {
+            //         new AlertDialog.Builder(HomeActivity.this)
+            //             .setTitle("Couldn't add item: " + productId)
+            //             .setMessage(t.getMessage())
+            //             .show();
+            //         call.cancel();
+            //     }
+            // });
+        }
+    }  
 }

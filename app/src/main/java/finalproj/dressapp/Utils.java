@@ -13,22 +13,29 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
+import com.google.gson.Gson;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import finalproj.dressapp.activities.HomeActivity;
 import finalproj.dressapp.activities.LoginActivity;
 import finalproj.dressapp.activities.MyClothesActivity;
 import finalproj.dressapp.activities.ProfileActivity;
 import finalproj.dressapp.activities.WishListActivity;
+import finalproj.dressapp.httpclient.models.CookieJarList;
+import okhttp3.Cookie;
 
 public class Utils {
     static SimpleDateFormat dateformatYYYYMMDD = new SimpleDateFormat("yyyy-MM-dd");
     static Boolean isGuest;
     static ProgressDialog dialog = null;
     static final String PREF_USER_NAME = "username";
-    static final String PREF_UDER_ID = "userid";
+    static final String PREF_USER_ID = "userid";
+    static final String PREF_COOKIES = "cookies";
         
     public static void showPopupProgressSpinner(Activity activity, Boolean isShowing, String text) {
 
@@ -67,15 +74,39 @@ public class Utils {
 
     public static String getUserId(Context ctx)
     {
-        return getSharedPreferences(ctx).getString(PREF_UDER_ID, "");
+        return getSharedPreferences(ctx).getString(PREF_USER_ID, "");
     }
     
     public static void setUserId(Context ctx, String userid) 
     {
         SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
-        editor.putString(PREF_UDER_ID, userid);
+        editor.putString(PREF_USER_ID, userid);
         editor.commit();
     }
+
+    public static List<Cookie> getCookies(Context ctx)
+    {
+        Gson gson = new Gson();
+        String json = getSharedPreferences(ctx).getString(PREF_COOKIES, "");
+
+        if (json == null || json.isEmpty()){
+            return new ArrayList<Cookie>();
+        }
+        else {
+            List<Cookie> cookies = gson.fromJson(json, ArrayList.class);
+            return cookies;
+        }
+    }
+
+    public static void setCookies(Context ctx, List<Cookie> cookies)
+    {
+        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(cookies);
+        editor.putString(PREF_COOKIES, json);
+        editor.commit();
+    }
+
     public static void clearUserName(final Activity activity)
     {
         SharedPreferences.Editor editor = getSharedPreferences(activity.getApplicationContext()).edit();

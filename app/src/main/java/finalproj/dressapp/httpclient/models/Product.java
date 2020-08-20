@@ -7,8 +7,11 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 
 public class Product {
-    // @SerializedName("user")
-    // public String user;
+    @SerializedName("user")
+    public String user;
+
+    @SerializedName("id")
+    public String id;
 
     @SerializedName("name")
     public String name;
@@ -24,6 +27,9 @@ public class Product {
 
     @SerializedName("image")
     public String image;
+
+    @SerializedName("isInWishlist")
+    public Boolean isInWishlist;
 
     public Product(String productName, Number price, String fromDate, String toDate, String image) {
         this.name = productName;
