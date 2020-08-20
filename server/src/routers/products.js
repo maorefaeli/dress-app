@@ -74,7 +74,7 @@ router.post('/add', auth.isLoggedIn, async (req, res) => {
         const user = req.user.id;
         const { name, price, image, fromdate, todate } = req.body;
         
-        let newProduct = new Product ({
+        let newProduct = new Product({
             user,
             name,
             price,
