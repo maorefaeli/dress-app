@@ -8,20 +8,28 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import finalproj.dressapp.R;
 
-public class CompleteOrderDialogFragment extends DialogFragment {
+public class ReviewDialogFragment extends DialogFragment {
+    private RatingBar ratingBar;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        Bundle bundle = getArguments();
         final LinearLayout dialogContainer =
-                (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.complete_order_window, null);
+                (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.review_window, null);
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(dialogContainer);
 
         final Dialog dialog = builder.create();
+        ratingBar = dialogContainer.findViewById(R.id.ratingBar);
+
+        ((TextView) dialogContainer.findViewById(R.id.itemTitle)).setText(getArguments().getString("title"));
 
         dialogContainer.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -30,17 +38,16 @@ public class CompleteOrderDialogFragment extends DialogFragment {
             }
         });
 
-        dialogContainer.findViewById(R.id.yes).setOnClickListener(new View.OnClickListener() {
+        dialogContainer.findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.dismiss();
-                // send order completed message to server
+                int rating = ratingBar.getNumStars();
+                // send rating to server
 
-                ReviewDialogFragment reviewDialogFragment = new ReviewDialogFragment();
-                reviewDialogFragment.setArguments(getArguments());
-                reviewDialogFragment.show(getFragmentManager(), "reviewDialog");
+                dialog.dismiss();
             }
         });
+
         return dialog;
     }
 }

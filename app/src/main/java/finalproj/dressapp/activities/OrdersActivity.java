@@ -48,7 +48,7 @@ public class OrdersActivity extends DressAppActivity {
 
     private void showProducts() {
         noOrdersText.setVisibility(products.size() == 0 ? View.VISIBLE : View.INVISIBLE);
-        for (Product product : products) {
+        for (final Product product : products) {
             LinearLayout productView = (LinearLayout) getLayoutInflater().inflate(R.layout.order_template, null);
             ((TextView)productView.findViewById(R.id.orderTitle)).setText(product.name);
             String dates = product.fromdate + "-" + product.todate;
@@ -59,6 +59,9 @@ public class OrdersActivity extends DressAppActivity {
                 @Override
                 public void onClick(View view) {
                     CompleteOrderDialogFragment dialogFragment = new CompleteOrderDialogFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", product.name);
+                    dialogFragment.setArguments(bundle);
                     dialogFragment.show(getSupportFragmentManager(), "completeOrder");
                 }
             });
