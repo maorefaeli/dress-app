@@ -37,9 +37,6 @@ const ProductSchema = new Schema({
     }
 });
 
-ProductSchema.virtual('isInWishlist').get(() => {
-    return true;
-});
 ProductSchema.set('toJSON', {
     virtuals: true,
     versionKey: false,
