@@ -22,35 +22,42 @@ const findCycles = async (userId) => {
  * Add a product to a user's wishlist and find new cycles
  */
 exports.addProductToWishlist = async (userId, productId) => {
+    // User must exist
     const user = await User.findById(userId);
     if (!user) {
         throw new Error('Invalid user');
     };
     
+    // Product must exist
     const product = await Product.findById(productId);
     if (!product) {
         throw new Error('Invalid product');
     };
 
+    // Make sure we have an empty array
     if (!user.wishlist) {
         user.wishlist = [];
     }
 
     let isFound = false;
     user.wishlist.forEach(wish => {
+        // Search the user that the product belongs to
         if (wish.user.equals(product.user)) {
             isFound = true;
 
+            // Make sure we have an empty array
             if (!wish.products) {
                 wish.products = [];
             }
 
+            // If product not in the user's list, add it
             if (!wish.products.includes(productId)) {
                 wish.products.push(productId);
             }
         }
     })
 
+    // If user was not found, need to create new item
     if (!isFound) {
         user.wishlist.push({
             user: product.user,
@@ -59,6 +66,8 @@ exports.addProductToWishlist = async (userId, productId) => {
     }
 
     await User.findByIdAndUpdate(userId, user);
+
+    // Initiate the algorithm for find and update cycles
     await findCycles(userId);
 };
 
