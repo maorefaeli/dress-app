@@ -26,8 +26,8 @@ import finalproj.dressapp.activities.LoginActivity;
 import finalproj.dressapp.activities.MyClothesActivity;
 import finalproj.dressapp.activities.ProfileActivity;
 import finalproj.dressapp.activities.WishListActivity;
-import finalproj.dressapp.httpclient.models.CookieJarList;
-import okhttp3.Cookie;
+//import finalproj.dressapp.httpclient.models.CookieJarList;
+//import okhttp3.Cookie;
 
 public class Utils {
     static SimpleDateFormat dateformatYYYYMMDD = new SimpleDateFormat("yyyy-MM-dd");
@@ -84,28 +84,28 @@ public class Utils {
         editor.commit();
     }
 
-    public static List<Cookie> getCookies(Context ctx)
-    {
-        Gson gson = new Gson();
-        String json = getSharedPreferences(ctx).getString(PREF_COOKIES, "");
-
-        if (json == null || json.isEmpty()){
-            return new ArrayList<Cookie>();
-        }
-        else {
-            List<Cookie> cookies = gson.fromJson(json, ArrayList.class);
-            return cookies;
-        }
-    }
-
-    public static void setCookies(Context ctx, List<Cookie> cookies)
-    {
-        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(cookies);
-        editor.putString(PREF_COOKIES, json);
-        editor.commit();
-    }
+//    public static List<Cookie> getCookies(Context ctx)
+//    {
+//        Gson gson = new Gson();
+//        String json = getSharedPreferences(ctx).getString(PREF_COOKIES, "");
+//
+//        if (json == null || json.isEmpty()){
+//            return new ArrayList<Cookie>();
+//        }
+//        else {
+//            List<Cookie> cookies = gson.fromJson(json, ArrayList.class);
+//            return cookies;
+//        }
+//    }
+//
+//    public static void setCookies(Context ctx, List<Cookie> cookies)
+//    {
+//        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+//        Gson gson = new Gson();
+//        String json = gson.toJson(cookies);
+//        editor.putString(PREF_COOKIES, json);
+//        editor.commit();
+//    }
 
     public static void clearUserName(final Activity activity)
     {

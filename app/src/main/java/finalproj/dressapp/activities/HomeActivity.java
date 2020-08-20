@@ -99,15 +99,17 @@ public class HomeActivity extends DressAppActivity {
         view.setTag(!isInwishlist);
 
         // Adding the item to the user's wishlist.
-        if (isInwishlist){
+        if (!isInwishlist){
+            //TODO: Move inside response after it works (Fix the cookies first).
+            mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26, 0);
+                    
             APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
             Call <Boolean> call = apiInterface.addToWishlist(productId);
             call.enqueue(new Callback<Boolean>() {
                 @Override
                 public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                     if (response.code() == 200) {
-                        mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26, 0);
-                     }
+ }
                 }
     
                 public void onFailure(Call<Boolean> call, Throwable t) {
