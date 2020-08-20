@@ -71,6 +71,7 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(morgan('dev'))
+app.disable('x-powered-by');
 
 // Load all routers
 app.use(require('./routers'));
