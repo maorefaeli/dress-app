@@ -6,6 +6,8 @@ const auth = require('../utils/auth');
 // Load Review model
 const Review = require('../models/Review');
 
+const ReviewsController = require('../controllers/reviewController');
+
 // @route POST /reviews/add
 // @desc Add new review about rent
 // @access Private
@@ -21,6 +23,10 @@ router.post('/add', auth.isLoggedIn, async (req, res) => {
         });
 
         newReview = await newReview.save();
+        
+        const newUser = await ReviewsController.updateUserRating(rent.product,score);
+        console.log(newUser);
+
         res.json(newReview);
     } catch (e) {
         console.log(e);
