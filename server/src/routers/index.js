@@ -12,6 +12,7 @@ router.get('/check', (req, res) => {
 });
 
 // Handle login
+// POST /login?username=XXX&password=XXX
 router.post('/login', passport.authenticate('local', { failWithError: true }),
     function(req, res, next) {
         // handle success
