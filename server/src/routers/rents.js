@@ -45,8 +45,8 @@ router.get('/history/:id', auth.isLoggedIn, async (req, res) => {
 // @access Private
 router.post('/add', auth.isLoggedIn, async (req, res) => {
     try {
-        const { product, fromdate, todate } = req.body;
-        const newRent = await RentController.addRent(req.user.id, product, fromdate, todate);
+        const { product, fromdate, todate, rentFromUser } = req.body;
+        const newRent = await RentController.addRent(req.user.id, product, fromdate, todate, rentFromUser);
         res.json(newRent);
     } catch (e) {
         console.log(e);
