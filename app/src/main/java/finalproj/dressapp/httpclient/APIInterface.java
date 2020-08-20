@@ -6,6 +6,7 @@ import finalproj.dressapp.httpclient.models.ServerCheck;
 import finalproj.dressapp.httpclient.models.UserCredentials;
 import finalproj.dressapp.httpclient.models.UserRegistration;
 import finalproj.dressapp.httpclient.models.Product;
+import finalproj.dressapp.httpclient.models.WishlistProduct;
 import finalproj.dressapp.Utils;
 
 import retrofit2.Call;
@@ -48,8 +49,8 @@ public interface APIInterface {
     Call<UserRegistration> getUserDetails(@Path("username") String userName);
 
     @POST("wishlist/add")
-    Call<Boolean> addToWishlist(@Body String product);
+    Call<Boolean> addToWishlist(@Body WishlistProduct wishlistProduct);
 
-    @DELETE("products/addwish/")
+    @DELETE("wishlist/CHANGETOREMOVEWHENREADY/")
     Call<Boolean> removeFromWishlist(@Body String product);
 }

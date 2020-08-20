@@ -18,6 +18,7 @@ import finalproj.dressapp.Utils;
 import finalproj.dressapp.httpclient.APIClient;
 import finalproj.dressapp.httpclient.APIInterface;
 import finalproj.dressapp.httpclient.models.Product;
+import finalproj.dressapp.httpclient.models.WishlistProduct;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -94,27 +95,25 @@ public class HomeActivity extends DressAppActivity {
     {
         final TextView mWishlistIcon = view.findViewById(R.id.postTitleWishlistIcon);
 
-        final String productId = (String) ((View)view.getParent()).getTag();
-        final Boolean isInwishlist = (Boolean) view.getTag();
-        view.setTag(!isInwishlist);
+        final WishlistProduct wishlistProduct = new WishlistProduct((String) ((View)view.getParent()).getTag());
+        final Boolean isInWishlist = (Boolean) view.getTag();
+        view.setTag(!isInWishlist);
 
         // Adding the item to the user's wishlist.
-        if (!isInwishlist){
+        if (!isInWishlist){
             //TODO: Move inside response after it works (Fix the cookies first).
-            mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26, 0);
-                    
             APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-            Call <Boolean> call = apiInterface.addToWishlist(productId);
+            Call <Boolean> call = apiInterface.addToWishlist(wishlistProduct);
             call.enqueue(new Callback<Boolean>() {
                 @Override
                 public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                     if (response.code() == 200) {
- }
+                        mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26, 0); }
                 }
     
                 public void onFailure(Call<Boolean> call, Throwable t) {
                     new AlertDialog.Builder(HomeActivity.this)
-                        .setTitle("Couldn't add item: " + productId)
+                        .setTitle("Couldn't add item: " + wishlistProduct.product)
                         .setMessage(t.getMessage())
                         .show();
                     call.cancel();
