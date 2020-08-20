@@ -47,8 +47,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawablePadding="3dp"
                     android:paddingBottom="3dp"
+                    android:gravity="end"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />

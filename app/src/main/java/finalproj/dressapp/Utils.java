@@ -24,6 +24,7 @@ import java.util.List;
 import finalproj.dressapp.activities.HomeActivity;
 import finalproj.dressapp.activities.LoginActivity;
 import finalproj.dressapp.activities.MyClothesActivity;
+import finalproj.dressapp.activities.OrdersActivity;
 import finalproj.dressapp.activities.ProfileActivity;
 import finalproj.dressapp.activities.WishListActivity;
 //import finalproj.dressapp.httpclient.models.CookieJarList;
@@ -167,9 +168,9 @@ public class Utils {
                         activity.startActivity(intent);
                         return true;
                     case R.id.myOrders:
-                        intent = new Intent(activity.getApplicationContext(), HomeActivity.class);
+                        intent = new Intent(activity.getApplicationContext(), OrdersActivity.class);
                         activity.startActivity(intent);
-                        break;
+                        return true;
                     case R.id.home:
                         intent = new Intent(activity.getApplicationContext(), HomeActivity.class);
                         activity.startActivity(intent);
