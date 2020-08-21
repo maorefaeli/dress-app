@@ -51,6 +51,6 @@ public interface APIInterface {
     @POST("wishlist/add")
     Call<Boolean> addToWishlist(@Body WishlistProduct wishlistProduct);
 
-    @DELETE("wishlist/CHANGETOREMOVEWHENREADY/")
+    @DELETE("wishlist/remove/")
     Call<Boolean> removeFromWishlist(@Body String product);
 }

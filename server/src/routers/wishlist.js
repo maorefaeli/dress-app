@@ -21,7 +21,7 @@ router.post('/add', auth.isLoggedIn, async (req, res) => {
 // @route POST /wishlist/add
 // @desc Add new product to wishlist
 // @access Private
-router.post('/remove', auth.isLoggedIn, async (req, res) => {
+router.delete('/remove', auth.isLoggedIn, async (req, res) => {
     try {
         const { product } = req.body;
         await WishlistController.removeProductFromWishlist(req.user.id, product);
