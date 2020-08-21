@@ -66,11 +66,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
         final Product currentProduct = mDataset.get(position);
 
-        String dates = currentProduct.fromdate + " - " + currentProduct.todate;
-        if (currentProduct.fromdate.length() == 10 )
-        {
-            dates = Utils.DateFormatToShow(currentProduct.fromdate) + "-" + Utils.DateFormatToShow(currentProduct.todate);
-        }
+        String dates = Utils.DateFormatToShow(currentProduct.fromdate) + "-" + Utils.DateFormatToShow(currentProduct.todate);
 
         // Set item views based on your views and data model
         TextView titleTextView = holder.titleTextView;
@@ -83,13 +79,13 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         addressTextView.setText("Default Addrress, 220, Tel Aviv");
         
         // Setting the product ID on the wishlist icon for when the user presses it.
-        TextView wishlistIcon = holder.wishlistIcon;
-        wishlistIcon.setTag(currentProduct.isInWishlist);
-        ((View)wishlistIcon.getParent()).setTag(currentProduct.id);
-
-        if (currentProduct.isInWishlist) {
-            wishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26_full, 0);
-        }
+//        TextView wishlistIcon = holder.wishlistIcon;
+//        wishlistIcon.setTag(currentProduct.isInWishlist);
+//        ((View)wishlistIcon.getParent()).setTag(currentProduct.id);
+//
+//        if (currentProduct.isInWishlist) {
+//            wishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26_full, 0);
+//        }
 
         // TODO: if item is in favourites set icon to full else empty.
 

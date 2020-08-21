@@ -36,7 +36,6 @@ public class Utils {
     static ProgressDialog dialog = null;
     static final String PREF_USER_NAME = "username";
     static final String PREF_USER_ID = "userid";
-    static final String PREF_COOKIES = "cookies";
         
     public static void showPopupProgressSpinner(Activity activity, Boolean isShowing, String text) {
 
@@ -58,7 +57,6 @@ public class Utils {
 
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
-    //    return ctx.getSharedPreferences(PREF_USER_NAME, 0);
     }
 
     public static String getUserName(Context ctx)

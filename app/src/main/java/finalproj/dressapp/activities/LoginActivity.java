@@ -154,9 +154,16 @@ public class LoginActivity extends AppCompatActivity {
                             List<String> Cookielist = response.headers().values("Set-Cookie");
                             String userId = (Cookielist.get(0).split(";"))[0];
                             Utils.setUserId(getApplicationContext(), userId);
-                            Utils.setUserName(getApplicationContext(), email);
+                            Utils.setGuestStatus(false);
                             goToHome();
                         }
+                    }
+                    else {
+                        new AlertDialog.Builder(LoginActivity.this)
+                        .setTitle("Could not log in.")
+                        .setMessage("The E-mail and password combination was not found, please check your input.")
+                        .show();
+                        call.cancel();
                     }
                 }
 
