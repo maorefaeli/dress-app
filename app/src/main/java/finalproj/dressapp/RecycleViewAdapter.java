@@ -79,15 +79,14 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         addressTextView.setText("Default Addrress, 220, Tel Aviv");
         
         // Setting the product ID on the wishlist icon for when the user presses it.
-//        TextView wishlistIcon = holder.wishlistIcon;
-//        wishlistIcon.setTag(currentProduct.isInWishlist);
-//        ((View)wishlistIcon.getParent()).setTag(currentProduct.id);
-//
-//        if (currentProduct.isInWishlist) {
-//            wishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26_full, 0);
-//        }
+        TextView wishlistIcon = holder.wishlistIcon;
+        Boolean isInWishList = true; // TODO: CHANGE TO CHECK IF TRUE OR FALSE BY THE USER'S WISHLIST LIST.
+        wishlistIcon.setTag(isInWishList);
+        ((View)wishlistIcon.getParent()).setTag(currentProduct.id);
 
-        // TODO: if item is in favourites set icon to full else empty.
+        if (isInWishList) {
+            wishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26_full, 0);
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
