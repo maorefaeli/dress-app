@@ -8,6 +8,7 @@ const getReviewedUserId = async (productId) => {
     return userId;
 };
 
+//  TODO: refactor the calculation of user's rating
 exports.updateUserRating = async (productId, score) => {
     const userId = await getReviewedUserId(productId);
     let avgRating, avgSum, avgQuentity = 0;
