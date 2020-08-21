@@ -16,9 +16,9 @@ exports.updateUserRating = async (productId, score) => {
     let reviews = await Review.find();
     reviews.forEach(review => {
         // Get the reviewed userId
-        const user = await getReviewedUserId(review.rent.product);
-        if (user.equals(userId))
-            userReviews.push(review);
+        // const user = await getReviewedUserId(review.rent.product);
+        // if (user.equals(userId))
+        //     userReviews.push(review);
     });
 
     userReviews.forEach(userReview => {
