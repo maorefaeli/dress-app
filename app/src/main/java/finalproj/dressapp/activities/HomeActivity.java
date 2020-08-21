@@ -93,53 +93,56 @@ public class HomeActivity extends DressAppActivity {
 
     public void onAddToWishlist(final View view)
     {
-        final TextView mWishlistIcon = view.findViewById(R.id.postTitleWishlistIcon);
+        // Only allow wishlist function for logged in users.
+        if (!Utils.getGuestStatus()) {
+            final TextView mWishlistIcon = view.findViewById(R.id.postTitleWishlistIcon);
 
-        final WishlistProduct wishlistProduct = new WishlistProduct((String) ((View)view.getParent()).getTag());
-        final Boolean isInWishlist = (Boolean) view.getTag();
-        view.setTag(!isInWishlist);
+            final WishlistProduct wishlistProduct = new WishlistProduct((String) ((View)view.getParent()).getTag());
+            final Boolean isInWishlist = (Boolean) view.getTag();
+            view.setTag(!isInWishlist);
 
-        // Adding the item to the user's wishlist.
-        if (!isInWishlist){
-            //TODO: Move inside response after it works (Fix the cookies first).
-            APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-            Call <Boolean> call = apiInterface.addToWishlist(wishlistProduct);
-            call.enqueue(new Callback<Boolean>() {
-                @Override
-                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                    if (response.code() == 200) {
-                        mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26, 0); }
-                }
-    
-                public void onFailure(Call<Boolean> call, Throwable t) {
-                    new AlertDialog.Builder(HomeActivity.this)
-                        .setTitle("Couldn't add item: " + wishlistProduct.product)
-                        .setMessage(t.getMessage())
-                        .show();
-                    call.cancel();
-                }
-            });
-        }
-        // Removing the item from the user's wishlist.
-        else {
-            // APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-            // Call <Boolean> call = apiInterface.removeFromWishlist(productId);
-            // call.enqueue(new Callback<Boolean>() {
-            //     @Override
-            //     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-            //         if (response.code() == 200) {
-                         mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26_full, 0);
-            //          }
-            //     }
-    
-            //     public void onFailure(Call<Boolean> call, Throwable t) {
-            //         new AlertDialog.Builder(HomeActivity.this)
-            //             .setTitle("Couldn't add item: " + productId)
-            //             .setMessage(t.getMessage())
-            //             .show();
-            //         call.cancel();
-            //     }
-            // });
+            // Adding the item to the user's wishlist.
+            if (!isInWishlist){
+                //TODO: Move inside response after it works (Fix the cookies first).
+                APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+                Call <Boolean> call = apiInterface.addToWishlist(wishlistProduct);
+                call.enqueue(new Callback<Boolean>() {
+                    @Override
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        if (response.code() == 200) {
+                            mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26, 0); }
+                    }
+
+                    public void onFailure(Call<Boolean> call, Throwable t) {
+                        new AlertDialog.Builder(HomeActivity.this)
+                                .setTitle("Couldn't add item: " + wishlistProduct.product)
+                                .setMessage(t.getMessage())
+                                .show();
+                        call.cancel();
+                    }
+                });
+            }
+            // Removing the item from the user's wishlist.
+            else {
+                // APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+                // Call <Boolean> call = apiInterface.removeFromWishlist(productId);
+                // call.enqueue(new Callback<Boolean>() {
+                //     @Override
+                //     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                //         if (response.code() == 200) {
+                mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26_full, 0);
+                //          }
+                //     }
+
+                //     public void onFailure(Call<Boolean> call, Throwable t) {
+                //         new AlertDialog.Builder(HomeActivity.this)
+                //             .setTitle("Couldn't add item: " + productId)
+                //             .setMessage(t.getMessage())
+                //             .show();
+                //         call.cancel();
+                //     }
+                // });
+            }
         }
     }  
 }

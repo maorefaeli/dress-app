@@ -11,6 +11,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.gson.Gson;
@@ -26,6 +27,7 @@ import finalproj.dressapp.activities.LoginActivity;
 import finalproj.dressapp.activities.MyClothesActivity;
 import finalproj.dressapp.activities.OrdersActivity;
 import finalproj.dressapp.activities.ProfileActivity;
+import finalproj.dressapp.activities.RegisterActivity;
 import finalproj.dressapp.activities.WishListActivity;
 //import finalproj.dressapp.httpclient.models.CookieJarList;
 //import okhttp3.Cookie;
@@ -154,6 +156,32 @@ public class Utils {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         NavigationView nv = activity.findViewById(R.id.nv);
+        Menu menu = nv.getMenu();
+
+        MenuItem currentItem;
+
+        for (int i = 0; i < menu.size(); i++) {
+            currentItem = menu.getItem(i);
+
+            if (currentItem.getItemId() == R.id.myCloth ||
+                currentItem.getItemId() == R.id.myOrders ||
+                currentItem.getItemId() == R.id.home ||
+                currentItem.getItemId() == R.id.profile ||
+                currentItem.getItemId() == R.id.wishList ||
+                currentItem.getItemId() == R.id.logout) {
+
+                if (isGuest) {
+                    currentItem.setVisible(false);
+                }
+            }
+            else if (currentItem.getItemId() == R.id.login ||
+                     currentItem.getItemId() == R.id.register) {
+                if (!isGuest) {
+                    currentItem.setVisible(false);
+                }
+            }
+        }
+
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -183,6 +211,14 @@ public class Utils {
                         return true;
                     case R.id.logout:
                         clearUserName(activity);
+                        return true;
+                    case R.id.login:
+                        intent = new Intent(activity.getApplicationContext(), LoginActivity.class);
+                        activity.startActivity(intent);
+                        return true;
+                    case R.id.register:
+                        intent = new Intent(activity.getApplicationContext(), RegisterActivity.class);
+                        activity.startActivity(intent);
                         return true;
                 }
 

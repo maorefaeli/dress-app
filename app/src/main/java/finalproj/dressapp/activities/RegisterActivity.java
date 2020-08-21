@@ -92,14 +92,14 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Check for a valid first name.
         if (!firstNameMatch.find()) {
-            mFirstNameView.setError("First name has to be at least 2 characters long and can't contain numbers.");
+            mFirstNameView.setError("First name has to be at least 2 characters long and can't contain numbers, spaces or any special character.");
             focusView = mFirstNameView;
             cancel = true;
         };
 
         // Check for a valid last name.
         if (!lastNameMatch.find()) {
-            mLastNameView.setError("Last name has to be at least 2 characters long and can't contain numbers.");
+            mLastNameView.setError("Last name has to be at least 2 characters long and can't contain numbers, spaces or any special character.");
             focusView = mLastNameView;
             cancel = true;
         };
@@ -131,9 +131,9 @@ public class RegisterActivity extends AppCompatActivity {
 
             Utils.showPopupProgressSpinner(this, true, "Juat a moment...");
             
-            firstName = firstName.toLowerCase();
-            lastName = lastName.toLowerCase();
-            email = email.toLowerCase();
+            firstName = firstName.toLowerCase().trim();
+            lastName = lastName.toLowerCase().trim();
+            email = email.toLowerCase().trim();
 
             UserRegistration userRegistration = new UserRegistration(firstName, lastName, email, password);
             APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);

@@ -1,8 +1,11 @@
 package finalproj.dressapp;
+import finalproj.dressapp.activities.ProfileActivity;
 import finalproj.dressapp.fragments.ItemDialogFragment;
+import finalproj.dressapp.httpclient.models.MyAppContext;
 import finalproj.dressapp.httpclient.models.Product;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -19,9 +22,11 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
     private Activity mCallingActivity;
+    private Context mContext;
 
     // data is passed into the constructor
     public RecycleViewAdapter(Activity activity, Context context, List<Product> data) {
+        this.mContext = context;
         this.mCallingActivity = activity;
         this.mInflater = LayoutInflater.from(context);
         this.mDataset = data;
@@ -77,31 +82,45 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         ownerTextView.setText("Owner's name here");
         TextView addressTextView = holder.addressTextView;
         addressTextView.setText("Default Addrress, 220, Tel Aviv");
-        
-        // Setting the product ID on the wishlist icon for when the user presses it.
-        TextView wishlistIcon = holder.wishlistIcon;
-        Boolean isInWishList = true; // TODO: CHANGE TO CHECK IF TRUE OR FALSE BY THE USER'S WISHLIST LIST.
-        wishlistIcon.setTag(isInWishList);
-        ((View)wishlistIcon.getParent()).setTag(currentProduct.id);
 
-        if (isInWishList) {
-            wishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26_full, 0);
+        // For guests, don't allow to see the item renting popup dialog.
+        if (Utils.getGuestStatus()) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                    new AlertDialog.Builder(mContext)
+                            .setTitle("Not logged in.")
+                            .setMessage("If you want to begin renting clothes, please login or register.")
+                            .show();
+               }
+            });
         }
+        else {
+            // Setting the product ID on the wishlist icon for when the user presses it.
+            TextView wishlistIcon = holder.wishlistIcon;
+            Boolean isInWishList = true; // TODO: CHANGE TO CHECK IF TRUE OR FALSE BY THE USER'S WISHLIST LIST.
+            wishlistIcon.setTag(isInWishList);
+            ((View)wishlistIcon.getParent()).setTag(currentProduct.id);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ItemDialogFragment dialogFragment = new ItemDialogFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("description", currentProduct.name);
-                bundle.putString("imgSrc", currentProduct.image);
-                bundle.putInt("cost", currentProduct.price.intValue());
-                bundle.putLong("minDate", Utils.DateFormatToLong(currentProduct.fromdate));
-                bundle.putLong("maxDate", Utils.DateFormatToLong(currentProduct.todate));
-                dialogFragment.setArguments(bundle);
-                dialogFragment.show(mCallingActivity.getFragmentManager(), "ItemDialog");
+            if (isInWishList) {
+                wishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26_full, 0);
             }
-        });
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ItemDialogFragment dialogFragment = new ItemDialogFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("description", currentProduct.name);
+                    bundle.putString("imgSrc", currentProduct.image);
+                    bundle.putInt("cost", currentProduct.price.intValue());
+                    bundle.putLong("minDate", Utils.DateFormatToLong(currentProduct.fromdate));
+                    bundle.putLong("maxDate", Utils.DateFormatToLong(currentProduct.todate));
+                    dialogFragment.setArguments(bundle);
+                    dialogFragment.show(mCallingActivity.getFragmentManager(), "ItemDialog");
+                }
+            });
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
