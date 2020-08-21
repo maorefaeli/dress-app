@@ -212,6 +212,8 @@ const removeProductFromPendingCycles = async (userId, productId) => {
 const removeProductFromUserWishlist = (user, productId) => {
     if (!user || !user.wishlist) return;
 
+    const updateCommand = {};
+
     // Remove product from the wishlist it's on
     user.wishlist.forEach(wish => {
         wish.products = wish.products.filter(p => !p.equals(productId))
@@ -223,10 +225,13 @@ const removeProductFromUserWishlist = (user, productId) => {
     // Delete the wishlist if needed
     if (user.wishlist.length === 0) {
         user.wishlist = null;
+        updateCommand['$unset'] = { wishlist: 1 };
+    } else {
+        updateCommand['$set'] = { wishlist: user.wishlist };
     }
 
     // Return Promise when user is updated
-    return User.findByIdAndUpdate(userId, user);
+    return User.findByIdAndUpdate(user._id, updateCommand);
 };
 
 /**
@@ -235,7 +240,7 @@ const removeProductFromUserWishlist = (user, productId) => {
 exports.removeProductFromWishlist = async (userId, productId) => {
     if (!userId || !productId) return;
 
-    await removeProductFromUserWishlist(await Users.find(userId), productId);
+    await removeProductFromUserWishlist(await User.findById(userId), productId);
     await removeProductFromPendingCycles(userId, productId);
 };
 
