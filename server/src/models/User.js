@@ -37,9 +37,24 @@ const UserSchema = new Schema({
             ref: 'Product',
         }],
     }],
-    avg: {
+    reviewSum: {
         type: Number,
         required: false,
+    },
+    reviewQuentity: {
+        type: Number,
+        required: false,
+        default: 1
+    },
+    /*  remove avg when refactor the calculation of user's rating
+    avg: {
+        type: Number,
+        required: false
+    },*/
+    coins: {
+        type: Number,
+        required: false,
+        default: 0
     }
 });
 
@@ -55,6 +70,10 @@ UserSchema.set('toJSON', {
     virtuals: true,
     versionKey: false,
     transform: function (doc, ret) { delete ret._id }
+});
+
+UserSchema.virtual('avg').get(function () {
+    return this.reviewSum/this.reviewQuentity;
 });
 
 UserSchema.index({ username: 1 }, { unique: true });
