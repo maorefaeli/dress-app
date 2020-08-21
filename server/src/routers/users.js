@@ -16,11 +16,11 @@ router.post('/register', async (req, res) => {
         }
 
         if (!validators.isNonEmptyString(firstName)) {
-            return res.status(400).json({"error": "First name connot be empty"});
+            return res.status(400).json({"error": "First name cannot be empty"});
         }
 
         if (!validators.isNonEmptyString(lastName)) {
-            return res.status(400).json({"error": "last name connot be empty"});
+            return res.status(400).json({"error": "last name cannot be empty"});
         }
 
         if (!validators.isNonEmptyString(password)) {
@@ -41,10 +41,35 @@ router.post('/register', async (req, res) => {
         });
 
         await user.save();
-        res.json(true);
+        return res.json(true);
     } catch (error) {
         console.log(error);
         res.status(400).json({'error': 'problem saving user'});
+    }
+});
+
+//  @route POST /products/:id
+//  @desc Edit specific product
+//  @access Private
+router.post('/edit', auth.isLoggedIn, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { firstName, lastName } = req.body;
+
+        if (!validators.isNonEmptyString(firstName)) {
+            return res.status(400).json({"error": "First name cannot be empty"});
+        }
+
+        if (!validators.isNonEmptyString(lastName)) {
+            return res.status(400).json({"error": "last name cannot be empty"});
+        }
+
+        await User.findByIdAndUpdate(userId, { firstName, lastName });
+        return res.json(true);
+        
+    } catch (error){
+        console.log(error);
+        res.status(400).json({"error":"Problem editing product"});
     }
 });
 
@@ -53,7 +78,7 @@ router.post('/register', async (req, res) => {
 //  @access Private
 router.get('/profile/:username', async (req, res) => {
     try {
-        const [profile] = await User.find({username: req.params.username});
+        const profile = await User.findOne({ username: req.params.username });
         delete profile.password
         return res.json(profile);
     } catch (error){
