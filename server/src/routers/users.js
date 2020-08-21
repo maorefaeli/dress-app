@@ -73,14 +73,32 @@ router.post('/edit', auth.isLoggedIn, async (req, res) => {
     }
 });
 
-//  @route GET users/profile/:id
-//  @desc Get specific user
+const getUserById = async (userId) => {
+    const user = await User.findById(userId);
+    delete user.username;
+    delete user.password;
+    delete user.wishlist;
+    return user;
+}
+
+//  @route GET users/profile
+//  @desc Get logged in user profile
 //  @access Private
-router.get('/profile/:username', async (req, res) => {
+router.get('/profile', auth.isLoggedIn, async (req, res) => {
     try {
-        const profile = await User.findOne({ username: req.params.username });
-        delete profile.password
-        return res.json(profile);
+        return res.json(getUserById(req.user.id));
+    } catch (error){
+        console.log(error);
+        res.status(400).json({"error":"Problem getting profile"})
+    }
+});
+
+//  @route GET users/profile/:id
+//  @desc Get specific user profile
+//  @access Private
+router.get('/profile/:id', async (req, res) => {
+    try {
+        return res.json(getUserById(req.params.id));
     } catch (error){
         console.log(error);
         res.status(400).json({"error":"Problem getting profile"})
