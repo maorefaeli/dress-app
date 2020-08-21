@@ -11,23 +11,6 @@ const getReviewedUserId = async (productId) => {
 //  TODO: refactor the calculation of user's rating
 exports.updateUserRating = async (productId, score) => {
     const userId = await getReviewedUserId(productId);
-    let avgRating, avgSum, avgQuentity = 0;
-    let userReviews = [];
-    
-    let reviews = await Review.find();
-    reviews.forEach(async review => {
-        // Get the reviewed userId
-        const user = await getReviewedUserId(review.rent.product);
-        if (user.equals(userId))
-            userReviews.push(review);
-    });
-
-    userReviews.forEach(userReview => {
-        avgSum += userReview.score;
-        avgQuentity++;
-    });
-
-    avgRating = avgSum/avgQuentity;
-    const newUser = await User.findByIdAndUpdate(userId, {"avg": avgRating});
+    const newUser = await User.findByIdAndUpdate(userId, { $inc: {"reviewQuentity": 1, "reviewSum":score} });
     return newUser;
 };

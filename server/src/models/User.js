@@ -46,11 +46,11 @@ const UserSchema = new Schema({
         required: false,
         default: 1
     },
-    //  remove avg when refactor the calculation of user's rating
+    /*  remove avg when refactor the calculation of user's rating
     avg: {
         type: Number,
         required: false
-    },
+    },*/
     coins: {
         type: Number,
         required: false,
