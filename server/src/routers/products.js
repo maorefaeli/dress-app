@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const validators = require('../utils/validators');
 const auth = require('../utils/auth');
+const ObjectID = require('mongodb').ObjectID;
 
 // Load Product model
 const Product = require('../models/Product');
@@ -21,7 +22,11 @@ const isProductContainErrors = (product) => {
 // @access Public
 router.get('/', async (req, res) => {
     try {
-        const products = await Product.find();
+        const query = {}
+        if (req.user && req.user.id) {
+            query['user'] = { $ne: ObjectID(req.user.id)};
+        }
+        const products = await Product.find(query);
         return res.json(products);
     } catch (error){
         console.log(error);
