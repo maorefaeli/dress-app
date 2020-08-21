@@ -18,6 +18,20 @@ router.post('/add', auth.isLoggedIn, async (req, res) => {
     }
 });
 
+// @route POST /wishlist/add
+// @desc Add new product to wishlist
+// @access Private
+router.post('/remove', auth.isLoggedIn, async (req, res) => {
+    try {
+        const { product } = req.body;
+        await WishlistController.removeProductFromWishlist(req.user.id, product);
+        return res.json(true);
+    } catch (error){
+        console.log(error);
+        res.status(400).json({"error":"Problem removing product from wishlist"});
+    }
+});
+
 // @route GET /wishlist
 // @desc Get the logged in user wishlist
 // @access Private
