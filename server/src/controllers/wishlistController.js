@@ -319,15 +319,25 @@ exports.requestProductOnCycle = async (cycleId, userId, productId, fromDate, toD
     const cycle = await PendingCycle.findById(cycleId);
     const product = await Product.findById(productId);
 
-    if (isOrderValid(product, fromDate, toDate)) {
-        cycle.participants.forEach(p => {
-            if (p.user.equals(userId) && p.products.includes(productId)) {
-                p.requestedProduct = productId;
-                p.fromDate = fromDate;
-                p.toDate = toDate;
-            }
-        });
-        await PendingCycle.findByIdAndUpdate(cycleId, cycle);
-        await validateCycle(cycle);
+    if (!cycle) {
+        throw new Error('Cycle not found', cycleId.toString());
     }
+
+    if (!product) {
+        throw new Error('Product not found', productId.toString());
+    }
+
+    if (!isOrderValid(product, fromDate, toDate)) {
+        throw new Error('Order is not valid. product', product.id, 'dates', fromDate, toDate);
+    }
+
+    cycle.participants.forEach(p => {
+        if (p.user.equals(userId) && p.products.includes(productId)) {
+            p.requestedProduct = productId;
+            p.fromDate = fromDate;
+            p.toDate = toDate;
+        }
+    });
+    await PendingCycle.findByIdAndUpdate(cycleId, cycle);
+    await validateCycle(cycle);
 };
