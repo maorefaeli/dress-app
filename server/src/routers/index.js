@@ -7,6 +7,7 @@ router.use('/products', require('./products'));
 router.use('/rents', require('./rents'));
 router.use('/wishlist', require('./wishlist'));
 router.use('/reviews', require('./reviews'));
+router.use('/coins', require('./coins'));
 
 router.get('/check', (req, res) => {
     res.send({ msg: 'Hello! Server is up' });
