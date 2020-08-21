@@ -38,19 +38,16 @@ const PendingCycleSchema = new Schema({
     }]
 });
 
-PendingCycleSchema.statics.calculateHash = function(cycle) {
-    // Hash is calculated based only on participants.
-    if (cycle.participants && cycle.participants.length) {
-
-        // Make sure the sort when needed to get the same hash even on different orders
-        const component = cycle.participants.map(p => ({
-            user: p.user,
-        })).sort(); // Sort here because order of users is not important in a cycle
-
-        return crypto.encodeSHA256(JSON.stringify(component));
+// Calculate hash based on the user participating the cycle
+PendingCycleSchema.methods.calculateHash = function() {
+    if (!this.participants || !this.participants.length) {
+        throw new Error('Cannot calculate hash with no users');
     }
 
-    return '';
+    // Make sure to sort in order to get the same hash on different appearances order
+    const component = this.participants.map(p => p.user.toString()).sort().join();
+
+    this.hash = crypto.encodeSHA256(component);
 };
 
 PendingCycleSchema.set('toJSON', {

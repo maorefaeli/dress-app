@@ -1,10 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const validators = require('../utils/validators');
 const auth = require('../utils/auth');
-const Product = require('../models/Product');
 const WishlistController = require('../controllers/wishlistController');
-const PendingCycle = require('../models/PendingCycle');
 
 // @route POST /wishlist/add
 // @desc Add new product to wishlist
