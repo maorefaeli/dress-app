@@ -8,9 +8,8 @@ const getReviewedUserId = async (productId) => {
     return userId;
 };
 
-//  TODO: refactor the calculation of user's rating
 exports.updateUserRating = async (productId, score) => {
     const userId = await getReviewedUserId(productId);
-    const newUser = await User.findByIdAndUpdate(userId, { $inc: {"reviewQuentity": 1, "reviewSum":score} });
+    const newUser = await User.findByIdAndUpdate(userId, { $inc: { "reviewQuantity": 1, "reviewSum": score } });
     return newUser;
 };

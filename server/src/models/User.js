@@ -40,17 +40,13 @@ const UserSchema = new Schema({
     reviewSum: {
         type: Number,
         required: false,
+        default: 0
     },
-    reviewQuentity: {
+    reviewQuantity: {
         type: Number,
         required: false,
-        default: 1
+        default: 0
     },
-    /*  remove avg when refactor the calculation of user's rating
-    avg: {
-        type: Number,
-        required: false
-    },*/
     coins: {
         type: Number,
         required: false,
@@ -73,7 +69,7 @@ UserSchema.set('toJSON', {
 });
 
 UserSchema.virtual('avg').get(function () {
-    return this.reviewSum/this.reviewQuentity;
+    return this.reviewQuantity ? this.reviewSum / this.reviewQuantity : 0;
 });
 
 UserSchema.index({ username: 1 }, { unique: true });
