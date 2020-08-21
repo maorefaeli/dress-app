@@ -2,20 +2,117 @@ const User = require('../models/User');
 const PendingCycle = require('../models/PendingCycle');
 const Product = require('../models/Product');
 const RentController = require('./rentController');
+const Graph = require('../utils/graph');
+const ObjectID = require('mongodb').ObjectID;
 
 // Maximum depth of users in a cycle
 const MAX_CYCLE_PARTICIPANTS = 5;
 
-// logged in user added new item to wishlist
-// Find all cycles in depth 5.
-// For each cycle found:
-//      check if cycle exist via hash code (participants users hashing)
-//          if exist then skip
-//      check all products available at some time
-//          if available then add PendingCycle
+const findCycles = async (user, product) => {
+    console.log("Searching cycles from user", user.id, "since the product", product.id, "was added to his wishlist");
 
-const findCycles = async (userId) => {
+    // Extract mini graph that starts from the user as root and find
+    // its connections up until 5 levels
+    const data = await User.aggregate([
+        {
+            $match: {'_id': user._id }
+        },
+        {
+            $graphLookup: {
+                from: 'Users', 
+                startWith: '$wishlist.user', 
+                connectFromField: 'wishlist.user', 
+                connectToField: '_id', 
+                maxDepth: MAX_CYCLE_PARTICIPANTS,
+                depthField: 'depth',
+                as: 'connections', 
+            }
+        },
+        {   
+            $unwind: "$connections"
+        },
+        {
+            $replaceRoot: {
+                newRoot: "$connections"
+            }
+        },
+        {
+            $project: {
+                _id: true,
+                wishlist: true,
+                depth: true,
+            }
+        },
+        {
+            $sort: { depth: 1 }
+        },
+    ]);
 
+    if (!data.length) {
+        return;
+    }
+
+    // Use Graph to find out all the cycles
+    const graph = new Graph();
+
+    for (const item of data) {
+        // Each user id is vertex
+        graph.addVertex(item._id.toString());
+
+        // User can have no wishlist and return in the query as a dead end
+        if (item.wishlist) {
+            for (const wish of item.wishlist) {
+                // Fill edges between users with products as additional data on the edge
+                graph.addEdge(item._id.toString(), wish.user.toString(), wish.products);
+            }
+        }
+    }
+
+    const cycles = graph.findCycles();
+
+    console.log("Cycles found", cycles);
+
+    await Promise.all(cycles.map(async (cycle) => {
+        const participants = cycle.map(item => ({
+            user: ObjectID(item[0]),
+            products: item[1]
+        }));
+
+        const pendingCycle = PendingCycle({
+            participants
+        });
+        
+        // Use the users hash for easier way to query the DB
+        pendingCycle.calculateHash();
+
+        const existing = await PendingCycle.findOne({ hash: pendingCycle.hash });
+
+        if (!existing) {
+            console.log("Create cycle with hash", pendingCycle.hash);
+            await pendingCycle.save();
+        } else {
+        // If cycle already exists, check if the newly added product is part of the cycle
+            for (const p of existing.participants) {
+
+                // Look for the user
+                if (p.user.equals(user._id)) {
+
+                    // If product not exist yet, add it
+                    if (!p.products.includes(product._id)) {
+                        await PendingCycle.updateOne(
+                            { _id: existing._id, 'participants.user': user._id },
+                            { $addToSet: {'participants.$.products': product._id }},
+                        )
+                    }
+
+                    console.log("Update cycle id", existing.id, "after user", user.id, "added", product.id, "to his wishlist");
+
+                    // No need to iterate the other users
+                    break;
+                }
+            };
+        }
+    }));
 };
 
 /**
@@ -68,7 +165,7 @@ exports.addProductToWishlist = async (userId, productId) => {
     await User.findByIdAndUpdate(userId, user);
 
     // Initiate the algorithm for find and update cycles
-    await findCycles(userId);
+    await findCycles(user, product);
 };
 
 const removeProductFromPendingCycles = async (userId, productId) => {
