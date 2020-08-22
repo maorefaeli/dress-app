@@ -46,11 +46,11 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
     if (!toUser) {
         throw new Error("Product's owner not found");
     }
-    const rentingDays = rentingDate.todate - rentingDate.fromdate;
+
+    const rentingDays = newRent.todate - newRent.fromdate;
 
     if (!isFree) {
         // TODO: Check coins of fromUser: throw if not valid
-        
         if (fromUser.coins < product.price*rentingDays)
             throw new Error('Not enough coins');
     }
