@@ -3,6 +3,7 @@ const router = express.Router();
 const validators = require('../utils/validators');
 const auth = require('../utils/auth');
 const ObjectID = require('mongodb').ObjectID;
+const { getDateComponent } = require('../utils/date');
 
 // Load Product model
 const Product = require('../models/Product');
@@ -65,7 +66,7 @@ router.get('/user/me', auth.isLoggedIn, async (req, res) => {
 // @access Private
 router.get('/user/:user', auth.isLoggedIn, async (req, res) => {
     try {
-        const products = await Product.find({user:req.params.user});
+        const products = await Product.find({user: req.params.user});
         return res.json(products);
     } catch (error){
         console.log(error);
@@ -86,8 +87,8 @@ router.post('/add', auth.isLoggedIn, async (req, res) => {
             name,
             price,
             image,
-            fromdate,
-            todate,
+            fromdate: getDateComponent(fromdate),
+            todate: getDateComponent(todate),
         });
 
         let error = isProductContainErrors(newProduct);
@@ -144,8 +145,8 @@ router.post('/:id', auth.isLoggedIn, async (req, res) => {
             name,
             price,
             image,
-            fromdate,
-            todate
+            fromdate: getDateComponent(fromdate),
+            todate: getDateComponent(todate)
         };
 
         const error = isProductContainErrors(product);

@@ -4,9 +4,13 @@ const Product = require('../models/Product');
 const RentController = require('./rentController');
 const Graph = require('../utils/graph');
 const ObjectID = require('mongodb').ObjectID;
+const isRentDatesValid = require('./rentController');
+const { getDateComponent } = require('../utils/date');
 
 // Maximum depth of users in a cycle
 const MAX_CYCLE_PARTICIPANTS = 5;
+
+const MAXIMUM_MILLISECONDS_FOR_SUGGESTION_REQUEST = 7 /* days */ * 24 * 60 * 60 * 1000;
 
 const findCycles = async (user, product) => {
     console.log("Searching cycles from user", user.id, "since the product", product.id, "was added to his wishlist");
@@ -269,21 +273,6 @@ exports.handleUserDeletion = async (userId) => {
     await PendingCycle.deleteMany({ 'participants.user': { $in: [userId] } });
 };
 
-const isOrderValid = (product, fromDate, toDate) => {
-    if (product.fromdate > fromDate || product.todate < toDate) return false;
-
-    if (product.rentingDates && product.rentingDates.length) {
-        for (let index = 0; index < product.rentingDates.length; index++) {
-            const rt = product.rentingDates[index];
-            if (!(rt.todate < fromDate && rt.fromdate > toDate)) {
-                return false;
-            }
-        }
-    }
-
-    return true;  
-};
-
 const validateCycle = async (cycleId) => {
     const cycle = await PendingCycle.findById(cycleId).populate('requestedProduct');
 
@@ -298,7 +287,7 @@ const validateCycle = async (cycleId) => {
         }
 
         // If order not valid due to dates, reset the requested product
-        if (!isOrderValid(participant.requestedProduct, participant.fromDate, participant.toDate)) {
+        if (!isRentDatesValid(participant.requestedProduct, participant.fromDate, participant.toDate)) {
             isCycleValid = false;
             
             participant.requestedProduct = null;
@@ -314,7 +303,8 @@ const validateCycle = async (cycleId) => {
     if (isCycleChanged) {
         await PendingCycle.findOneAndUpdate(cycle._id, cycle);
     } else if (isCycleValid) {
-        await Promise.all(participant.map(p => RentController.addRent(p.user, p.requestedProduct, p.fromDate, p.toDate)));
+        // Free orders for everyone!
+        await Promise.all(participant.map(p => RentController.addRent(p.user, p.requestedProduct, p.fromDate, p.toDate, true)));
         await PendingCycle.findByIdAndDelete(cycle._id);
         console.log("Cycle", cycle, "is completed and deleted");
     }
@@ -324,6 +314,14 @@ exports.requestProductOnCycle = async (cycleId, userId, productId, fromDate, toD
     const cycle = await PendingCycle.findById(cycleId);
     const product = await Product.findById(productId);
 
+    const validFromDate = getDateComponent(fromDate);
+    const validToDate = getDateComponent(toDate);
+
+    const delta = validFromDate - validToDate;
+    if (delta > MAXIMUM_MILLISECONDS_FOR_SUGGESTION_REQUEST) {
+        throw new Error('Order dates are more than 7 days');
+    }
+
     if (!cycle) {
         throw new Error('Cycle not found', cycleId.toString());
     }
@@ -332,17 +330,19 @@ exports.requestProductOnCycle = async (cycleId, userId, productId, fromDate, toD
         throw new Error('Product not found', productId.toString());
     }
 
-    if (!isOrderValid(product, fromDate, toDate)) {
-        throw new Error('Order is not valid. product', product.id, 'dates', fromDate, toDate);
+    if (!isRentDatesValid(product, validFromDate, validToDate)) {
+        throw new Error('Order is not valid. product', product.id, 'dates', validFromDate, validToDate);
     }
 
     cycle.participants.forEach(p => {
         if (p.user.equals(userId) && p.products.includes(productId)) {
             p.requestedProduct = productId;
-            p.fromDate = fromDate;
-            p.toDate = toDate;
+            p.fromDate = validFromDate;
+            p.toDate = validToDate;
         }
     });
     await PendingCycle.findByIdAndUpdate(cycleId, cycle);
-    await validateCycle(cycle);
+
+    // Not await - no need
+    validateCycle(cycle);
 };

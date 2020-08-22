@@ -13,11 +13,6 @@ const RentSchema = new Schema({
         ref: "Product",
         required: true
     },
-    rentFromUser: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-        required: true
-    },
     fromdate: {
         type: Date,
         required: true
@@ -35,5 +30,6 @@ RentSchema.set('toJSON', {
 });
 
 RentSchema.index({ user: 1 });
+RentSchema.index({ product: 1 });
 
 module.exports = Rent = mongoose.model('Rent', RentSchema, 'Rents');
