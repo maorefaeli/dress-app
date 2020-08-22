@@ -1,6 +1,7 @@
 package finalproj.dressapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +30,13 @@ import finalproj.dressapp.activities.OrdersActivity;
 import finalproj.dressapp.activities.ProfileActivity;
 import finalproj.dressapp.activities.RegisterActivity;
 import finalproj.dressapp.activities.WishListActivity;
+import finalproj.dressapp.httpclient.APIClient;
+import finalproj.dressapp.httpclient.APIInterface;
+import finalproj.dressapp.httpclient.models.MyAppContext;
+import finalproj.dressapp.httpclient.models.Product;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 //import finalproj.dressapp.httpclient.models.CookieJarList;
 //import okhttp3.Cookie;
 
@@ -36,6 +44,7 @@ public class Utils {
     static SimpleDateFormat dateformatYYYYMMDD = new SimpleDateFormat("yyyy-MM-dd");
     static Boolean isGuest;
     static ProgressDialog dialog = null;
+    static List<Product> currentUserWishlistItems;
     static final String PREF_USER_NAME = "username";
     static final String PREF_USER_ID = "userid";
         
@@ -85,6 +94,32 @@ public class Utils {
         editor.commit();
     }
 
+    public static void loadUserWishlistItems()
+    {
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        Call<List<Product>> call = apiInterface.getWishlist();
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if (response.code() == 200) {
+                    currentUserWishlistItems = response.body();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                new AlertDialog.Builder(MyAppContext.getContext())
+                    .setTitle("Couldn't get current user's wishlist items")
+                    .setMessage(t.getMessage())
+                    .show();
+                call.cancel();
+            }
+        });
+    }
+
+    public static List<Product> getCurrentUserWishlistItems() {
+        return currentUserWishlistItems;
+    }
 //    public static List<Cookie> getCookies(Context ctx)
 //    {
 //        Gson gson = new Gson();

@@ -23,6 +23,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     private ItemClickListener mClickListener;
     private Activity mCallingActivity;
     private Context mContext;
+    private List<Product> mUserWishlist;
 
     // data is passed into the constructor
     public RecycleViewAdapter(Activity activity, Context context, List<Product> data) {
@@ -98,7 +99,16 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         else {
             // Setting the product ID on the wishlist icon for when the user presses it.
             TextView wishlistIcon = holder.wishlistIcon;
-            Boolean isInWishList = true; // TODO: CHANGE TO CHECK IF TRUE OR FALSE BY THE USER'S WISHLIST LIST.
+            Boolean isInWishList = false;
+            mUserWishlist = Utils.getCurrentUserWishlistItems();
+
+            for (Product productIterator:mUserWishlist) {
+                if (productIterator.id.equals(currentProduct.id)) {
+                    isInWishList = true;
+                    break;
+                }
+            }
+
             wishlistIcon.setTag(isInWishList);
             ((View)wishlistIcon.getParent()).setTag(currentProduct.id);
 

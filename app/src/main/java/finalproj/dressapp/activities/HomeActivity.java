@@ -35,6 +35,8 @@ public class HomeActivity extends DressAppActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        Utils.loadUserWishlistItems();
+        
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         Call <List<Product>> call = apiInterface.getAllItems();
         call.enqueue(new Callback<List<Product>>() {
@@ -95,6 +97,9 @@ public class HomeActivity extends DressAppActivity {
     {
         // Only allow wishlist function for logged in users.
         if (!Utils.getGuestStatus()) {
+
+            Utils.loadUserWishlistItems();
+            
             final TextView mWishlistIcon = view.findViewById(R.id.postTitleWishlistIcon);
 
             final WishlistProduct wishlistProduct = new WishlistProduct((String) ((View)view.getParent()).getTag());
@@ -103,19 +108,18 @@ public class HomeActivity extends DressAppActivity {
 
             // Adding the item to the user's wishlist.
             if (!isInWishlist){
-                //TODO: Move inside response after it works (Fix the cookies first).
                 APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
                 Call <Boolean> call = apiInterface.addToWishlist(wishlistProduct);
                 call.enqueue(new Callback<Boolean>() {
                     @Override
                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                         if (response.code() == 200) {
-                            mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26, 0); }
+                            mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26_full, 0); }
                     }
 
                     public void onFailure(Call<Boolean> call, Throwable t) {
                         new AlertDialog.Builder(HomeActivity.this)
-                                .setTitle("Couldn't add item: " + wishlistProduct.product)
+                                .setTitle("Couldn't add item: " + wishlistProduct.product + " to wishlist.")
                                 .setMessage(t.getMessage())
                                 .show();
                         call.cancel();
@@ -124,24 +128,24 @@ public class HomeActivity extends DressAppActivity {
             }
             // Removing the item from the user's wishlist.
             else {
-                // APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-                // Call <Boolean> call = apiInterface.removeFromWishlist(productId);
-                // call.enqueue(new Callback<Boolean>() {
-                //     @Override
-                //     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                //         if (response.code() == 200) {
-                mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26_full, 0);
-                //          }
-                //     }
+                APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+                Call <Boolean> call = apiInterface.removeFromWishlist(wishlistProduct);
+                call.enqueue(new Callback<Boolean>() {
+                    @Override
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        if (response.code() == 200) {
+                            mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26, 0);
+                         }
+                    }
 
-                //     public void onFailure(Call<Boolean> call, Throwable t) {
-                //         new AlertDialog.Builder(HomeActivity.this)
-                //             .setTitle("Couldn't add item: " + productId)
-                //             .setMessage(t.getMessage())
-                //             .show();
-                //         call.cancel();
-                //     }
-                // });
+                    public void onFailure(Call<Boolean> call, Throwable t) {
+                        new AlertDialog.Builder(HomeActivity.this)
+                            .setTitle("Couldn't delete item: " + wishlistProduct.product + " from wishlist.")
+                            .setMessage(t.getMessage())
+                            .show();
+                        call.cancel();
+                    }
+                });
             }
         }
     }  

@@ -36,7 +36,7 @@ public class ProfileActivity extends DressAppActivity {
         
         final String userEmail = Utils.getUserName(getApplicationContext());
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-        final Call <UserRegistration> call = apiInterface.getUserDetails(userEmail);
+        final Call <UserRegistration> call = apiInterface.getCurrentUserDetails();
         call.enqueue(new Callback<UserRegistration>() {
             public void onResponse(Call <UserRegistration> call, Response <UserRegistration> response) {
                 if (response.code() == 200) {

@@ -15,6 +15,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -45,12 +46,18 @@ public interface APIInterface {
     @POST("products/add")
     Call<Product> doAddItem(@Body Product product, @Header("Cookie") String cookie);
 
-    @GET("users/profile/{username}")
-    Call<UserRegistration> getUserDetails(@Path("username") String userName);
+    @GET("users/profile")
+    Call<UserRegistration> getCurrentUserDetails();
+
+    @GET("users/profile/{id}")
+    Call<UserRegistration> getUserDetails(@Path("id") String userName);
 
     @POST("wishlist/add")
     Call<Boolean> addToWishlist(@Body WishlistProduct wishlistProduct);
 
-    @DELETE("wishlist/remove/")
-    Call<Boolean> removeFromWishlist(@Body String product);
+    @HTTP(method = "DELETE", path = "wishlist/remove", hasBody = true)
+    Call<Boolean> removeFromWishlist(@Body WishlistProduct wishlistProduct);
+
+    @GET("wishlist")
+    Call<List<Product>> getWishlist();
 }
