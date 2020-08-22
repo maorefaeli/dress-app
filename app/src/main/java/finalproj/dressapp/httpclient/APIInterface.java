@@ -34,6 +34,9 @@ public interface APIInterface {
     @POST("users/register")
     Call<Boolean> doRegister(@Body UserRegistration userRegistration);
 
+    @POST("users/edit")
+    Call<Boolean> doUpdateUser(@Body UserRegistration userRegistration);
+
     @GET("products/")
     Call<List<Product>> getAllItems();
 

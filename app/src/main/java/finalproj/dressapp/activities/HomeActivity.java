@@ -99,7 +99,7 @@ public class HomeActivity extends DressAppActivity {
         if (!Utils.getGuestStatus()) {
 
             Utils.loadUserWishlistItems();
-            
+
             final TextView mWishlistIcon = view.findViewById(R.id.postTitleWishlistIcon);
 
             final WishlistProduct wishlistProduct = new WishlistProduct((String) ((View)view.getParent()).getTag());

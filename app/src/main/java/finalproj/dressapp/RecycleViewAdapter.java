@@ -102,12 +102,15 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
             Boolean isInWishList = false;
             mUserWishlist = Utils.getCurrentUserWishlistItems();
 
-            for (Product productIterator:mUserWishlist) {
-                if (productIterator.id.equals(currentProduct.id)) {
-                    isInWishList = true;
-                    break;
+            if (mUserWishlist != null && mUserWishlist.size() > 0) {
+                for (Product productIterator:mUserWishlist) {
+                    if (productIterator.id.equals(currentProduct.id)) {
+                        isInWishList = true;
+                        break;
+                    }
                 }
             }
+
 
             wishlistIcon.setTag(isInWishList);
             ((View)wishlistIcon.getParent()).setTag(currentProduct.id);
