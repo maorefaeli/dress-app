@@ -4,7 +4,7 @@ const Product = require('../models/Product');
 const RentController = require('./rentController');
 const Graph = require('../utils/graph');
 const ObjectID = require('mongodb').ObjectID;
-const isRentDatesValid = require('./rentController');
+const { isRentDatesValid } = require('./rentController');
 const { getDateComponent } = require('../utils/date');
 
 // Maximum depth of users in a cycle
