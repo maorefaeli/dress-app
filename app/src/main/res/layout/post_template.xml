@@ -94,6 +94,15 @@
                 android:drawablePadding="3dp"
                 android:padding="2dp"
                 android:textSize="18sp" />
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="18sp"
+                android:layout_gravity="end"
+                android:drawableEnd="@drawable/outline_monetization_on_black_18dp"
+                android:drawableTint="@color/duskYellow"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

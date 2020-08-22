@@ -43,6 +43,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         public TextView ownerTextView;
         public TextView addressTextView;
         public TextView wishlistIcon;
+        public TextView priceView;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -56,6 +57,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
             ownerTextView = (TextView) itemView.findViewById(R.id.owner);
             addressTextView = (TextView) itemView.findViewById(R.id.address);
             wishlistIcon = (TextView) itemView.findViewById(R.id.postTitleWishlistIcon);
+            priceView = (TextView) itemView.findViewById(R.id.price);
         }
     }
 
@@ -83,6 +85,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         ownerTextView.setText("Owner's name here");
         TextView addressTextView = holder.addressTextView;
         addressTextView.setText("Default Addrress, 220, Tel Aviv");
+        holder.priceView.setText(String.valueOf(currentProduct.price));
 
         // For guests, don't allow to see the item renting popup dialog.
         if (Utils.getGuestStatus()) {
