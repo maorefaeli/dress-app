@@ -63,4 +63,10 @@ public interface APIInterface {
 
     @GET("wishlist")
     Call<List<Product>> getWishlist();
+
+    @GET("suggestions")
+    Call<List<Product>> getSuggestions();
+    
+    @POST("suggestions/request")
+    Call<Boolean> requestSuggestion();
 }
