@@ -41,7 +41,7 @@ router.get('/', async (req, res) => {
 // @access Public
 router.get('/:id', async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id).populate('user');
+        const product = await Product.findById(req.params.id).populate('user', 'firstName lastName averageScore reviewQuantity address');
         return res.json(product);
     } catch (error){
         console.log(error);
