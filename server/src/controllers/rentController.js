@@ -47,7 +47,8 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
         throw new Error("Product's owner not found");
     }
 
-    const rentingDays = newRent.todate - newRent.fromdate;
+    const rentingDays = newRent.todate - newRent.fromdate + 1;
+    const coins = rentingDays*product.price;
 
     if (!isFree) {
         // TODO: Check coins of fromUser: throw if not valid
@@ -66,7 +67,6 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
 
         if (!isFree) {
             // TODO: Transfer coins from fromUser to toUser
-            const coins = rentingDays*product.price;
             const negPrice = coins * -1;
             const newFromUser = await User.findByIdAndUpdate(userId, { $inc: {"coins": negPrice} });
             const newToUser = await User.findByIdAndUpdate(product.user, { $inc: {"coins": coins} });
