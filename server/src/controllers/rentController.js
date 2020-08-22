@@ -1,6 +1,7 @@
 const validators = require('../utils/validators');
 const Product = require('../models/Product');
 const Rent = require('../models/Rent');
+const User = require('../models/User');
 const { getDateComponent } = require('../utils/date');
 
 const isRentContainErrors = (rent) => {
@@ -27,7 +28,7 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
         throw new Error(error);
     }
 
-    const fromUser = await Product.findById(userId);
+    const fromUser = await User.findById(userId);
     if (!fromUser) {
         throw new Error("User not found");
     }
@@ -41,13 +42,15 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
         throw new Error(product.name, "is taken on specified dates");
     }
 
-    const toUser = await Product.findById(product.user);
+    const toUser = await User.findById(product.user);
     if (!toUser) {
         throw new Error("Product's owner not found");
     }
 
     if (!isFree) {
         // TODO: Check coins of fromUser: throw if not valid
+        if (fromUser.coins < product.price)
+            throw new Error('Not enough coins');
     }
 
     try {
@@ -61,6 +64,13 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
 
         if (!isFree) {
             // TODO: Transfer coins from fromUser to toUser
+            const rentingDays = rentingDate.todate - rentingDate.fromdate;
+            const coins = rentingDays*product.price;
+            const negPrice = coins * -1;
+            const newFromUser = await User.findByIdAndUpdate(userId, { $inc: {"coins": negPrice} });
+            const newToUser = await User.findByIdAndUpdate(product.user, { $inc: {"coins": coins} });
+            console.log(newFromUser);
+            console.log(newToUser);
         }
 
         return newRent;
