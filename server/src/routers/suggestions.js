@@ -10,7 +10,7 @@ const ObjectID = require('mongodb').ObjectID;
 // @access Private
 router.get('/', auth.isLoggedIn, async (req, res) => {
     try {
-        const result = [];
+        let result = [];
         const userId = ObjectID(req.user.id);
 
         // Search for pending cycles that the user participates and has not requested a product yet
@@ -24,12 +24,7 @@ router.get('/', auth.isLoggedIn, async (req, res) => {
         cycles.forEach(cycle => {
             for (const participant of cycle.participants) {
                 if (participant.user.equals(userId)) {
-                    participant.products.forEach(product => {
-                        result.push({
-                            cycleId: cycle._id,
-                            product
-                        });
-                    });
+                    result = [...result, ...participant.products];
                     
                     // User participates only once
                     break;
@@ -49,11 +44,21 @@ router.get('/', auth.isLoggedIn, async (req, res) => {
 // @access Private
 router.post('/request', auth.isLoggedIn, async (req, res) => {
     try {
-        const { cycle, product, fromdate, todate } = req.body;
+        const { product, fromdate, todate } = req.body;
+        const userId = ObjectID(req.user.id);
+        const productId = ObjectID(product);
 
-        await WishlistController.requestProductOnCycle(
-            ObjectID(cycle), ObjectID(re.user.id), ObjectID(product), fromdate, todate
-        );
+        // Find all open cycles that
+        const cycles = await PendingCycle.find({
+            participants: {
+                $elemMatch: { user: userId, requestedProduct: { $ne: null }, products: { $in: productId } }
+            }
+        }) || [];
+
+        await Promise.all(cycles.map(cycle => WishlistController.requestProductOnCycle(
+            cycle._id, userId, productId, fromdate, todate
+        )));
+
         return res.json(true);
     } catch (error){
         console.log(error);

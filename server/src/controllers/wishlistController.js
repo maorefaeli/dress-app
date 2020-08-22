@@ -347,15 +347,20 @@ exports.requestProductOnCycle = async (cycleId, userId, productId, fromDate, toD
         throw new Error('Order is not valid. product', product.id, 'dates', validFromDate, validToDate);
     }
 
-    cycle.participants.forEach(p => {
-        if (p.user.equals(userId) && p.products.includes(productId)) {
+    for (const p of cycle.participants) {
+        // Only if there is no requested product yet
+        if (p.user.equals(userId) && p.products.includes(productId) && !p.requestedProduct) {
             p.requestedProduct = productId;
             p.fromDate = validFromDate;
             p.toDate = validToDate;
-        }
-    });
-    await PendingCycle.findByIdAndUpdate(cycleId, cycle);
 
-    // Not await - no need
+            await PendingCycle.findByIdAndUpdate(cycleId, cycle);
+            console.log("Approved user", userId.toString(), "request for product", product.id, "on cycle", cycle.id);
+            
+            break;
+        }
+    }
+
+    // Initiate cycle detection. No await - no need to wait for it to finish
     validateCycle(cycle);
 };
