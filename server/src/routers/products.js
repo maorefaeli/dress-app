@@ -19,11 +19,12 @@ const isProductContainErrors = (product) => {
 };
 
 // @route GET /products
-// @desc Get all products
+// @desc Search for products
 // @access Public
 router.get('/', async (req, res) => {
     try {
         const query = {}
+        // Filter out own user products if logged in
         if (req.user && req.user.id) {
             query['user'] = { $ne: ObjectID(req.user.id)};
         }
@@ -40,7 +41,7 @@ router.get('/', async (req, res) => {
 // @access Public
 router.get('/:id', async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id);
+        const product = await Product.findById(req.params.id).populate('user');
         return res.json(product);
     } catch (error){
         console.log(error);
