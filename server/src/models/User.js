@@ -55,6 +55,15 @@ const UserSchema = new Schema({
     address: {
         type: String,
         required: false
+    },
+    location: {
+        type: {
+            type: String,
+            enum: ['Point'], // 'location.type' must be 'Point'
+        },
+        coordinates: {
+            type: [Number], // [longitude, latitude]
+        }
     }
 });
 
@@ -72,12 +81,13 @@ UserSchema.set('toJSON', {
     transform: function (doc, ret) { delete ret._id }
 });
 
-UserSchema.virtual('avg').get(function () {
+UserSchema.virtual('averageScore').get(function () {
     return this.reviewQuantity ? this.reviewSum / this.reviewQuantity : 0;
 });
 
 UserSchema.index({ username: 1 }, { unique: true });
 UserSchema.index({ 'wishlist.user': 1 });
 UserSchema.index({ 'wishlist.products': 1 });
+UserSchema.index({ location: '2dsphere' });
 
 module.exports = User = mongoose.model('User', UserSchema, 'Users');
