@@ -12,9 +12,16 @@ router.get('/', auth.isLoggedIn, async (req, res) => {
     try {
         const result = [];
         const userId = ObjectID(req.user.id);
-        const cycles = await PendingCycle.find({ 'participants.user': userId }).populate('participants.products') || [];
 
-        for (const cycle of cycles) {
+        // Search for pending cycles that the user participates and has not requested a product yet
+        const cycles = await PendingCycle.find({
+            participants: {
+                // Use $ne to enforce use of index and filter null values as well
+                $elemMatch: { user: userId, requestedProduct: { $ne: null } }
+            }
+        }).populate('participants.products') || [];
+
+        cycles.forEach(cycle => {
             for (const participant of cycle.participants) {
                 if (participant.user.equals(userId)) {
                     participant.products.forEach(product => {
@@ -23,10 +30,12 @@ router.get('/', auth.isLoggedIn, async (req, res) => {
                             product
                         });
                     });
+                    
+                    // User participates only once
                     break;
                 }
             }
-        }
+        });
 
         return res.json(result);
     } catch (error){

@@ -57,7 +57,7 @@ PendingCycleSchema.set('toJSON', {
 });
 
 PendingCycleSchema.index({ hash: 1 }, { unique: true });
-PendingCycleSchema.index({ 'participants.user': 1 });
+PendingCycleSchema.index({ 'participants.user': 1, 'participants.requestedProduct': 1 });
 PendingCycleSchema.index({ 'participants.products': 1 });
 
 module.exports = Product = mongoose.model('PendingCycle', PendingCycleSchema, 'PendingCycles');
