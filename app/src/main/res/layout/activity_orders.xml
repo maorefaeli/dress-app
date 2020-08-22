@@ -19,17 +19,11 @@
             android:padding="10dp"
             android:src="@drawable/app_logo"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/orders"
-            android:textStyle="bold"
-            android:textSize="30sp"
-            android:layout_gravity="center_horizontal"/>
         <LinearLayout
             android:id="@+id/clothes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingVertical="5dp"
             android:orientation="vertical"/>
 
         <TextView

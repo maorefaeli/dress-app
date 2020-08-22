@@ -17,19 +17,19 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.WishListActivity"
-            android:label=""/>
+            android:label="Wish List"/>
         <activity
             android:name=".activities.OrdersActivity"
-            android:label="" />
+            android:label="Orders" />
         <activity
             android:name=".activities.MyClothesActivity"
-            android:label="" />
+            android:label="My Clothes" />
         <activity
             android:name=".activities.SmartSuggestionsActivity"
-            android:label="" />
+            android:label="Smart Suggestions" />
         <activity
             android:name=".activities.ProfileActivity"
-            android:label="" />
+            android:label="Profile" />
         <activity android:name=".activities.RegisterActivity" />
         <activity
             android:name=".activities.LoginActivity"
@@ -43,7 +43,7 @@
         <activity
             android:name=".activities.HomeActivity"
             android:icon="@drawable/app_logo"
-            android:label="" />
+            android:label="Dress App" />
     </application>
 
 </manifest>
