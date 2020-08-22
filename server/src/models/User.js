@@ -51,6 +51,10 @@ const UserSchema = new Schema({
         type: Number,
         required: false,
         default: 0
+    },
+    address: {
+        type: String,
+        required: false
     }
 });
 

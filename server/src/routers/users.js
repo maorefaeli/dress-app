@@ -3,13 +3,14 @@ const router = express.Router();
 const validators = require('../utils/validators');
 const auth = require('../utils/auth');
 const User = require('../models/User');
+const NodeGeocoder = require('node-geocoder');
 
 // @route POST users/register
 // @desc Register user
 // @access Public
 router.post('/register', async (req, res) => {
     try {
-        const { username, password, firstName, lastName } = req.body;
+        const { username, password, firstName, lastName, lat, lon, streetNumber } = req.body;
 
         if (!validators.isNonEmptyString(username)) {
             return res.status(400).json({"error": "name cannot be empty"});
@@ -33,11 +34,20 @@ router.post('/register', async (req, res) => {
             return res.status(403).json({"error": "user already exist"});
         }
 
+        const geocoder = NodeGeocoder({
+            provider: 'openstreetmap',
+        });
+
+        const address = await geocoder.reverse({ lat: lat, lon: lon });
+        const fullAddress = address[0].streetName + ' ' + streetNumber + ' ' + address[0].city;
+        console.log(fullAddress);
+
         user = new User({
             username,
             firstName,
             lastName,
-            password: User.encryptPassword(password)
+            password: User.encryptPassword(password),
+            address: fullAddress
         });
 
         await user.save();
