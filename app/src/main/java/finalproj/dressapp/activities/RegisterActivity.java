@@ -159,7 +159,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         if (didLogin) {
                                             Utils.setGuestStatus(false);
                                             Utils.setUserName(getApplicationContext(), finalEmail);
-                                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
                                             startActivity(intent);
                                             finish();
                                         }

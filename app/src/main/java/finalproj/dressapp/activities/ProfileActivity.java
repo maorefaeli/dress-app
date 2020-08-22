@@ -33,6 +33,7 @@ public class ProfileActivity extends DressAppActivity implements  ActivityCompat
     private EditText mAddressView;
     private EditText mEmailView;
     private TextView mMoneyView;
+    private GPSTracker gpsTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class ProfileActivity extends DressAppActivity implements  ActivityCompat
         mMoneyView = findViewById(R.id.money);
         mMoneyView.setText("300");
 
-        GPSTracker gpsTracker = new GPSTracker(this);
+        gpsTracker = new GPSTracker(this);
         if (!gpsTracker.getIsGPSTrackingEnabled())
         {
             // can't get location
@@ -61,13 +62,17 @@ public class ProfileActivity extends DressAppActivity implements  ActivityCompat
         mAddressView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gpsTracker.getLocation();
 
-                // TODO JONATHAN - SEND LAT LON ADDRESS
-                Log.d(TAG, String.valueOf(gpsTracker.getLatitude()));
-                Log.d(TAG, String.valueOf(gpsTracker.getLongitude()));
-                Log.d(TAG, String.valueOf(gpsTracker.getAddressLine()));
-                mAddressView.setText(gpsTracker.getAddressLine());
+                if (!gpsTracker.getIsGPSTrackingEnabled()){
+                    gpsTracker.showSettingsAlert();
+                }
+                else {
+                    gpsTracker.getLocation();
+                    Log.d(TAG, String.valueOf(gpsTracker.getLatitude()));
+                    Log.d(TAG, String.valueOf(gpsTracker.getLongitude()));
+                    Log.d(TAG, String.valueOf(gpsTracker.getAddressLine()));
+                    mAddressView.setText(gpsTracker.getAddressLine());
+                }
             }
         });
         
@@ -84,6 +89,7 @@ public class ProfileActivity extends DressAppActivity implements  ActivityCompat
                     upperString = userDetails.lastName.substring(0, 1).toUpperCase() + userDetails.lastName.substring(1).toLowerCase();
                     mLastNameView.setText(upperString);
                     mEmailView.setText(userDetails.username);
+                    mAddressView.setText(userDetails.address);
                 }
             }
 
@@ -109,6 +115,9 @@ public class ProfileActivity extends DressAppActivity implements  ActivityCompat
         
         String firstName = mFirstNameView.getText().toString().toLowerCase().trim();
         String lastName = mLastNameView.getText().toString().toLowerCase().trim();
+        String address = mAddressView.getText().toString();
+        String longitude = String.valueOf(gpsTracker.getLongitude());
+        String latitude = String.valueOf(gpsTracker.getLatitude());
 
         Matcher firstNameMatch = namePattern.matcher(firstName);
         Matcher lastNameMatch = namePattern.matcher(lastName);
@@ -132,7 +141,7 @@ public class ProfileActivity extends DressAppActivity implements  ActivityCompat
             focusView.requestFocus();
         }
         else {
-            UserRegistration userRegistration = new UserRegistration(firstName, lastName);
+            UserRegistration userRegistration = new UserRegistration(firstName, lastName, address, longitude, latitude);
             APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
             
             Call<Boolean> call = apiInterface.doUpdateUser(userRegistration);

@@ -20,6 +20,15 @@ public class UserRegistration {
     @SerializedName("password")
     public String password;
 
+    @SerializedName("address")
+    public String address;
+
+    @SerializedName("longitude")
+    public String longitude;
+
+    @SerializedName("latitude")
+    public String latitude;
+
     @SerializedName("wishlist")
     public List<Wishlist> wishlist;
 
@@ -28,6 +37,15 @@ public class UserRegistration {
         this.lastName = lastName;
         this.username = username; //email
         this.password = password;        
+    }
+
+    public UserRegistration(String firstName, String lastName, String address, String longitude, String latitude) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username; //email      
+        this.address = address;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     public UserRegistration(String firstName, String lastName) {

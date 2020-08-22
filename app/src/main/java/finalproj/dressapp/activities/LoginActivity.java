@@ -151,10 +151,7 @@ public class LoginActivity extends AppCompatActivity {
                         Boolean didLogin = response.body();
                         if (didLogin) {
                             String userCookie = password;
-//                            List<String> Cookielist = response.headers().values("Set-Cookie");
-//                            String userId = (Cookielist.get(0).split(";"))[0];
                             Utils.setUserName(getApplicationContext(), email);
-//                            Utils.setUserId(getApplicationContext(), userId);
                             Utils.setUserCookie(getApplicationContext(), userCookie);
                             Utils.setGuestStatus(false);
                             goToHome();
