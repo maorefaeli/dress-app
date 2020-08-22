@@ -106,6 +106,37 @@ router.post('/add', auth.isLoggedIn, async (req, res) => {
     }
 });
 
+// @route POST /products/close
+// @desc Close products for future orders
+// @access Private
+router.post('/close/:id', auth.isLoggedIn, async (req, res) => {
+    try {
+        const userId = ObjectID(req.user.id);
+        const productId = ObjectID(req.params.id);
+        const product = await Product.findById(productId);
+
+        if (!product.user.equals(userId)) {
+            return res.status(401).json({"error": "Product not belongs to user"});
+        }
+
+        // Try close the product as soon as possible
+        let closeDate = product.fromdate;
+
+        // Find latest date the product is already rented
+        if (product.rentingDates && product.rentingDates.length) {
+            closeDate = new Date(Math.max(...product.rentingDates.map(rt => rt.todate)));
+        }
+        
+        const newProduct = await Product.findByIdAndUpdate(productId, { todate: closeDate }, { new: true });
+        close.log("Product", product.id, "todate changed to", closeDate);
+        res.json(newProduct);
+    } catch (e) {
+        console.log(e);
+        error = 'Problem saving product';
+        res.status(400).json({ error });
+    }
+});
+
 //  @route DELETE /products/:id
 //  @desc Delete specific product
 //  @access Private
