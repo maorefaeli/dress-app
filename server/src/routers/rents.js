@@ -8,7 +8,20 @@ const Rent = require('../models/Rent');
 const User = require('../models/User');
 const RentController = require('../controllers/rentController');
 
-// @route GET /history/:id
+// @route GET rents/
+// @desc Get all user rents
+// @access Private
+router.get('/', auth.isLoggedIn, async (req, res) => {
+    try {
+        const userRents = await Rent.find({ user: ObjectID(req.user.id), isFinished: { $ne: true } }) || [];
+        return res.json(userRents);
+    } catch (error) {
+        console.log(error);
+        req.status(400).json({"error":"Problem getting user rents"});
+    }
+});
+
+// @route GET rents/history/:id
 // @desc Get product renting history
 // @access Private
 router.get('/history/:id', auth.isLoggedIn, async (req, res) => {
