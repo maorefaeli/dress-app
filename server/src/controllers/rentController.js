@@ -2,7 +2,7 @@ const validators = require('../utils/validators');
 const Product = require('../models/Product');
 const Rent = require('../models/Rent');
 const User = require('../models/User');
-const { getDateComponent } = require('../utils/date');
+const { getDateComponent, getAmountOfDays } = require('../utils/date');
 
 const isRentContainErrors = (rent) => {
     if (!validators.isNonEmptyString(rent.user)) return 'User cannot be empty';
@@ -47,34 +47,28 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
         throw new Error("Product's owner not found");
     }
 
-    const rentingDays = newRent.todate - newRent.fromdate + 1;
-    const coins = rentingDays*product.price;
+    const rentingDays = getAmountOfDays(newRent.todate - newRent.fromdate) + 1;
+    const coins = rentingDays * product.price;
 
-    if (!isFree) {
-        // TODO: Check coins of fromUser: throw if not valid
-        if (fromUser.coins < product.price*rentingDays)
-            throw new Error('Not enough coins');
+    if (!isFree && coins > fromUser.coins) {
+        throw new Error('Missing', coins - fromUser.coins, 'coins. Try add it to wishlist');
     }
 
     try {
         const rentingDate = {
-            "fromdate": newRent.fromdate,
-            "todate": newRent.todate
+            fromdate: newRent.fromdate,
+            todate: newRent.todate
         }
         await Product.findByIdAndUpdate(productId, { $push: { rentingDates: rentingDate } });
 
         newRent = await newRent.save();
+        console.log("New rent:", rent.id);
 
         if (!isFree) {
-            // TODO: Transfer coins from fromUser to toUser
-            const negPrice = coins * -1;
-            const newFromUser = await User.findByIdAndUpdate(userId, { $inc: {"coins": negPrice} });
-            const newToUser = await User.findByIdAndUpdate(product.user, { $inc: {"coins": coins} });
-            console.log(newFromUser);
-            console.log(newToUser);
+            await User.findByIdAndUpdate(fromUser.id, { $inc: { coins: coins * -1 } });
+            await User.findByIdAndUpdate(toUser.id, { $inc: { coins: coins } });
+            console.log("Transferred", coins, "coins from", fromUser.id, "to", toUser.id);
         }
-
-        console.log("New rent:", rent.id);
         
         return newRent;
     } catch (error) {
