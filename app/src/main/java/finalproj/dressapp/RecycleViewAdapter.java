@@ -1,4 +1,5 @@
 package finalproj.dressapp;
+import finalproj.dressapp.activities.MyClothesActivity;
 import finalproj.dressapp.activities.ProfileActivity;
 import finalproj.dressapp.fragments.ItemDialogFragment;
 import finalproj.dressapp.httpclient.models.MyAppContext;
@@ -24,6 +25,8 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     private Activity mCallingActivity;
     private Context mContext;
     private List<Product> mUserWishlist;
+    private Boolean mIsWishlist = false;
+    private Boolean mIsMyClothes = false;
 
     // data is passed into the constructor
     public RecycleViewAdapter(Activity activity, Context context, List<Product> data) {
@@ -31,6 +34,13 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         this.mCallingActivity = activity;
         this.mInflater = LayoutInflater.from(context);
         this.mDataset = data;
+
+        if (activity.getClass().getSimpleName().equals("WishListActivity")) {
+            this.mIsWishlist = true;
+        }
+        else if (activity.getClass().getSimpleName().equals("MyClothesActivity")) {
+            this.mIsMyClothes = true;
+        }
     }
 
     // Provide a direct reference to each of the views within a data item
@@ -103,40 +113,49 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
             // Setting the product ID on the wishlist icon for when the user presses it.
             TextView wishlistIcon = holder.wishlistIcon;
             Boolean isInWishList = false;
-            mUserWishlist = Utils.getCurrentUserWishlistItems();
 
-            if (mUserWishlist != null && mUserWishlist.size() > 0) {
-                for (Product productIterator:mUserWishlist) {
-                    if (productIterator.id.equals(currentProduct.id)) {
-                        isInWishList = true;
-                        break;
+            if (mIsMyClothes) {
+                wishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_empty, 0);
+            }
+            else {
+                mUserWishlist = Utils.getCurrentUserWishlistItems();
+
+                if (mUserWishlist != null && mUserWishlist.size() > 0) {
+                    for (Product productIterator:mUserWishlist) {
+                        if (productIterator.id.equals(currentProduct.id)) {
+                            isInWishList = true;
+                            break;
+                        }
                     }
                 }
-            }
 
-            wishlistIcon.setTag(isInWishList);
-            ((View)wishlistIcon.getParent()).setTag(currentProduct.id);
+                wishlistIcon.setTag(isInWishList);
+                ((View)wishlistIcon.getParent()).setTag(currentProduct.id);
 
-            if (isInWishList) {
-                wishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26_full, 0);
-            }
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ItemDialogFragment dialogFragment = new ItemDialogFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("description", currentProduct.name);
-                    bundle.putString("imgSrc", currentProduct.image);
-                    bundle.putInt("cost", currentProduct.price.intValue());
-                    bundle.putLong("minDate", Utils.DateFormatToLong(currentProduct.fromdate));
-                    bundle.putLong("maxDate", Utils.DateFormatToLong(currentProduct.todate));
-                    bundle.putString("owner", currentProduct.name);
-                    bundle.putInt("rating", 4);
-                    dialogFragment.setArguments(bundle);
-                    dialogFragment.show(mCallingActivity.getFragmentManager(), "ItemDialog");
+                if (isInWishList) {
+                    wishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26_full, 0);
                 }
-            });
+
+                // Don't allow the item popup in wishlist view.
+                if (!mIsWishlist) {
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ItemDialogFragment dialogFragment = new ItemDialogFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("description", currentProduct.name);
+                            bundle.putString("imgSrc", currentProduct.image);
+                            bundle.putInt("cost", currentProduct.price.intValue());
+                            bundle.putLong("minDate", Utils.DateFormatToLong(currentProduct.fromdate));
+                            bundle.putLong("maxDate", Utils.DateFormatToLong(currentProduct.todate));
+                            bundle.putString("owner", currentProduct.name);
+                            bundle.putInt("rating", 4);
+                            dialogFragment.setArguments(bundle);
+                            dialogFragment.show(mCallingActivity.getFragmentManager(), "ItemDialog");
+                        }
+                    });
+                }
+            }
         }
     }
 

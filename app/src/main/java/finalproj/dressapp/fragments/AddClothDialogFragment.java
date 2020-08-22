@@ -126,13 +126,13 @@ public class AddClothDialogFragment extends DialogFragment {
                 Product product = new Product(name.getText().toString(), Integer.parseInt(cost.getText().toString()), Utils.LongToDateFormat(minDate), Utils.LongToDateFormat(maxDate), image.toString());
                 APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
     
-                Call<Product> call = apiInterface.doAddItem(product, Utils.getUserId(getActivity().getApplicationContext()));
+                Call<Product> call = apiInterface.doAddItem(product);
                 call.enqueue(new Callback<Product>() {
                     @Override
                     public void onResponse(Call<Product> call, Response<Product> response) {
-    
+                        dialog.dismiss();
                         if (response.code() == 200) {
-                            dialog.dismiss();
+                            getActivity().recreate();
                         }
                     }
     

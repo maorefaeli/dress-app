@@ -41,10 +41,11 @@ import retrofit2.Response;
 public class Utils {
     static SimpleDateFormat dateformatYYYYMMDD = new SimpleDateFormat("yyyy-MM-dd");
     static Boolean isGuest;
+    static Boolean isWishlistActivity = false;
     static ProgressDialog dialog = null;
     static List<Product> currentUserWishlistItems;
     static final String PREF_USER_NAME = "username";
-    static final String PREF_USER_ID = "userid";
+    // static final String PREF_USER_ID = "userid";
     static final String PREF_USER_COOKIE = "usercookie";
         
     public static void showPopupProgressSpinner(Activity activity, Boolean isShowing, String text) {
@@ -57,12 +58,20 @@ public class Utils {
 
     }
 
+    public static Boolean getGuestStatus() {
+        return isGuest;
+    }
+
     public static void setGuestStatus(Boolean setGuest) {
         isGuest = setGuest;
     }
 
-    public static Boolean getGuestStatus() {
-        return isGuest;
+    public static Boolean getWishlistActivity() {
+        return isWishlistActivity;
+    }
+
+    public static void setWishlistActivity(Boolean setWishlistActivity) {
+        isWishlistActivity = setWishlistActivity;
     }
 
     static SharedPreferences getSharedPreferences(Context ctx) {
@@ -81,17 +90,17 @@ public class Utils {
         editor.commit();
     }
 
-    public static String getUserId(Context ctx)
-    {
-        return getSharedPreferences(ctx).getString(PREF_USER_ID, "");
-    }
+    // public static String getUserId(Context ctx)
+    // {
+    //     return getSharedPreferences(ctx).getString(PREF_USER_ID, "");
+    // }
     
-    public static void setUserId(Context ctx, String userid) 
-    {
-        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
-        editor.putString(PREF_USER_ID, userid);
-        editor.commit();
-    }
+    // public static void setUserId(Context ctx, String userid) 
+    // {
+    //     SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+    //     editor.putString(PREF_USER_ID, userid);
+    //     editor.commit();
+    // }
 
     public static String getUserCookie(Context ctx)
     {
@@ -261,6 +270,7 @@ public class Utils {
                         return true;
                     case R.id.logout:
                         clearUserName(activity);
+                        doLogOut();
                         return true;
                     case R.id.login:
                         intent = new Intent(activity.getApplicationContext(), LoginActivity.class);
@@ -277,5 +287,26 @@ public class Utils {
         });
 
         return toggle;
+    }
+
+    public static void doLogOut(){
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+
+        Call<Boolean> call = apiInterface.doLogout();
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if (response.code() == 200) {
+                    Boolean didLogin = response.body();
+                    if (didLogin) {
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                call.cancel();
+            }
+        });
     }
 }

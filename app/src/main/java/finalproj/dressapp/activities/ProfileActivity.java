@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.app.AlertDialog;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -142,7 +143,9 @@ public class ProfileActivity extends DressAppActivity implements  ActivityCompat
                     if (response.code() == 200) {
                         Boolean didUpdate = response.body();
                         if (didUpdate) {
-    
+                            Toast.makeText(getApplicationContext(),
+                                    "Profile updated!", Toast.LENGTH_SHORT)
+                                    .show();
                         }
                     }
                 }

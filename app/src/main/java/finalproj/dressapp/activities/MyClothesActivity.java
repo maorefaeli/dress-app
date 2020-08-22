@@ -27,6 +27,7 @@ public class MyClothesActivity extends DressAppActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private List<Product> products;
+    private Boolean mIsWishlistPressed = false;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,5 +79,9 @@ public class MyClothesActivity extends DressAppActivity {
                 call.cancel();
             }
         });
+    }
+
+    public void onAddToWishlist(final View view) {
+        mIsWishlistPressed = true;
     }
 }
