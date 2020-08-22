@@ -15,11 +15,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.gson.Gson;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +26,7 @@ import finalproj.dressapp.activities.MyClothesActivity;
 import finalproj.dressapp.activities.OrdersActivity;
 import finalproj.dressapp.activities.ProfileActivity;
 import finalproj.dressapp.activities.RegisterActivity;
+import finalproj.dressapp.activities.SmartSuggestionsActivity;
 import finalproj.dressapp.activities.WishListActivity;
 import finalproj.dressapp.httpclient.APIClient;
 import finalproj.dressapp.httpclient.APIInterface;
@@ -242,6 +240,10 @@ public class Utils {
                         return true;
                     case R.id.wishList:
                         intent = new Intent(activity.getApplicationContext(), WishListActivity.class);
+                        activity.startActivity(intent);
+                        return true;
+                    case R.id.smartSuggestions:
+                        intent = new Intent(activity.getApplicationContext(), SmartSuggestionsActivity.class);
                         activity.startActivity(intent);
                         return true;
                     case R.id.logout:

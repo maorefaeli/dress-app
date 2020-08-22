@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="finalproj.dressapp" >
+    package="finalproj.dressapp">
 
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -12,15 +12,18 @@
         android:allowBackup="true"
         android:icon="@drawable/app_logo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activities.WishListActivity"
+            android:label=""/>
         <activity
             android:name=".activities.OrdersActivity"
-            android:label=""/>
+            android:label="" />
         <activity
             android:name=".activities.MyClothesActivity"
             android:label="" />
         <activity
-            android:name=".activities.WishListActivity"
+            android:name=".activities.SmartSuggestionsActivity"
             android:label="" />
         <activity
             android:name=".activities.ProfileActivity"
@@ -28,7 +31,7 @@
         <activity android:name=".activities.RegisterActivity" />
         <activity
             android:name=".activities.LoginActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -20,6 +20,9 @@
     <item android:id="@+id/wishList"
         android:icon="@drawable/heart"
         android:title="@string/wishList"/>
+    <item android:id="@+id/smartSuggestions"
+        android:icon="@drawable/baseline_smart_button_black_18dp"
+        android:title="@string/smartSuggestions"/>
     <item android:id="@+id/logout"
         android:icon="@drawable/baseline_login_black_18dp"
         android:title="@string/logout"/>
