@@ -36,9 +36,6 @@ public class MyClothesActivity extends DressAppActivity {
                 (DrawerLayout) findViewById(R.id.activity_my_clothes),
                 getSupportActionBar());
 
-        LinearLayout clothesContainer = findViewById(R.id.clothes);
-
-
         findViewById(R.id.addNewCloth).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
