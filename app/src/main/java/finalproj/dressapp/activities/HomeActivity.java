@@ -98,11 +98,7 @@ public class HomeActivity extends DressAppActivity {
     {
         // Only allow wishlist function for logged in users.
         if (!Utils.getGuestStatus()) {
-
-            Utils.loadUserWishlistItems();
-
             final TextView mWishlistIcon = view.findViewById(R.id.postTitleWishlistIcon);
-
             final WishlistProduct wishlistProduct = new WishlistProduct((String) ((View)view.getParent()).getTag());
             final Boolean isInWishlist = (Boolean) view.getTag();
             view.setTag(!isInWishlist);
@@ -116,6 +112,7 @@ public class HomeActivity extends DressAppActivity {
                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                         if (response.code() == 200) {
                             mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26_full, 0); }
+                            Utils.loadUserWishlistItems();
                     }
 
                     public void onFailure(Call<Boolean> call, Throwable t) {
@@ -136,6 +133,7 @@ public class HomeActivity extends DressAppActivity {
                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                         if (response.code() == 200) {
                             mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26, 0);
+                            Utils.loadUserWishlistItems();
                          }
                     }
 

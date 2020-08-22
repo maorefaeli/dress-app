@@ -47,9 +47,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if(Utils.getUserName(getApplicationContext()).length() != 0)
         {
-            Utils.loadUserWishlistItems();
             attemptLogin(Utils.getUserName(LoginActivity.this), Utils.getUserCookie(LoginActivity.this));
-            goToHome();
         }
         else
         {
@@ -253,6 +251,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.code() == 200) {
                     Boolean didLogin = response.body();
                     if (didLogin) {
+                        Utils.loadUserWishlistItems();
                         String userCookie = cookie;
                         List<String> Cookielist = response.headers().values("Set-Cookie");
                         String userId = (Cookielist.get(0).split(";"))[0];
@@ -260,6 +259,7 @@ public class LoginActivity extends AppCompatActivity {
                         Utils.setUserId(getApplicationContext(), userId);
                         Utils.setUserCookie(getApplicationContext(), userCookie);
                         Utils.setGuestStatus(false);
+                        goToHome();
                     }
                 }
             }
