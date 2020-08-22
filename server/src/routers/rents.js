@@ -56,6 +56,7 @@ router.post('/finish/:id', auth.isLoggedIn, async (req, res) => {
     try {
         const userId = ObjectID(req.user.id);
         const rentId = ObjectID(req.params.id);
+        const { score } = req.body;
 
         const rent = await Rent.findById(rentId).populate('product');
 
@@ -65,7 +66,7 @@ router.post('/finish/:id', auth.isLoggedIn, async (req, res) => {
         }
 
         // Close order
-        await Rent.findByIdAndUpdate(rentId, { isFinished: true });
+        await Rent.findByIdAndUpdate(rentId, { isFinished: true, score });
 
         // Update user rating
         await User.findByIdAndUpdate(rent.product.user, { $inc: { reviewQuantity: 1, reviewSum: score } });

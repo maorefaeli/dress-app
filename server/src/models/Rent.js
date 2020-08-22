@@ -24,6 +24,10 @@ const RentSchema = new Schema({
     isFinished: {
         type: Boolean,
         required: false
+    },
+    score: {
+        type: Number,
+        required: false
     }
 });
 
