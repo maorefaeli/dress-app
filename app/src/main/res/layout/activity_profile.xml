@@ -62,10 +62,13 @@
                             android:hint="@string/address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
+
                         <EditText
                             android:id="@+id/email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:editable="false"
+                            android:hint="@string/prompt_email" />
                             android:hint="@string/prompt_email"/>
                         <TextView
                             android:id="@+id/money"
@@ -88,7 +91,8 @@
                         android:id="@+id/updateDetailsButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/edit"/>
+                        android:text="@string/updateUser"
+                        android:onClick="updateUserDetails"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

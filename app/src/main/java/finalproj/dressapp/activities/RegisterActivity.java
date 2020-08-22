@@ -76,13 +76,13 @@ public class RegisterActivity extends AppCompatActivity {
         mConfirmPassView.setError(null);
         
         // Store values at the time of the login attempt.
-        String firstName = mFirstNameView.getText().toString();
-        String lastName = mLastNameView.getText().toString();
-        String email = mEmailView.getText().toString();
+        String firstName = mFirstNameView.getText().toString().toLowerCase().trim();;
+        String lastName = mLastNameView.getText().toString().toLowerCase().trim();;
+        String email = mEmailView.getText().toString().toLowerCase().trim();;
         final String password = mPasswordView.getText().toString();
         String confirmPass = mConfirmPassView.getText().toString();
 
-        boolean cancel = false;
+        Boolean cancel = false;
         View focusView = null;
 
         Matcher firstNameMatch = namePattern.matcher(firstName);
@@ -129,11 +129,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
         else {
 
-            Utils.showPopupProgressSpinner(this, true, "Juat a moment...");
-            
-            firstName = firstName.toLowerCase().trim();
-            lastName = lastName.toLowerCase().trim();
-            email = email.toLowerCase().trim();
+            Utils.showPopupProgressSpinner(this, true, "Just a moment...");
 
             UserRegistration userRegistration = new UserRegistration(firstName, lastName, email, password);
             APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);

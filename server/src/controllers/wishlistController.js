@@ -5,12 +5,12 @@ const RentController = require('./rentController');
 const Graph = require('../utils/graph');
 const ObjectID = require('mongodb').ObjectID;
 const { isRentDatesValid } = require('./rentController');
-const { getDateComponent } = require('../utils/date');
+const { getDateComponent, getAmountOfDays } = require('../utils/date');
 
 // Maximum depth of users in a cycle
 const MAX_CYCLE_PARTICIPANTS = 5;
 
-const MAXIMUM_MILLISECONDS_FOR_SUGGESTION_REQUEST = 7 /* days */ * 24 * 60 * 60 * 1000;
+const MAXIMUM_DAYS_FOR_SUGGESTION_REQUEST = 7;
 
 const findCycles = async (user, product) => {
     console.log("Searching cycles from user", user.id, "since the product", product.id, "was added to his wishlist");
@@ -318,8 +318,8 @@ exports.requestProductOnCycle = async (cycleId, userId, productId, fromDate, toD
     const validToDate = getDateComponent(toDate);
 
     const delta = validFromDate - validToDate;
-    if (delta > MAXIMUM_MILLISECONDS_FOR_SUGGESTION_REQUEST) {
-        throw new Error('Order dates are more than 7 days');
+    if (getAmountOfDays(delta) > MAXIMUM_DAYS_FOR_SUGGESTION_REQUEST) {
+        throw new Error('Order dates are more than', MAXIMUM_DAYS_FOR_SUGGESTION_REQUEST, 'days');
     }
 
     if (!cycle) {

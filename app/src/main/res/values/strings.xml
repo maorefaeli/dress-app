@@ -59,6 +59,7 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="edit">Edit</string>
+    <string name="updateUser">Update user details</string>
     <string name="complete_order_title">Are you sure you want to complete this order?</string>
     <string name="current_money">You currently have </string>
 
