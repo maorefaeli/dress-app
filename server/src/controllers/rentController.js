@@ -74,6 +74,8 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
             console.log(newToUser);
         }
 
+        console.log("New rent:", rent.id);
+        
         return newRent;
     } catch (error) {
         throw new Error('Save failed');

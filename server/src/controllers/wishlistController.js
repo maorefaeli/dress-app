@@ -246,6 +246,8 @@ exports.removeProductFromWishlist = async (userId, productId) => {
 
     await removeProductFromUserWishlist(await User.findById(userId), productId);
     await removeProductFromPendingCycles(userId, productId);
+
+    console.log('Product', productId.toString(), 'was removed from user', userId.toString(), 'wishlist');
 };
 
 /**
@@ -273,6 +275,10 @@ exports.handleUserDeletion = async (userId) => {
     await PendingCycle.deleteMany({ 'participants.user': { $in: [userId] } });
 };
 
+/**
+ * Validate cycle, if dates valid adjust them. If all dates are valid and everyone requested a product,
+ * finish the cycle and make free orders for everyone
+ */
 const validateCycle = async (cycleId) => {
     const cycle = await PendingCycle.findById(cycleId).populate('requestedProduct');
 
@@ -286,7 +292,7 @@ const validateCycle = async (cycleId) => {
             return;
         }
 
-        // If order not valid due to dates, reset the requested product
+        // If order not valid due to dates, reset the requested product and mark the cycle as invalid
         if (!isRentDatesValid(participant.requestedProduct, participant.fromDate, participant.toDate)) {
             isCycleValid = false;
             
@@ -296,17 +302,24 @@ const validateCycle = async (cycleId) => {
             isCycleChanged = true;
         }
 
-        // Save the product id and not the entire entity
+        // Make sure to save the product id and not the entire entity
         participant.requestedProduct = participant.requestedProduct._id;
     });
 
+    // dates were invalid, adjust to cycle
     if (isCycleChanged) {
-        await PendingCycle.findOneAndUpdate(cycle._id, cycle);
+        await PendingCycle.findOneAndUpdate(cycle._id, { participants: cycle.participants });
     } else if (isCycleValid) {
         // Free orders for everyone!
         await Promise.all(participant.map(p => RentController.addRent(p.user, p.requestedProduct, p.fromDate, p.toDate, true)));
+
+        // Delete the cycle once all orders were made
         await PendingCycle.findByIdAndDelete(cycle._id);
-        console.log("Cycle", cycle, "is completed and deleted");
+
+        // Remove requested products from wishlists, since they were fulfilled
+        await Promise.all(participants.map(p => this.removeProductFromWishlist(p.user, p.requestedProduct)));
+
+        console.log("Cycle", cycle, "is completed and deleted, rented products were removed from users wishlists");
     }
 };
 
