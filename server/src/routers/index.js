@@ -6,7 +6,6 @@ router.use('/users', require('./users'));
 router.use('/products', require('./products'));
 router.use('/rents', require('./rents'));
 router.use('/wishlist', require('./wishlist'));
-router.use('/reviews', require('./reviews'));
 router.use('/suggestions', require('./suggestions'));
 
 router.get('/check', (req, res) => {

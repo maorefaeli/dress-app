@@ -20,6 +20,10 @@ const RentSchema = new Schema({
     todate: {
         type: Date,
         required: true
+    },
+    isFinished: {
+        type: Boolean,
+        required: false
     }
 });
 
@@ -29,7 +33,7 @@ RentSchema.set('toJSON', {
     transform: function (doc, ret) { delete ret._id }
 });
 
-RentSchema.index({ user: 1 });
+RentSchema.index({ user: 1, isFinished: 1 });
 RentSchema.index({ product: 1 });
 
 module.exports = Rent = mongoose.model('Rent', RentSchema, 'Rents');
