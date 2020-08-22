@@ -49,6 +49,7 @@
     <string name="lastName">Last name</string>
     <string name="logout">Logout</string>
     <string name="cancel">Cancel</string>
+    <string name="settings">Settings</string>
     <string name="yes">Yes</string>
     <string name="ok">OK</string>
     <string name="title_activity_wish_list">WishListActivity</string>
@@ -66,4 +67,8 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <!-- GPSTracker -->
+    <string name="GPSAlertDialogTitle">GPS is setting</string>
+    <string name="GPSAlertDialogMessage">GPS is not enabled. Do you want to go to setting menu</string>
 </resources>
