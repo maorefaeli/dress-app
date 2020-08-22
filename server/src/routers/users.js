@@ -86,7 +86,7 @@ const getUserById = async (userId) => {
 //  @access Private
 router.get('/profile', auth.isLoggedIn, async (req, res) => {
     try {
-        return res.json(getUserById(req.user.id));
+        return res.json(await getUserById(req.user.id));
     } catch (error){
         console.log(error);
         res.status(400).json({"error":"Problem getting profile"})
@@ -98,7 +98,7 @@ router.get('/profile', auth.isLoggedIn, async (req, res) => {
 //  @access Private
 router.get('/profile/:id', async (req, res) => {
     try {
-        return res.json(getUserById(req.params.id));
+        return res.json(await getUserById(req.params.id));
     } catch (error){
         console.log(error);
         res.status(400).json({"error":"Problem getting profile"})
