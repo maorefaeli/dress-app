@@ -72,6 +72,7 @@ public class HomeActivity extends DressAppActivity {
             }
         });
 
+        ((TextView) findViewById(R.id.current_money)).setText("300");
         toggle = Utils.setNavigation(this, (DrawerLayout) findViewById(R.id.activity_main), getSupportActionBar());
         Calendar calendar = Calendar.getInstance();
         calendar.set(2020, 5, 10);

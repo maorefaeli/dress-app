@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import finalproj.dressapp.R;
@@ -38,6 +39,8 @@ public class ItemDialogFragment extends DialogFragment {
 //        ((ImageView) dialogContainer.findViewById(R.id.itemImage)).setImageURI(Uri.parse(params.getString("imageSrc")));
         ((TextView) dialogContainer.findViewById(R.id.itemDescription)).setText(params.getString("description"));
         ((TextView) dialogContainer.findViewById(R.id.cost)).setText(String.valueOf(params.getInt("cost")));
+        ((TextView) dialogContainer.findViewById(R.id.owner)).setText(params.getString("owner"));
+        ((RatingBar) dialogContainer.findViewById(R.id.rating)).setRating(params.getInt("rating"));
         final EditText fromDate = dialogContainer.findViewById(R.id.fromDate);
         fromDate.setOnClickListener(new View.OnClickListener() {
             @Override

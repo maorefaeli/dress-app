@@ -111,7 +111,6 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                 }
             }
 
-
             wishlistIcon.setTag(isInWishList);
             ((View)wishlistIcon.getParent()).setTag(currentProduct.id);
 
@@ -129,6 +128,8 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                     bundle.putInt("cost", currentProduct.price.intValue());
                     bundle.putLong("minDate", Utils.DateFormatToLong(currentProduct.fromdate));
                     bundle.putLong("maxDate", Utils.DateFormatToLong(currentProduct.todate));
+                    bundle.putString("owner", currentProduct.name);
+                    bundle.putInt("rating", 4);
                     dialogFragment.setArguments(bundle);
                     dialogFragment.show(mCallingActivity.getFragmentManager(), "ItemDialog");
                 }

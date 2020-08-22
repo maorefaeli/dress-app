@@ -69,6 +69,16 @@
                             android:layout_height="wrap_content"
                             android:editable="false"
                             android:hint="@string/prompt_email" />
+                            android:hint="@string/prompt_email"/>
+                        <TextView
+                            android:id="@+id/money"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:gravity="center_vertical"
+                            android:drawableEnd="@drawable/outline_monetization_on_black_18dp"
+                            android:drawableTint="@color/duskYellow"
+                            android:layout_gravity="center"/>
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout

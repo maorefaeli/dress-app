@@ -5,6 +5,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.EditText;
 import android.app.AlertDialog;
+import android.widget.TextView;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,6 +26,7 @@ public class ProfileActivity extends DressAppActivity {
     private EditText mLastNameView;
     private EditText mAddressView;
     private EditText mEmailView;
+    private TextView mMoneyView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,8 @@ public class ProfileActivity extends DressAppActivity {
         mLastNameView = (EditText) findViewById(R.id.lastName);
         mAddressView = (EditText) findViewById(R.id.address);
         mEmailView = (EditText) findViewById(R.id.email);
+        mMoneyView = findViewById(R.id.money);
+        mMoneyView.setText("300");
         
         final String userEmail = Utils.getUserName(getApplicationContext());
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
