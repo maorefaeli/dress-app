@@ -42,6 +42,13 @@ public class ProfileActivity extends DressAppActivity {
         mEmailView = (EditText) findViewById(R.id.email);
         mMoneyView = findViewById(R.id.money);
         mMoneyView.setText("300");
+
+        mAddressView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: Maor
+            }
+        });
         
         final String userEmail = Utils.getUserName(getApplicationContext());
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);

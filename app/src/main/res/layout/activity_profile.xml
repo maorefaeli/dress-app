@@ -61,7 +61,8 @@
                             android:id="@+id/address"
                             android:hint="@string/address"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:drawableEnd="@drawable/baseline_location_on_black_18dp"/>
 
                         <EditText
                             android:id="@+id/email"
