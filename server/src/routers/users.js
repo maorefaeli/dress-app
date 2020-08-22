@@ -31,15 +31,15 @@ router.post('/register', async (req, res) => {
         let user = await User.findOne({ username });
 
         if (user) {
-            return res.status(403).json({"error": "user already exist"});
+            return res.status(403).json({"error": "username already exist"});
         }
 
         const geocoder = NodeGeocoder({
             provider: 'openstreetmap',
         });
 
-        const address = await geocoder.reverse({ lat: lat, lon: lon });
-        const fullAddress = address[0].streetName + ' ' + streetNumber + ' ' + address[0].city;
+        const address = await geocoder.reverse({ lon, lat });
+        const fullAddress = address[0].streetName + ' ' + (streetNumber || '') + ', ' + address[0].city;
         console.log(fullAddress);
 
         user = new User({
@@ -47,7 +47,11 @@ router.post('/register', async (req, res) => {
             firstName,
             lastName,
             password: User.encryptPassword(password),
-            address: fullAddress
+            address: fullAddress,
+            location: {
+                type: "Point",
+                coordinates: [lon, lat]
+            }
         });
 
         await user.save();
