@@ -45,6 +45,7 @@ public class Utils {
     static List<Product> currentUserWishlistItems;
     static final String PREF_USER_NAME = "username";
     static final String PREF_USER_ID = "userid";
+    static final String PREF_USER_COOKIE = "usercookie";
         
     public static void showPopupProgressSpinner(Activity activity, Boolean isShowing, String text) {
 
@@ -89,6 +90,18 @@ public class Utils {
     {
         SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
         editor.putString(PREF_USER_ID, userid);
+        editor.commit();
+    }
+
+    public static String getUserCookie(Context ctx)
+    {
+        return getSharedPreferences(ctx).getString(PREF_USER_COOKIE, "");
+    }
+
+    public static void setUserCookie(Context ctx, String userCookie) 
+    {
+        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+        editor.putString(PREF_USER_COOKIE, userCookie);
         editor.commit();
     }
 

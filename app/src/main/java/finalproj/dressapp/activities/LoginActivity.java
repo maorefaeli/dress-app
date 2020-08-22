@@ -47,6 +47,8 @@ public class LoginActivity extends AppCompatActivity {
 
         if(Utils.getUserName(getApplicationContext()).length() != 0)
         {
+            Utils.loadUserWishlistItems();
+            attemptLogin(Utils.getUserName(LoginActivity.this), Utils.getUserCookie(LoginActivity.this));
             goToHome();
         }
         else
@@ -104,7 +106,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void attemptLogin() {
-        // do login to server here
 
         // Reset errors.
         mEmailView.setError(null);
@@ -151,10 +152,12 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.code() == 200) {
                         Boolean didLogin = response.body();
                         if (didLogin) {
+                            String userCookie = password;
                             List<String> Cookielist = response.headers().values("Set-Cookie");
                             String userId = (Cookielist.get(0).split(";"))[0];
                             Utils.setUserName(getApplicationContext(), email);
                             Utils.setUserId(getApplicationContext(), userId);
+                            Utils.setUserCookie(getApplicationContext(), userCookie);
                             Utils.setGuestStatus(false);
                             goToHome();
                         }
@@ -232,6 +235,44 @@ public class LoginActivity extends AppCompatActivity {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
+    }
+
+    private void attemptLogin(String userName, String userCookie) {
+
+        // Store values at the time of the login attempt.
+        final String email = userName;
+        String cookie = userCookie;
+        UserCredentials userCredentials = new UserCredentials(email, cookie);
+
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+
+        Call<Boolean> call = apiInterface.doLogin(userCredentials);
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if (response.code() == 200) {
+                    Boolean didLogin = response.body();
+                    if (didLogin) {
+                        String userCookie = cookie;
+                        List<String> Cookielist = response.headers().values("Set-Cookie");
+                        String userId = (Cookielist.get(0).split(";"))[0];
+                        Utils.setUserName(getApplicationContext(), email);
+                        Utils.setUserId(getApplicationContext(), userId);
+                        Utils.setUserCookie(getApplicationContext(), userCookie);
+                        Utils.setGuestStatus(false);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                new AlertDialog.Builder(LoginActivity.this)
+                        .setTitle("failure")
+                        .setMessage(t.getMessage())
+                        .show();
+                call.cancel();
+            }
+        });
     }
 }
 
