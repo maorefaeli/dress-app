@@ -16,8 +16,7 @@ router.get('/', auth.isLoggedIn, async (req, res) => {
         // Search for pending cycles that the user participates and has not requested a product yet
         const cycles = await PendingCycle.find({
             participants: {
-                // Use $ne to enforce use of index and filter null values as well
-                $elemMatch: { user: userId, requestedProduct: { $ne: null } }
+                $elemMatch: { user: userId, requestedProduct: null }
             }
         }).populate('participants.products') || [];
 
@@ -51,7 +50,7 @@ router.post('/request', auth.isLoggedIn, async (req, res) => {
         // Find all open cycles that
         const cycles = await PendingCycle.find({
             participants: {
-                $elemMatch: { user: userId, requestedProduct: { $ne: null }, products: { $in: productId } }
+                $elemMatch: { user: userId, requestedProduct: null, products: { $in: productId } }
             }
         }) || [];
 
