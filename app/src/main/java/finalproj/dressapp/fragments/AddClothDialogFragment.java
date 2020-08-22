@@ -78,7 +78,7 @@ public class AddClothDialogFragment extends DialogFragment {
                         String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1)
                                 + "/" + (date.getYear() - 2000);
                         fromDate.setText(dateString);
-                    }
+                     }
                 });
                 builder.create().show();
             }
