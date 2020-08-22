@@ -7,7 +7,10 @@ const { getDateComponent } = require('../utils/date');
 
 // Load Product model
 const Product = require('../models/Product');
+const User = require('../models/User');
 const WishlistController = require('../controllers/wishlistController');
+
+const DEFAULT_SEARCH_SPHERE_KM = 10;
 
 const isProductContainErrors = (product) => {
     //if (!validators.isNonEmptyString(product.user)) return 'User cannot be empty';
@@ -18,15 +21,41 @@ const isProductContainErrors = (product) => {
     return '';
 };
 
+const kilometersToRadian = function(kilometers){
+    const earthRadiusInKilometers = 6371;
+    return kilometers / earthRadiusInKilometers;
+};
+
 // @route GET /products
 // @desc Search for products
 // @access Public
 router.get('/', async (req, res) => {
     try {
-        const query = {}
-        // Filter out own user products if logged in
+        const { location } = req.query;
+
+        const query = {};
+
         if (req.user && req.user.id) {
+            const userId = ObjectID(req.user.id);
+
+            // Filter out own user products if logged in
             query['user'] = { $ne: ObjectID(req.user.id)};
+
+            // For logged in user that has location, search only products of nearby users
+            const user = await User.findById(userId, 'location');
+
+            if (user.location) {
+                const users = await User.find({
+                    location : {
+                        $geoWithin : {
+                            $centerSphere : [user.location.coordinates, kilometersToRadian(location || DEFAULT_SEARCH_SPHERE_KM) ]
+                        }
+                    }
+                }, 'id');
+
+                query['user']['$in'] = users.map(q => q._id);
+            }
+            
         }
         const products = await Product.find(query);
         return res.json(products);
