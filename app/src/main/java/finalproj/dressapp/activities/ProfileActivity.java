@@ -1,7 +1,9 @@
 package finalproj.dressapp.activities;
 
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.app.AlertDialog;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import finalproj.dressapp.GPSTracker;
 import finalproj.dressapp.R;
 import finalproj.dressapp.Utils;
 import finalproj.dressapp.httpclient.APIClient;
@@ -19,7 +22,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProfileActivity extends DressAppActivity {
+public class ProfileActivity extends DressAppActivity implements  ActivityCompat.OnRequestPermissionsResultCallback {
+
+    private static String TAG = GPSTracker.class.getName();
 
     static Pattern namePattern = Pattern.compile("^[a-zA-Z]{2,}$");
     private EditText mFirstNameView;
@@ -43,10 +48,25 @@ public class ProfileActivity extends DressAppActivity {
         mMoneyView = findViewById(R.id.money);
         mMoneyView.setText("300");
 
+        GPSTracker gpsTracker = new GPSTracker(this);
+        if (!gpsTracker.getIsGPSTrackingEnabled())
+        {
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gpsTracker.showSettingsAlert();
+        }
+
         mAddressView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Maor
+                gpsTracker.getLocation();
+
+                // TODO JONATHAN - SEND LAT LON ADDRESS
+                Log.d(TAG, String.valueOf(gpsTracker.getLatitude()));
+                Log.d(TAG, String.valueOf(gpsTracker.getLongitude()));
+                Log.d(TAG, String.valueOf(gpsTracker.getAddressLine()));
+                mAddressView.setText(gpsTracker.getAddressLine());
             }
         });
         
