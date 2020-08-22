@@ -1,3 +1,6 @@
+/**
+ * Utility class for finding cycles within directed graph
+ */
 class Graph {
     constructor() {
         this.nodes = [];
@@ -5,11 +8,21 @@ class Graph {
         this.data = new Map();
     }
 
+    /**
+     * Add new vertex
+     * @param {string} vertex vertex identifier
+     */
     addVertex(vertex) {
         this.nodes.push(vertex);
         this.arrows.set(vertex, []);
     }
 
+    /**
+     * Add new edge
+     * @param {string} from source vertex identifier
+     * @param {string} to target vertex identifier
+     * @param {any=} data optional data to store on the edge
+     */
     addEdge(from, to, data) {
         const values = this.arrows.get(from);
         values.push(to);
@@ -17,16 +30,21 @@ class Graph {
         this.data.set([from, to].join(), data);
     }
 
-    // Find all the elementary circuits of a directed graph
+    /**
+     * Find all the elementary cycles of a directed graph.
+     * Returns an array of cycles.
+     * Each cycle is an array of 2 element tuples (represented by array) in the order of the cycle.
+     * Each tuple is [vertex, data]
+     */
     findCycles() {
-        var startNode;
-        var stack = [];
-        var cycles = [];
-        var blocked = new Map();
+        let startNode;
+        const stack = [];
+        const cycles = [];
+        const blocked = new Map();
 
-        // book keeping to prevent Tarjan's algorithm fruitless searches
-        var b = new Map();
-        var graph = this;
+        // book keeping to prevent algorithm fruitless searches
+        const b = new Map();
+        const graph = this;
 
         function addCycle(start, stack) {
             const cycle = [].concat(stack).concat(start);
@@ -41,14 +59,16 @@ class Graph {
                 return;
             }
 
+            // Cycle is valid
             cycles.push(cycle);
         }
 
-        function unblock(u) {
-            blocked.set(u, false);
-            if (b.has(u)) {
-                b.get(u).forEach(function (w) {
-                    b.get(u).delete(w);
+        // Unblock a node recursively from all book keeping
+        function unblock(node) {
+            blocked.set(node, false);
+            if (b.has(node)) {
+                b.get(node).forEach(function (w) {
+                    b.get(node).delete(w);
                     if (blocked.get(w)) {
                         unblock(w);
                     }
@@ -58,13 +78,16 @@ class Graph {
 
         // Use DFS to locate all the cycles starting from a specific node
         function findCyclesFromNode(node) {
-            var found = false;
+            let found = false;
             stack.push(node);
             blocked.set(node, true);
             graph.arrows.get(node).forEach(function (w) {
+                // If reached startNode, cycle was detected
                 if (w === startNode) {
                     found = true;
                     addCycle(startNode, stack);
+
+                // As long as not blocked keep going
                 } else if (!blocked.get(w)) {
                     if (findCyclesFromNode(w)) {
                         found = true;
@@ -72,11 +95,13 @@ class Graph {
                 }
             });
 
+            // Hit a cycle
             if (found) {
                 unblock(node);
             } else {
+                // If cycle not found, store the data on book keeping to not encounter it again
                 graph.arrows.get(node).forEach(function (w) {
-                    var entry = b.get(w);
+                    let entry = b.get(w);
                     if (!entry) {
                         entry = new Set();
                         b.set(w, entry);
@@ -84,6 +109,8 @@ class Graph {
                     entry.add(node);
                 });
             }
+
+            // Done with the node
             stack.pop();
             return found;
         }
@@ -100,7 +127,7 @@ class Graph {
                     // Get the current vertex
                     const current = cycle[i];
     
-                    // Get the next one that connected to current
+                    // Get the next one that connected to current, cyclic iteration
                     const next = cycle[(i + 1) % cycle.length];
                     
                     filledCycle[i] = [current, graph.data.get([current, next].join())];
@@ -118,6 +145,7 @@ class Graph {
             graph.arrows.get(node).forEach(findCyclesFromNode);
         });
 
+        // Add the data stored on the edges between nodes
         return fillCyclesWithData(cycles);
     }
 }
