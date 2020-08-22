@@ -86,6 +86,7 @@ const getUserById = async (userId) => {
     delete user.username;
     delete user.password;
     delete user.wishlist;
+    delete user.location;
     return user;
 }
 
@@ -103,7 +104,7 @@ router.get('/profile', auth.isLoggedIn, async (req, res) => {
 
 //  @route GET users/profile/:id
 //  @desc Get specific user profile
-//  @access Private
+//  @access Public
 router.get('/profile/:id', async (req, res) => {
     try {
         return res.json(await getUserById(req.params.id));

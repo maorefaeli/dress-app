@@ -142,11 +142,12 @@ router.post('/close/:id', auth.isLoggedIn, async (req, res) => {
 //  @access Private
 router.delete('/:id', auth.isLoggedIn, async (req, res) => {
     try {
+        const userId = ObjectID(req.user.id);
         const productId = req.params.id;
 
         const product = await Product.findById(productId);
         if (!product.user.equals(userId)) {
-            return res.status(404).json({"error": "Product not belongs to user"});
+            return res.status(401).json({"error": "Product not belongs to user"});
         }
 
         await Product.findByIdAndRemove(productId);
@@ -163,13 +164,13 @@ router.delete('/:id', auth.isLoggedIn, async (req, res) => {
 //  @access Private
 router.post('/:id', auth.isLoggedIn, async (req, res) => {
     try {
-        const productId = req.params.id;
-        const userId = req.user.id;
+        const userId = ObjectID(req.user.id);
+        const productId = ObjectID(req.params.id);
         const { name, price, image, fromdate, todate } = req.body;
 
         let product = await Product.findById(productId);
         if (!product.user.equals(userId)) {
-            return res.status(404).json({"error": "Product not belongs to user"});
+            return res.status(401).json({"error": "Product not belongs to user"});
         }
 
         product = {

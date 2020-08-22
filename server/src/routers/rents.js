@@ -23,8 +23,8 @@ router.get('/', auth.isLoggedIn, async (req, res) => {
 
 // @route GET rents/history/:id
 // @desc Get product renting history
-// @access Private
-router.get('/history/:id', auth.isLoggedIn, async (req, res) => {
+// @access Public
+router.get('/history/:id', async (req, res) => {
     try {
         const rentingHistory = await Rent.find({ product: ObjectID(req.params.id) }) || [];
         return res.json(rentingHistory);
@@ -62,7 +62,7 @@ router.post('/finish/:id', auth.isLoggedIn, async (req, res) => {
 
         // Check rent belongs to logged in user
         if (!rent.user.equals(userId)) {
-            return res.status(401);
+            return res.status(401).json({"error": "Rent not belongs to user"});
         }
 
         // Close order
