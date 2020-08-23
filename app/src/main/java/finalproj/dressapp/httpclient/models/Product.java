@@ -37,6 +37,14 @@ public class Product {
     @SerializedName("rentingDates")
     public List<RentingDate> rentingDates;
 
+    public Product(String productName, Number price, String fromDate, String toDate, String image) {
+        this.name = productName;
+        this.price = price;
+        this.fromdate = fromDate;
+        this.todate = toDate;    
+        this.image = image;
+    }
+
     public Product(String productName, Number price, String fromDate, String toDate, String image, List<RentingDate> rentingDates) {
         this.name = productName;
         this.price = price;
