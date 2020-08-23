@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.app.AlertDialog;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ public class ProfileActivity extends DressAppActivity implements  ActivityCompat
     private EditText mAddressView;
     private EditText mEmailView;
     private TextView mMoneyView;
+    private ImageButton mLocateButton;
     private GPSTracker gpsTracker;
 
     @Override
@@ -48,6 +50,7 @@ public class ProfileActivity extends DressAppActivity implements  ActivityCompat
         mAddressView = (EditText) findViewById(R.id.address);
         mEmailView = (EditText) findViewById(R.id.email);
         mMoneyView = findViewById(R.id.money);
+        mLocateButton = findViewById(R.id.locateButton);
         mMoneyView.setText("300");
 
         gpsTracker = new GPSTracker(this);
@@ -59,7 +62,7 @@ public class ProfileActivity extends DressAppActivity implements  ActivityCompat
             gpsTracker.showSettingsAlert();
         }
 
-        mAddressView.setOnClickListener(new View.OnClickListener() {
+        mLocateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

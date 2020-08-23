@@ -31,5 +31,5 @@
         android:title="@string/login"/>
     <item android:id="@+id/register"
         android:icon="@drawable/baseline_edit_black_18dp"
-        android:title="@string/registernav"/>
+        android:title="@string/register"/>
 </menu>
