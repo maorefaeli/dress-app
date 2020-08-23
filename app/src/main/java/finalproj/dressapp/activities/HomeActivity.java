@@ -47,6 +47,7 @@ public class HomeActivity extends DressAppActivity {
         setContentView(R.layout.activity_home);
 
         Utils.loadUserWishlistItems();
+        fillSearchFields();
 
         AtomicLong minDateAvailable = new AtomicLong(System.currentTimeMillis());
 
@@ -259,5 +260,31 @@ public class HomeActivity extends DressAppActivity {
         searchObject = new SearchObject(name, radius, minPrice, maxPrice, fromDate, toDate, minRating);
 
         HomeActivity.super.recreate();
+    }
+
+    private void fillSearchFields() {
+        if (searchObject != null) {
+            if (searchObject.name != null && !searchObject.name.isEmpty()) {
+                ((TextView)findViewById(R.id.search)).setText(searchObject.name);
+            }
+            if (searchObject.fromDate != null && !searchObject.fromDate.isEmpty()) {
+                ((TextView)findViewById(R.id.minDate)).setText(searchObject.fromDate);
+            }
+            if (searchObject.toDate != null && !searchObject.toDate.isEmpty()) {
+                ((TextView)findViewById(R.id.maxDate)).setText(searchObject.toDate);
+            }
+            if (searchObject.minimumPrice != null && !searchObject.minimumPrice.isEmpty()) {
+                ((TextView)findViewById(R.id.minPrice)).setText(searchObject.minimumPrice);
+            }
+            if (searchObject.maximumPrice != null && !searchObject.maximumPrice.isEmpty()) {
+                ((TextView)findViewById(R.id.maxPrice)).setText(searchObject.maximumPrice);
+            }
+            if (searchObject.radius != null && !searchObject.radius.isEmpty()) {
+                ((TextView)findViewById(R.id.radius)).setText(searchObject.radius);
+            }
+            if (searchObject.minimumRating != 0) {
+                ((RatingBar)findViewById(R.id.ratingBar)).setRating(searchObject.minimumRating);
+            }
+        }
     }
 }
