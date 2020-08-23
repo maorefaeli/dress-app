@@ -42,8 +42,8 @@ router.get('/history/:id', async (req, res) => {
 router.post('/add', auth.isLoggedIn, async (req, res) => {
     try {
         const { product, fromdate, todate } = req.body;
-        const newRent = await RentController.addRent(req.user.id, product, fromdate, todate);
-        res.json(newRent);
+        await RentController.addRent(req.user.id, product, fromdate, todate);
+        res.json(true);
     } catch (e) {
         console.log(e);
         error = 'Problem place an order: ' + e.message;
