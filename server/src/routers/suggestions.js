@@ -63,7 +63,7 @@ router.post('/request', auth.isLoggedIn, async (req, res) => {
         }) || [];
 
         await Promise.all(cycles.map(cycle => WishlistController.requestProductOnCycle(
-            cycle._id, userId, productId, fromdate, todate
+            cycle._id, userId, productId, Number(fromdate), Number(todate)
         )));
 
         return res.json(true);
