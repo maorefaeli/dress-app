@@ -52,8 +52,8 @@ router.get('/', auth.isLoggedIn, async (req, res) => {
 router.post('/request', auth.isLoggedIn, async (req, res) => {
     try {
         const { product, fromdate, todate } = req.body;
-        const userId = ObjectID(req.user.id);
-        const productId = ObjectID(product);
+        const userId = ObjectID("5ec4e48911bf28a249ec3037");
+        const productId = ObjectID("5f3f9fe1a9564ea974c7543d");
 
         // Find all open cycles that
         const cycles = await PendingCycle.find({
@@ -63,7 +63,7 @@ router.post('/request', auth.isLoggedIn, async (req, res) => {
         }) || [];
 
         await Promise.all(cycles.map(cycle => WishlistController.requestProductOnCycle(
-            cycle._id, userId, productId, fromdate, todate
+            cycle._id, userId, productId, "2020-08-21T00:00:00.000Z", "2020-08-22T00:00:00.000Z"
         )));
 
         return res.json(true);

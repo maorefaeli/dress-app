@@ -311,13 +311,13 @@ const validateCycle = async (cycleId) => {
         await PendingCycle.findOneAndUpdate(cycle._id, { participants: cycle.participants });
     } else if (isCycleValid) {
         // Free orders for everyone!
-        await Promise.all(participant.map(p => RentController.addRent(p.user, p.requestedProduct, p.fromDate, p.toDate, true)));
+        await Promise.all(cycle.participants.map(p => RentController.addRent(p.user, p.requestedProduct, p.fromDate, p.toDate, true)));
 
         // Delete the cycle once all orders were made
         await PendingCycle.findByIdAndDelete(cycle._id);
 
         // Remove requested products from wishlists, since they were fulfilled
-        await Promise.all(participants.map(p => this.removeProductFromWishlist(p.user, p.requestedProduct)));
+        await Promise.all(cycle.participants.map(p => this.removeProductFromWishlist(p.user, p.requestedProduct)));
 
         console.log("Cycle", cycle, "is completed and deleted, rented products were removed from users wishlists");
     }
