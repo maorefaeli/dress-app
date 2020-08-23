@@ -27,3 +27,5 @@ const isFunction = (value) => typeof value === 'function';
 exports.isFunction = isFunction;
 
 exports.isPromise = (value) => !!value && isFunction(value.then) && isFunction(value.catch);
+
+exports.isObjectEmpty = (value) => Object.keys(value).length === 0;
