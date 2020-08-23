@@ -2,12 +2,10 @@ package finalproj.dressapp.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.icu.util.Calendar;
 import android.icu.util.GregorianCalendar;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -16,8 +14,11 @@ import android.widget.TextView;
 
 import finalproj.dressapp.R;
 import finalproj.dressapp.Utils;
+import finalproj.dressapp.httpclient.APIClient;
+import finalproj.dressapp.httpclient.APIInterface;
+import finalproj.dressapp.httpclient.models.ProductEdit;
 
-public class EditClothFragment extends DialogFragment {
+public class EditItemFragment extends DialogFragment {
     private long minDate;
     private long maxDate;
 
@@ -33,9 +34,15 @@ public class EditClothFragment extends DialogFragment {
 
         Bundle params = getArguments();
         minDate = System.currentTimeMillis();
-        ((TextView) dialogContainer.findViewById(R.id.itemDescription)).setText(params.getString("title"));
-        ((TextView) dialogContainer.findViewById(R.id.cost)).setText(String.valueOf(params.getInt("cost")));
-        ((RatingBar) dialogContainer.findViewById(R.id.rating)).setRating(params.getInt("rating"));
+        EditText itemDescription = dialogContainer.findViewById(R.id.itemDescription);
+        itemDescription.setText(params.getString("title"));
+
+        TextView cost =  dialogContainer.findViewById(R.id.cost);
+        cost.setText(String.valueOf(params.getInt("cost")));
+
+        RatingBar rating = dialogContainer.findViewById(R.id.rating);
+        rating.setRating(params.getInt("rating"));
+
         final EditText fromDate = dialogContainer.findViewById(R.id.fromDate);
         fromDate.setText(Utils.LongToDateFormat(params.getLong("from")));
         fromDate.setOnClickListener(v -> {
@@ -69,6 +76,8 @@ public class EditClothFragment extends DialogFragment {
             builder12.setPositiveButton("OK", (dialog12, which) -> {
                 String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1) + "/" + (date.getYear() - 2000);
                 toDate.setText(dateString);
+                Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth());
+                maxDate = calendar.getTimeInMillis();
             });
             builder12.create().show();
         });
@@ -77,7 +86,11 @@ public class EditClothFragment extends DialogFragment {
 
         dialogContainer.findViewById(R.id.ok).setOnClickListener(v -> {
             dialog.dismiss();
-            // TODO: send edit to server
+
+            APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+            ProductEdit productEdit = new ProductEdit(params.getString("id"), itemDescription.getText().toString(),
+                    Integer.parseInt(cost.getText().toString()), String.valueOf(minDate), String.valueOf(maxDate));
+            apiInterface.doEditProduct(productEdit);
         });
 
         return dialog;
