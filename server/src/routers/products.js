@@ -3,7 +3,7 @@ const router = express.Router();
 const validators = require('../utils/validators');
 const auth = require('../utils/auth');
 const ObjectID = require('mongodb').ObjectID;
-const { getDateComponent } = require('../utils/date');
+const { getDateComponent, parseSearch } = require('../utils/date');
 
 // Load Product model
 const Product = require('../models/Product');
@@ -30,7 +30,7 @@ const kilometersToRadian = function(kilometers){
 router.post('/', async (req, res) => {
     try {
         let { name, radius, minimumPrice, maximumPrice, fromDate, toDate, minimumRating } = req.body;
-        console.log('Search', name, radius, minimumPrice, maximumPrice, fromDate, toDate, minimumRating)
+        console.log('Search:', name, radius, minimumPrice, maximumPrice, fromDate, toDate, minimumRating)
 
         const query = {};
         const userQuery = {};
@@ -48,14 +48,14 @@ router.post('/', async (req, res) => {
         }
 
         // Default to today if 'fromDate' not provided
-        fromDate = getDateComponent(fromDate || Date.now());
+        fromDate = getDateComponent(parseSearch(fromDate) || Date.now());
 
         // Search for products that end after fromDate
         query.todate = { $gte: fromDate };
 
         if (toDate) {
             // Search for products that start before toDate
-            query.fromdate = { $lte: getDateComponent(toDate) };
+            query.fromdate = { $lte: getDateComponent(parseSearch(toDate)) };
         }
 
         if (req.user && req.user.id) {
