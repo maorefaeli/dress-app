@@ -12,6 +12,23 @@ const isRentContainErrors = (rent) => {
     return '';
 };
 
+const isRentDatesValid = (product, fromDate, toDate) => {
+    if (product.fromdate > fromDate || product.todate < toDate) return false;
+
+    if (product.rentingDates && product.rentingDates.length) {
+        for (let index = 0; index < product.rentingDates.length; index++) {
+            const rt = product.rentingDates[index];
+            if (!(rt.todate < fromDate && rt.fromdate > toDate)) {
+                return false;
+            }
+        }
+    }
+
+    return true;  
+};
+
+exports.isRentDatesValid = isRentDatesValid;
+
 exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
     const validFromDate = getDateComponent(fromdate);
     const validToDate = getDateComponent(todate);
@@ -74,19 +91,4 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
     } catch (error) {
         throw new Error('Save failed');
     }    
-};
-
-exports.isRentDatesValid = (product, fromDate, toDate) => {
-    if (product.fromdate > fromDate || product.todate < toDate) return false;
-
-    if (product.rentingDates && product.rentingDates.length) {
-        for (let index = 0; index < product.rentingDates.length; index++) {
-            const rt = product.rentingDates[index];
-            if (!(rt.todate < fromDate && rt.fromdate > toDate)) {
-                return false;
-            }
-        }
-    }
-
-    return true;  
 };
