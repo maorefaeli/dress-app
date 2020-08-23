@@ -100,8 +100,8 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                @Override
                public void onClick(View v) {
                     new AlertDialog.Builder(mContext)
-                            .setTitle("Not logged in.")
-                            .setMessage("If you want to begin renting clothes, please login or register.")
+                            .setTitle("Need to login")
+                            .setMessage("Please login or register to start exploring the app")
                             .show();
                }
             });

@@ -17,16 +17,6 @@
         android:scaleType="centerCrop"
         android:src="@drawable/app_logo_small" />
 
-    <TextView
-        android:id="@+id/registerScreen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:text="@string/register"
-        android:textSize="25sp"
-        android:textStyle="bold" />
-
     <EditText
         android:id="@+id/firstName"
         android:layout_width="match_parent"
