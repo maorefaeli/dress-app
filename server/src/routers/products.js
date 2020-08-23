@@ -9,6 +9,7 @@ const { getDateComponent, parseSearch } = require('../utils/date');
 const Product = require('../models/Product');
 const User = require('../models/User');
 const WishlistController = require('../controllers/wishlistController');
+const UserController = require('../controllers/userController');
 
 const isProductContainErrors = (product) => {
     //if (!validators.isNonEmptyString(product.user)) return 'User cannot be empty';
@@ -45,6 +46,10 @@ router.post('/', async (req, res) => {
 
         if (maximumPrice) {
             query.price = { ...query.price, $lte: Number(maximumPrice) };
+        }
+
+        if (minimumRating) {
+            query.averageScore = { $gte: Number(minimumRating) };
         }
 
         // Default to today if 'fromDate' not provided
@@ -84,11 +89,7 @@ router.post('/', async (req, res) => {
         }
 
         // Sort by _id descending: which will return the newly created products first
-        let products = await Product.find(query).populate('user', 'firstName lastName averageScore reviewQuantity address').sort({_id: -1}) || [];
-
-        if (minimumRating) {
-            products = products.filter(p => p.user.averageScore >= minimumRating);
-        }
+        let products = await Product.find(query).populate('user', UserController.partialUserFields).sort({_id: -1}) || [];
 
         console.log('Returned', products.length, 'products on search');
 
@@ -104,7 +105,7 @@ router.post('/', async (req, res) => {
 // @access Public
 router.get('/:id', async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id).populate('user', 'firstName lastName averageScore reviewQuantity address');
+        const product = await Product.findById(req.params.id).populate('user', UserController.partialUserFields);
         return res.json(product);
     } catch (error){
         console.log(error);
@@ -117,7 +118,7 @@ router.get('/:id', async (req, res) => {
 // @access Private
 router.get('/user/me', auth.isLoggedIn, async (req, res) => {
     try {
-        const products = await Product.find({user:req.user.id}).populate('user', 'firstName lastName averageScore reviewQuantity address').sort({_id: -1});
+        const products = await Product.find({user:req.user.id}).populate('user', UserController.partialUserFields).sort({_id: -1});
         return res.json(products);
     } catch (error){
         console.log(error);
@@ -130,7 +131,7 @@ router.get('/user/me', auth.isLoggedIn, async (req, res) => {
 // @access Private
 router.get('/user/:user', auth.isLoggedIn, async (req, res) => {
     try {
-        const products = await Product.find({user: req.params.user}).populate('user', 'firstName lastName averageScore reviewQuantity address');
+        const products = await Product.find({user: req.params.user}).populate('user', UserController.partialUserFields);
         return res.json(products);
     } catch (error){
         console.log(error);
