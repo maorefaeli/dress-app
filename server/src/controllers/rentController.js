@@ -7,10 +7,27 @@ const { getDateComponent, getAmountOfDays } = require('../utils/date');
 const isRentContainErrors = (rent) => {
     if (!validators.isObject(rent.user)) return 'User cannot be empty';
     if (!validators.isObject(rent.product)) return 'Product cannot be empty';
-    if (!validators.isNonEmptyString(rent.fromdate)) return 'From date cannot be empty';
-    if (!validators.isNonEmptyString(rent.todate)) return 'To date cannot be empty';
+    if (!validators.isDate(rent.fromdate)) return 'From date cannot be empty';
+    if (!validators.isDate(rent.todate)) return 'To date cannot be empty';
     return '';
 };
+
+const isRentDatesValid = (product, fromDate, toDate) => {
+    if (product.fromdate > fromDate || product.todate < toDate) return false;
+
+    if (product.rentingDates && product.rentingDates.length) {
+        for (let index = 0; index < product.rentingDates.length; index++) {
+            const rt = product.rentingDates[index];
+            if (!(rt.todate < fromDate && rt.fromdate > toDate)) {
+                return false;
+            }
+        }
+    }
+
+    return true;  
+};
+
+exports.isRentDatesValid = isRentDatesValid;
 
 exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
     const validFromDate = getDateComponent(fromdate);
@@ -74,19 +91,4 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
     } catch (error) {
         throw new Error('Save failed');
     }    
-};
-
-exports.isRentDatesValid = (product, fromDate, toDate) => {
-    if (product.fromdate > fromDate || product.todate < toDate) return false;
-
-    if (product.rentingDates && product.rentingDates.length) {
-        for (let index = 0; index < product.rentingDates.length; index++) {
-            const rt = product.rentingDates[index];
-            if (!(rt.todate < fromDate && rt.fromdate > toDate)) {
-                return false;
-            }
-        }
-    }
-
-    return true;  
 };
