@@ -42,9 +42,9 @@ router.get('/', async (req, res) => {
             query['user'] = { $ne: ObjectID(req.user.id)};
 
             // For logged in user that has location, search only products of nearby users
-            const user = await User.findById(userId, 'location');
+            const user = await User.findById(userId);
 
-            if (user.location) {
+            if (user.location && user.location.coordinates) {
                 const users = await User.find({
                     location : {
                         $geoWithin : {
