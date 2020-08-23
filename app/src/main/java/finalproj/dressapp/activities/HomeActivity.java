@@ -79,8 +79,10 @@ public class HomeActivity extends DressAppActivity {
         findViewById(R.id.applySearch).setOnClickListener(view -> {
             String text = ((TextView) findViewById(R.id.search)).getText().toString();
             int minRating = (int) ((RatingBar) findViewById(R.id.ratingBar)).getRating();
-            int maxPrice = Integer.parseInt(((TextView) findViewById(R.id.maxPrice)).getText().toString());
-            int radius = Integer.parseInt(((TextView) findViewById(R.id.radius)).getText().toString());
+            String price = ((TextView) findViewById(R.id.maxPrice)).getText().toString();
+            int maxPrice = price.isEmpty() ? 0 : Integer.parseInt(price);
+            String radius = ((TextView) findViewById(R.id.radius)).getText().toString();
+            int maxRadius = radius.isEmpty() ? 0 : Integer.parseInt(radius);
             // TODO: apply search params
         });
         toggle = Utils.setNavigation(this, (DrawerLayout) findViewById(R.id.activity_main), getSupportActionBar());
