@@ -24,12 +24,12 @@ const kilometersToRadian = function(kilometers){
     return kilometers / earthRadiusInKilometers;
 };
 
-// @route GET /products
+// @route POST /products
 // @desc Search for products
 // @access Public
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
-        const { name, radius, minimumPrice, maximumPrice, fromDate, toDate, minimumRating } = req.query;
+        const { name, radius, minimumPrice, maximumPrice, fromDate, toDate, minimumRating } = req.body;
 
         const query = {};
         const userQuery = {};
