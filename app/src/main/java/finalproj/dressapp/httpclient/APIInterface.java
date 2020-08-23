@@ -6,6 +6,7 @@ import finalproj.dressapp.httpclient.models.RentProduct;
 import finalproj.dressapp.httpclient.models.ServerCheck;
 import finalproj.dressapp.httpclient.models.UserCredentials;
 import finalproj.dressapp.httpclient.models.UserRegistration;
+import finalproj.dressapp.httpclient.models.SearchObject;
 import finalproj.dressapp.httpclient.models.Product;
 import finalproj.dressapp.httpclient.models.WishlistProduct;
 import finalproj.dressapp.Utils;
@@ -38,8 +39,8 @@ public interface APIInterface {
     @POST("users/edit")
     Call<Boolean> doUpdateUser(@Body UserRegistration userRegistration);
 
-    @GET("products/")
-    Call<List<Product>> getAllItems();
+    @POST("products/")
+    Call<List<Product>> getAllItems(@Body SearchObject searchObject);
 
     @GET("products/user/me")
     Call<List<Product>> getAllMyItems();
@@ -48,7 +49,7 @@ public interface APIInterface {
     Call<List<Product>> getAllSpecificUserItems(@Path("username") String userid);
 
     @POST("products/add")
-    Call<Product> doAddItem(@Body Product product);
+    Call<Boolean> doAddItem(@Body Product product);
 
     @GET("products/close/{productid}")
     Call<Product> closeProduct(@Path("product") String userid);

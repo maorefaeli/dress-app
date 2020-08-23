@@ -126,10 +126,10 @@ public class AddClothDialogFragment extends DialogFragment {
                 Product product = new Product(name.getText().toString(), Integer.parseInt(cost.getText().toString()), Utils.LongToDateFormat(minDate), Utils.LongToDateFormat(maxDate), image.toString());
                 APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
     
-                Call<Product> call = apiInterface.doAddItem(product);
-                call.enqueue(new Callback<Product>() {
+                Call<Boolean> call = apiInterface.doAddItem(product);
+                call.enqueue(new Callback<Boolean>() {
                     @Override
-                    public void onResponse(Call<Product> call, Response<Product> response) {
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                         dialog.dismiss();
                         if (response.code() == 200) {
                             getActivity().recreate();
@@ -137,7 +137,7 @@ public class AddClothDialogFragment extends DialogFragment {
                     }
     
                     @Override
-                    public void onFailure(Call<Product> call, Throwable t) {
+                    public void onFailure(Call<Boolean> call, Throwable t) {
                         new AlertDialog.Builder(getActivity())
                             .setTitle("failure")
                             .setMessage(t.getMessage())

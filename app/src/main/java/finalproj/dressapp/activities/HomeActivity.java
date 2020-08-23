@@ -27,6 +27,7 @@ import finalproj.dressapp.httpclient.APIClient;
 import finalproj.dressapp.httpclient.APIInterface;
 import finalproj.dressapp.httpclient.models.Product;
 import finalproj.dressapp.httpclient.models.RentProduct;
+import finalproj.dressapp.httpclient.models.SearchObject;
 import finalproj.dressapp.httpclient.models.WishlistProduct;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,6 +38,7 @@ public class HomeActivity extends DressAppActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private List<Product> products;
+    private static SearchObject searchObject = new SearchObject("","","","","","",0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +87,7 @@ public class HomeActivity extends DressAppActivity {
         });
 
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-        Call<List<Product>> call = apiInterface.getAllItems();
+        Call<List<Product>> call = apiInterface.getAllItems(searchObject);
         call.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
@@ -120,19 +122,13 @@ public class HomeActivity extends DressAppActivity {
         });
 
         ((TextView) findViewById(R.id.current_money)).setText("300");
-        findViewById(R.id.applySearch).setOnClickListener(view -> {
-            String text = ((TextView) findViewById(R.id.search)).getText().toString();
-            int minRating = (int) ((RatingBar) findViewById(R.id.ratingBar)).getRating();
-            String price = ((TextView) findViewById(R.id.maxPrice)).getText().toString();
-            int maxPrice = price.isEmpty() ? 0 : Integer.parseInt(price);
-            String radius = ((TextView) findViewById(R.id.radius)).getText().toString();
-            int maxRadius = radius.isEmpty() ? 0 : Integer.parseInt(radius);
-
-            // TODO: apply search params
-        });
         toggle = Utils.setNavigation(this, (DrawerLayout) findViewById(R.id.activity_main), getSupportActionBar());
         Calendar calendar = Calendar.getInstance();
         calendar.set(2020, 5, 10);
+
+        findViewById(R.id.applySearch).setOnClickListener(view -> {
+            doSearch();
+        });
     }
 
     @Override
@@ -209,6 +205,7 @@ public class HomeActivity extends DressAppActivity {
     }
 
     public void orderItem(final View view) {
+
         String fromDate = Utils.getFromDate();
         String toDate = Utils.getToDate();
         String productId = Utils.getProductId();
@@ -248,5 +245,19 @@ public class HomeActivity extends DressAppActivity {
                 }
             });
         }
+    }
+
+    private void doSearch() {
+        String name = ((TextView) findViewById(R.id.search)).getText().toString();
+        int minRating = (int) ((RatingBar) findViewById(R.id.ratingBar)).getRating();
+        String minPrice = ((TextView) findViewById(R.id.minPrice)).getText().toString();
+        String maxPrice = ((TextView) findViewById(R.id.maxPrice)).getText().toString();
+        String radius = ((TextView) findViewById(R.id.radius)).getText().toString();
+        String fromDate = ((TextView) findViewById(R.id.minDate)).getText().toString();
+        String toDate = ((TextView) findViewById(R.id.maxDate)).getText().toString();
+
+        searchObject = new SearchObject(name, radius, minPrice, maxPrice, fromDate, toDate, minRating);
+
+        HomeActivity.super.recreate();
     }
 }

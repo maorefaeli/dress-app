@@ -184,7 +184,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="10dp"
-                android:text="@string/apply" />
+                android:text="@string/apply"/>
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
