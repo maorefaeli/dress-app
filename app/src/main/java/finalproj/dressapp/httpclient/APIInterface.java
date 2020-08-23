@@ -74,7 +74,7 @@ public interface APIInterface {
     Call<List<Product>> getSuggestions();
     
     @POST("suggestions/request")
-    Call<Boolean> requestSuggestion();
+    Call<Boolean> requestSuggestion(@Body AddRent addRent);
 
     @GET("rents")
     Call<List<RentProduct>> getRents();

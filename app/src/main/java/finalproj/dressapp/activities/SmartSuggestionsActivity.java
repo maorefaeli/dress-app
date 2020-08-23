@@ -25,7 +25,9 @@ import finalproj.dressapp.R;
 import finalproj.dressapp.Utils;
 import finalproj.dressapp.httpclient.APIClient;
 import finalproj.dressapp.httpclient.APIInterface;
+import finalproj.dressapp.httpclient.models.AddRent;
 import finalproj.dressapp.httpclient.models.Product;
+import finalproj.dressapp.httpclient.models.RentProduct;
 import finalproj.dressapp.httpclient.models.WishlistProduct;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -67,15 +69,16 @@ public class SmartSuggestionsActivity extends DressAppActivity {
     private void updateSuggestions() {
         if (suggestionsContainer != null && !suggestions.isEmpty()) {
             for (final Product suggestion : suggestions) {
+                suggestionsContainer.removeAllViews();
                 if (suggestion.name != null && !suggestion.name.isEmpty()){
                     LinearLayout suggestionContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.wish_list_suggestion, null);
                     ((TextView) suggestionContainer.findViewById(R.id.title)).setText(suggestion.name);
-                    ((ImageView) suggestionContainer.findViewById(R.id.image)).setImageURI(Uri.parse(suggestion.image));
+//                    ((ImageView) suggestionContainer.findViewById(R.id.image)).setImageURI(Uri.parse(suggestion.image));
                     final EditText fromDate = suggestionContainer.findViewById(R.id.fromDate);
                     final AtomicLong minDate = new AtomicLong(0);
                     final AtomicLong maxDate = new AtomicLong(0);
                     fromDate.setOnClickListener(v -> {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         LinearLayout dateContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.date_picker, null);
                         builder.setView(dateContainer);
 
@@ -100,7 +103,7 @@ public class SmartSuggestionsActivity extends DressAppActivity {
 
                     final EditText toDate = suggestionContainer.findViewById(R.id.toDate);
                     toDate.setOnClickListener(v -> {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         LinearLayout dateContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.date_picker, null);
                         builder.setView(dateContainer);
 
@@ -108,12 +111,9 @@ public class SmartSuggestionsActivity extends DressAppActivity {
                         date.setMinDate(minDate.get());
                         date.setMaxDate(maxDate.get());
 
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1) + "/" + (date.getYear() - 2000);
-                                toDate.setText(dateString);
-                            }
+                        builder.setPositiveButton("OK", (dialog, which) -> {
+                            String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1) + "/" + (date.getYear() - 2000);
+                            toDate.setText(dateString);
                         });
                         builder.create().show();
                     });
@@ -128,6 +128,7 @@ public class SmartSuggestionsActivity extends DressAppActivity {
                                     Toast.makeText(getBaseContext(), "Removed from wish list!", Toast.LENGTH_LONG).show();
                                     suggestions.remove(suggestion);
                                     suggestionsContainer.removeView(suggestionContainer);
+                                    updateSuggestions();
                                 }
                             }
 
@@ -140,6 +141,42 @@ public class SmartSuggestionsActivity extends DressAppActivity {
                             }
                         });
                     });
+
+                    suggestionContainer.findViewById(R.id.placeRequest).setOnClickListener(view -> {
+                        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+                        AddRent rentProduct = new AddRent(suggestion.id, fromDate.getText().toString(), toDate.getText().toString());
+                        Call <Boolean> call = apiInterface.requestSuggestion(rentProduct);
+                        call.enqueue(new Callback<Boolean>() {
+                            @Override
+                            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                                if (response.code() == 200) {
+                                    Utils.setProductId("");
+                                    Utils.setFromDate("");
+                                    Utils.setToDate("");
+                                    Toast.makeText(getApplicationContext(),
+                                            "Order has been placed!", Toast.LENGTH_SHORT)
+                                            .show();
+                                    suggestionsContainer.removeView(suggestionContainer);
+                                    updateSuggestions();
+                                } else {
+                                    new AlertDialog.Builder(SmartSuggestionsActivity.this)
+                                            .setTitle("Couldn't rent item.")
+                                            .setMessage(response.message())
+                                            .show();
+                                }
+                            }
+
+                            public void onFailure(Call<Boolean> call, Throwable t) {
+                                new AlertDialog.Builder(SmartSuggestionsActivity.this)
+                                        .setTitle("Couldn't rent item.")
+                                        .setMessage(t.getMessage())
+                                        .show();
+                                Utils.setProductId("");
+                                call.cancel();
+                            }
+                        });
+                    });
+
                     suggestionsContainer.addView(suggestionContainer);
                 }
             }
