@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import finalproj.dressapp.R;
+import finalproj.dressapp.httpclient.APIClient;
+import finalproj.dressapp.httpclient.APIInterface;
+import finalproj.dressapp.httpclient.models.OrderReview;
 
 public class CompleteOrderDialogFragment extends DialogFragment {
     @NonNull
@@ -30,16 +33,14 @@ public class CompleteOrderDialogFragment extends DialogFragment {
             }
         });
 
-        dialogContainer.findViewById(R.id.yes).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                // send order completed message to server
+        dialogContainer.findViewById(R.id.yes).setOnClickListener(view -> {
+            dialog.dismiss();
+            // send order completed message to server
 
-                ReviewDialogFragment reviewDialogFragment = new ReviewDialogFragment();
-                reviewDialogFragment.setArguments(getArguments());
-                reviewDialogFragment.show(getFragmentManager(), "reviewDialog");
-            }
+            ReviewDialogFragment reviewDialogFragment = new ReviewDialogFragment();
+            reviewDialogFragment.setArguments(getArguments());
+            reviewDialogFragment.show(getFragmentManager(), "reviewDialog");
+            getActivity().recreate();
         });
         return dialog;
     }

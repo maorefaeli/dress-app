@@ -1,5 +1,6 @@
 package finalproj.dressapp.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -33,7 +34,6 @@ public class ReviewDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        Bundle bundle = getArguments();
         final LinearLayout dialogContainer =
                 (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.review_window, null);
 
@@ -42,21 +42,20 @@ public class ReviewDialogFragment extends DialogFragment {
 
         final Dialog dialog = builder.create();
         ratingBar = dialogContainer.findViewById(R.id.ratingBar);
-
-        ((TextView) dialogContainer.findViewById(R.id.itemTitle)).setText(getArguments().getString("title"));
-
-        dialogContainer.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+        ratingBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.dismiss();
+                dialogContainer.findViewById(R.id.pleaseReview).setVisibility(View.GONE);
             }
         });
 
-        dialogContainer.findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int rating = ratingBar.getNumStars();
+        ((TextView) dialogContainer.findViewById(R.id.itemTitle)).setText(getArguments().getString("title"));
+
+        dialogContainer.findViewById(R.id.ok).setOnClickListener(view -> {
+            int rating = (int) ratingBar.getRating();
+            if (rating > 0) {
                 String rentId = Utils.getRentId();
+                final Activity activity = getActivity();
                 OrderReview orderReview = new OrderReview(rentId, rating);
                 APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
                 Call<Boolean> call = apiInterface.rentFinish(orderReview);
@@ -66,6 +65,7 @@ public class ReviewDialogFragment extends DialogFragment {
                         if (response.code() == 200) {
                             Toast.makeText(MyAppContext.getContext(), "Thank you for the feedback! You got 10 coins.", Toast.LENGTH_LONG).show();
                             Utils.setRentId("");
+                            activity.recreate();
                         }
                     }
 
@@ -78,9 +78,11 @@ public class ReviewDialogFragment extends DialogFragment {
                         call.cancel();
                     }
                 });
-
-                dialog.dismiss();
+            } else {
+                dialogContainer.findViewById(R.id.pleaseReview).setVisibility(View.VISIBLE);
             }
+
+            dialog.dismiss();
         });
 
         return dialog;

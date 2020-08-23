@@ -48,7 +48,7 @@ router.post('/', async (req, res) => {
         }
 
         // Default to today if 'fromDate' not provided
-        fromDate = getDateComponent(parseSearch(fromDate) || Date.now());
+        fromDate = getDateComponent(fromDate ? parseSearch(fromDate) : Date.now());
 
         // Search for products that end after fromDate
         query.todate = { $gte: fromDate };
@@ -230,11 +230,11 @@ router.post('/close/:id', auth.isLoggedIn, async (req, res) => {
 //  @route POST /products/:id
 //  @desc Edit specific product
 //  @access Private
-router.post('/:id', auth.isLoggedIn, async (req, res) => {
+router.post('/edit', auth.isLoggedIn, async (req, res) => {
     try {
         const userId = ObjectID(req.user.id);
-        const productId = ObjectID(req.params.id);
-        const { name, price, image, fromdate, todate } = req.body;
+        const { id, name, price, fromdate, todate } = req.body;
+        const productId = ObjectID(id);
 
         let product = await Product.findById(productId);
         if (!product.user.equals(userId)) {
@@ -244,7 +244,6 @@ router.post('/:id', auth.isLoggedIn, async (req, res) => {
         product = {
             name,
             price,
-            image,
             fromdate: getDateComponent(fromdate),
             todate: getDateComponent(todate)
         };
@@ -264,8 +263,8 @@ router.post('/:id', auth.isLoggedIn, async (req, res) => {
             return res.status(400).json({ error: `Product is first rented on ${maxDateForOpening.toDateString()}` });
         }
 
-        const newProduct = await Product.findByIdAndUpdate(productId, product, { new: true }).populate('user', 'firstName lastName averageScore reviewQuantity address');
-        return res.json(newProduct);
+        await Product.findByIdAndUpdate(productId, product);
+        return res.json(true);
     } catch (error){
         console.log(error);
         res.status(400).json({"error":"Problem editing product"});

@@ -34,17 +34,18 @@
         android:layout_height="wrap_content"
         android:theme="@style/RatingBar"/>
 
+    <TextView
+        android:id="@+id/pleaseReview"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/red"
+        android:text="@string/pleaseReview"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal">
-
-        <Button
-            android:id="@+id/cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:text="@string/cancel"/>
 
         <Button
             android:id="@+id/ok"
