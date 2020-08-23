@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../utils/auth');
 const ObjectID = require('mongodb').ObjectID;
+const keys = require('../config/keys');
+
 
 // Load models
 const Rent = require('../models/Rent');
@@ -68,8 +70,11 @@ router.post('/finish/:id', auth.isLoggedIn, async (req, res) => {
         // Close order
         await Rent.findByIdAndUpdate(rentId, { isFinished: true, score });
 
-        // Update user rating
+        // Update product's owner rating
         await User.findByIdAndUpdate(rent.product.user, { $inc: { reviewQuantity: 1, reviewSum: score } });
+
+        // Reward user for give a review
+        await User.findByIdAndUpdate(userId, { $inc: { coins: keys.coinsRewardForReview } });
 
         console.log("Rent", rent.id, "was closed");
 

@@ -3,6 +3,7 @@ const router = express.Router();
 const validators = require('../utils/validators');
 const auth = require('../utils/auth');
 const User = require('../models/User');
+const keys = require('../config/keys');
 
 // @route POST users/register
 // @desc Register user
@@ -38,7 +39,7 @@ router.post('/register', async (req, res) => {
             firstName,
             lastName,
             password: User.encryptPassword(password),
-            coins: 300,
+            coins: keys.coinsNewUser,
         });
 
         await user.save();
