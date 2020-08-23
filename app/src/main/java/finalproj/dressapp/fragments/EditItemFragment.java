@@ -5,7 +5,7 @@ import android.app.Dialog;
 import android.icu.util.Calendar;
 import android.icu.util.GregorianCalendar;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.app.DialogFragment;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -84,14 +84,14 @@ public class EditItemFragment extends DialogFragment {
 
         dialogContainer.findViewById(R.id.cancel).setOnClickListener(v -> dialog.dismiss());
 
-        dialogContainer.findViewById(R.id.ok).setOnClickListener(v -> {
-            dialog.dismiss();
-
-            APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-            ProductEdit productEdit = new ProductEdit(params.getString("id"), itemDescription.getText().toString(),
-                    Integer.parseInt(cost.getText().toString()), String.valueOf(minDate), String.valueOf(maxDate));
-            apiInterface.doEditProduct(productEdit);
-        });
+//        dialogContainer.findViewById(R.id.ok).setOnClickListener(v -> {
+//            dialog.dismiss();
+//
+//            APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+//            ProductEdit productEdit = new ProductEdit(params.getString("id"), itemDescription.getText().toString(),
+//                    Integer.parseInt(cost.getText().toString()), String.valueOf(minDate), String.valueOf(maxDate));
+//            apiInterface.doEditProduct(productEdit);
+//        });
 
         return dialog;
     }

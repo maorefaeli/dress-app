@@ -2,6 +2,7 @@ package finalproj.dressapp;
 
 import finalproj.dressapp.activities.MyClothesActivity;
 import finalproj.dressapp.activities.ProfileActivity;
+import finalproj.dressapp.fragments.EditItemFragment;
 import finalproj.dressapp.fragments.ItemDialogFragment;
 import finalproj.dressapp.httpclient.APIClient;
 import finalproj.dressapp.httpclient.APIInterface;
@@ -121,6 +122,36 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
             if (mIsMyClothes) {
                 wishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_empty, 0);
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+
+                    int userMoney;
+
+                    @Override
+                    public void onClick(View v) {
+                        userMoney = Utils.getUserMoney();
+                        EditItemFragment dialogFragment = new EditItemFragment();
+                        Bundle bundle = new Bundle();
+                        Utils.setProductId(currentProduct.id);
+                        bundle.putString("description", currentProduct.name);
+                        bundle.putString("imgSrc", currentProduct.image);
+                        bundle.putInt("cost", currentProduct.price.intValue());
+                        bundle.putLong("minDate", Utils.DateFormatToLong(currentProduct.fromdate));
+                        bundle.putLong("maxDate", Utils.DateFormatToLong(currentProduct.todate));
+                        bundle.putInt("rating", currentProduct.user.averageScore);
+                        bundle.putInt("money", userMoney);
+                        bundle.putInt("reviewers", currentProduct.user.reviewQuantity);
+                        bundle.putInt("numOfRenting", currentProduct.rentingDates.size());
+
+                        for (int i = 0; i < currentProduct.rentingDates.size(); i++) {
+                            RentingDate rentingDate = currentProduct.rentingDates.get(i);
+                            bundle.putLong("startRent" + i, Utils.DateFormatToLong(rentingDate.fromDate));
+                            bundle.putLong("endRent" + i, Utils.DateFormatToLong(rentingDate.toDate));
+                        }
+
+                        dialogFragment.setArguments(bundle);
+                        dialogFragment.show(mCallingActivity.getFragmentManager(), "ItemDialog");
+                    }
+                });
             } else {
                 mUserWishlist = Utils.getCurrentUserWishlistItems();
 

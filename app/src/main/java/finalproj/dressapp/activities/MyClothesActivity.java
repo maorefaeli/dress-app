@@ -41,7 +41,7 @@ public class MyClothesActivity extends DressAppActivity {
             @Override
             public void onClick(View view) {
                 AddClothDialogFragment dialogFragment = new AddClothDialogFragment();
-                dialogFragment.show(getFragmentManager(), "ItemDialog");
+                dialogFragment.show(getFragmentManager(), "itemDialog");
             }
         });
 
