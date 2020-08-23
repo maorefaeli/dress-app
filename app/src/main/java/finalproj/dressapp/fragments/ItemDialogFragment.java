@@ -50,9 +50,9 @@ public class ItemDialogFragment extends DialogFragment {
         final EditText toDate = dialogContainer.findViewById(R.id.toDate);
 
         TextView reviewers = dialogContainer.findViewById(R.id.numOfReviewerss);
-        String numOfReviews = params.getString("reviewers").isEmpty() ? "0" : params.get("reviewers").toString();
+
         String reviewersText = reviewers.getText() + " " +
-                numOfReviews +
+                params.getInt("reviewers") +
                 " reviews";
         reviewers.setText(reviewersText);
 
@@ -62,57 +62,44 @@ public class ItemDialogFragment extends DialogFragment {
             ((Button) dialogContainer.findViewById(R.id.order)).setEnabled(false);
             dialogContainer.findViewById(R.id.notEnoughCoins).setVisibility(View.VISIBLE);
         } else {
-            fromDate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    LinearLayout dateContainer = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.date_picker, null);
-                    builder.setView(dateContainer);
+            fromDate.setOnClickListener(v -> {
+                AlertDialog.Builder builder12 = new AlertDialog.Builder(getContext());
+                LinearLayout dateContainer = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.date_picker, null);
+                builder12.setView(dateContainer);
 
-                    final DatePicker date = dateContainer.findViewById(R.id.date);
-                    date.setMinDate(minDate);
-                    date.setMaxDate(maxDate);
+                final DatePicker date = dateContainer.findViewById(R.id.date);
+                date.setMinDate(System.currentTimeMillis());
+                date.setMaxDate(maxDate);
 
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth());
-                            minDate = calendar.getTimeInMillis();
-                            String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1)
-                                    + "/" + (date.getYear() - 2000);
-                            fromDate.setText(dateString);
-                            Utils.setFromDate(Utils.LongToDateFormat(minDate));
-                        }
-                    });
-                    builder.create().show();
-                }
+                builder12.setPositiveButton("OK", (dialog12, which) -> {
+                    Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth());
+                    minDate = calendar.getTimeInMillis();
+                    String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1)
+                            + "/" + (date.getYear() - 2000);
+                    fromDate.setText(dateString);
+                    Utils.setFromDate(Utils.LongToDateFormat(minDate));
+                });
+                builder12.create().show();
             });
 
-            toDate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    LinearLayout dateContainer = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.date_picker, null);
-                    builder.setView(dateContainer);
+            toDate.setOnClickListener(v -> {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+                LinearLayout dateContainer = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.date_picker, null);
+                builder1.setView(dateContainer);
 
-                    final DatePicker date = dateContainer.findViewById(R.id.date);
-                    date.setMinDate(minDate);
-                    date.setMaxDate(maxDate);
+                final DatePicker date = dateContainer.findViewById(R.id.date);
+                date.setMinDate(minDate);
+                date.setMaxDate(maxDate);
 
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth());
-                            maxDate = calendar.getTimeInMillis();
-                            String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1) + "/" + (date.getYear() - 2000);
-                            toDate.setText(dateString);
-                            Utils.setToDate(Utils.LongToDateFormat(maxDate));
-                            int newCost = (int) (((maxDate - minDate) / 86400000) + 1) * cost;
-                            costView.post(() -> costView.setText(String.valueOf(newCost)));
-                        }
-                    });
-                    builder.create().show();
-                }
+                builder1.setPositiveButton("OK", (dialog1, which) -> {
+                    Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth());
+                    String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1) + "/" + (date.getYear() - 2000);
+                    toDate.setText(dateString);
+                    Utils.setToDate(Utils.LongToDateFormat(maxDate));
+                    int newCost = (int) (((maxDate - minDate) / 86400000) + 1) * cost;
+                    costView.post(() -> costView.setText(String.valueOf(newCost)));
+                });
+                builder1.create().show();
             });
         }
 

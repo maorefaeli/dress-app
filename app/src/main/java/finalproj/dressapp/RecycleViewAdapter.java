@@ -1,10 +1,4 @@
 package finalproj.dressapp;
-import finalproj.dressapp.activities.MyClothesActivity;
-import finalproj.dressapp.activities.ProfileActivity;
-import finalproj.dressapp.fragments.ItemDialogFragment;
-import finalproj.dressapp.httpclient.models.MyAppContext;
-import finalproj.dressapp.httpclient.models.Product;
-import finalproj.dressapp.httpclient.models.RentingDate;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,10 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
+
+import finalproj.dressapp.fragments.ItemDialogFragment;
+import finalproj.dressapp.httpclient.models.Product;
+import finalproj.dressapp.httpclient.models.RentingDate;
 
 public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.ViewHolder> {
     private List<Product> mDataset;
@@ -38,8 +35,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
         if (activity.getClass().getSimpleName().equals("WishListActivity")) {
             this.mIsWishlist = true;
-        }
-        else if (activity.getClass().getSimpleName().equals("MyClothesActivity")) {
+        } else if (activity.getClass().getSimpleName().equals("MyClothesActivity")) {
             this.mIsMyClothes = true;
         }
     }
@@ -97,28 +93,26 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         // For guests, don't allow to see the item renting popup dialog.
         if (Utils.getGuestStatus()) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     new AlertDialog.Builder(mContext)
                             .setTitle("Need to login")
                             .setMessage("Please login or register to start exploring the app")
                             .show();
-               }
+                }
             });
-        }
-        else {
+        } else {
             // Setting the product ID on the wishlist icon for when the user presses it.
             TextView wishlistIcon = holder.wishlistIcon;
             Boolean isInWishList = false;
 
             if (mIsMyClothes) {
                 wishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_empty, 0);
-            }
-            else {
+            } else {
                 mUserWishlist = Utils.getCurrentUserWishlistItems();
 
                 if (mUserWishlist != null && mUserWishlist.size() > 0) {
-                    for (Product productIterator:mUserWishlist) {
+                    for (Product productIterator : mUserWishlist) {
                         if (productIterator.id.equals(currentProduct.id)) {
                             isInWishList = true;
                             break;
@@ -127,7 +121,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                 }
 
                 wishlistIcon.setTag(isInWishList);
-                ((View)wishlistIcon.getParent()).setTag(currentProduct.id);
+                ((View) wishlistIcon.getParent()).setTag(currentProduct.id);
 
                 if (isInWishList) {
                     wishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26_full, 0);
@@ -146,11 +140,10 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                             bundle.putInt("cost", currentProduct.price.intValue());
                             bundle.putLong("minDate", Utils.DateFormatToLong(currentProduct.fromdate));
                             bundle.putLong("maxDate", Utils.DateFormatToLong(currentProduct.todate));
-                            if (currentProduct.user.averageScore != null) {
-                                bundle.putInt("rating", Integer.parseInt(currentProduct.user.averageScore.split("\\.")[0]));
-                            }
+                            bundle.putInt("rating", currentProduct.user.averageScore);
+
                             bundle.putInt("money", 200);
-                            bundle.putString("reviewers", currentProduct.user.reviewQuantity);
+                            bundle.putInt("reviewers", currentProduct.user.reviewQuantity);
                             bundle.putInt("numOfRenting", currentProduct.rentingDates.size());
 
                             for (int i = 0; i < currentProduct.rentingDates.size(); i++) {
