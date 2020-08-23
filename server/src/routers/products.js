@@ -10,7 +10,7 @@ const Product = require('../models/Product');
 const User = require('../models/User');
 const WishlistController = require('../controllers/wishlistController');
 
-const DEFAULT_SEARCH_SPHERE_KM = 10;
+const DEFAULT_SEARCH_SPHERE_KM = 100;
 
 const isProductContainErrors = (product) => {
     //if (!validators.isNonEmptyString(product.user)) return 'User cannot be empty';
