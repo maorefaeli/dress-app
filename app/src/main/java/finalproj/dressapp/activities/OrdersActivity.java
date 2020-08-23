@@ -76,8 +76,8 @@ public class OrdersActivity extends DressAppActivity {
             ((TextView)productView.findViewById(R.id.orderTitle)).setText(rentProduct.product.name);
             String dates = Utils.DateFormatToShow(rentProduct.fromdate) + "-" + Utils.DateFormatToShow(rentProduct.todate);
             ((TextView) productView.findViewById(R.id.dates)).setText(dates);
-            ((TextView) productView.findViewById(R.id.address)).setText(rentProduct.user.address);
-            String userFullName = rentProduct.user.firstName + " " + rentProduct.user.lastName;
+            ((TextView) productView.findViewById(R.id.address)).setText(rentProduct.product.user.address);
+            String userFullName = rentProduct.product.user.firstName + " " + rentProduct.product.user.lastName;
             ((TextView) productView.findViewById(R.id.owner)).setText(userFullName);
             if (rentProduct.coins > 0) {
                 TextView textNew = ((TextView) productView.findViewById(R.id.cost));

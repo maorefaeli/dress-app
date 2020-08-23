@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+
 import finalproj.dressapp.R;
 import finalproj.dressapp.Utils;
 import finalproj.dressapp.httpclient.APIClient;
@@ -21,6 +23,7 @@ import finalproj.dressapp.httpclient.models.ProductEdit;
 public class EditItemFragment extends DialogFragment {
     private long minDate;
     private long maxDate;
+    static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -44,7 +47,8 @@ public class EditItemFragment extends DialogFragment {
         rating.setRating(params.getInt("rating"));
 
         final EditText fromDate = dialogContainer.findViewById(R.id.fromDate);
-        fromDate.setText(Utils.LongToDateFormat(params.getLong("from")));
+        StringBuilder newFromDate = new StringBuilder( dateFormat.format( params.getLong("minDate") ) );
+        fromDate.setText(newFromDate.toString());
         fromDate.setOnClickListener(v -> {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
             LinearLayout dateContainer = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.date_picker, null);
@@ -64,7 +68,8 @@ public class EditItemFragment extends DialogFragment {
         });
 
         final EditText toDate = dialogContainer.findViewById(R.id.toDate);
-        toDate.setText(Utils.LongToDateFormat(params.getLong("to")));
+        StringBuilder newToDate = new StringBuilder( dateFormat.format( params.getLong("maxDate") ) );
+        toDate.setText(newToDate.toString());
         toDate.setOnClickListener(v -> {
             AlertDialog.Builder builder12 = new AlertDialog.Builder(getContext());
             LinearLayout dateContainer = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.date_picker, null);
@@ -84,14 +89,14 @@ public class EditItemFragment extends DialogFragment {
 
         dialogContainer.findViewById(R.id.cancel).setOnClickListener(v -> dialog.dismiss());
 
-//        dialogContainer.findViewById(R.id.ok).setOnClickListener(v -> {
-//            dialog.dismiss();
-//
-//            APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-//            ProductEdit productEdit = new ProductEdit(params.getString("id"), itemDescription.getText().toString(),
-//                    Integer.parseInt(cost.getText().toString()), String.valueOf(minDate), String.valueOf(maxDate));
-//            apiInterface.doEditProduct(productEdit);
-//        });
+        dialogContainer.findViewById(R.id.ok).setOnClickListener(v -> {
+            dialog.dismiss();
+
+            APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+            ProductEdit productEdit = new ProductEdit(Utils.getProductId(), itemDescription.getText().toString(),
+                    Integer.parseInt(cost.getText().toString()), String.valueOf(minDate), String.valueOf(maxDate));
+            apiInterface.doEditProduct(productEdit);
+        });
 
         return dialog;
     }

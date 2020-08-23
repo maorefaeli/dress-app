@@ -132,7 +132,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                         EditItemFragment dialogFragment = new EditItemFragment();
                         Bundle bundle = new Bundle();
                         Utils.setProductId(currentProduct.id);
-                        bundle.putString("description", currentProduct.name);
+                        bundle.putString("title", currentProduct.name);
                         bundle.putString("imgSrc", currentProduct.image);
                         bundle.putInt("cost", currentProduct.price.intValue());
                         bundle.putLong("minDate", Utils.DateFormatToLong(currentProduct.fromdate));

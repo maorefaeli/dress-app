@@ -13,10 +13,10 @@ public class RentProduct {
     public String id;
 
     @SerializedName("product")
-    public ProductNotPopulated product;
+    public Product product;
 
     @SerializedName("user")
-    public UserRegistration user;
+    public UserModel user;
 
     @SerializedName("fromdate")
     public String fromdate;
