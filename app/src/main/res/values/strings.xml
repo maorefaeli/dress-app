@@ -19,13 +19,13 @@
     <string name="search">Search…</string>
     <string name="apply">Apply</string>
     <string name="item_description">Description…</string>
-    <string name="cost">Cost</string>
+    <string name="cost">Cost per day</string>
     <string name="or">or</string>
     <string name="guest"><u>Continue as a guest</u></string>
     <string name="place_order">Place your order</string>
     <string name="edit_cloth">Edit Cloth</string>
     <string name="please_review">Please review your experience</string>
-    <string name="add_cloth">New item</string>
+    <string name="add_cloth">New Item</string>
     <string name="add">Add</string>
     <string name="from">From</string>
     <string name="to">To</string>
@@ -39,7 +39,7 @@
     <string name="orders">Orders</string>
     <string name="no_orders">No orders yet…</string>
     <string name="no_clothes">No clothes yet…</string>
-    <string name="no_suggestions">No suggestions yet :( \n try adding clothes to your wish list</string>
+    <string name="no_suggestions">No suggestions yet 🥺\nTry adding items to your wish list</string>
     <string name="finish_order">Finish order</string>
     <string name="clothes">My Items</string>
     <string name="home">Home</string>
