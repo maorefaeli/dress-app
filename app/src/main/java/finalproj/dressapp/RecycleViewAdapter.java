@@ -91,7 +91,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         TextView datesTextView = holder.datesTextView;
         datesTextView.setText(dates);
         TextView addressTextView = holder.addressTextView;
-        addressTextView.setText("Default Addrress, 220, Tel Aviv");
+        addressTextView.setText(currentProduct.user.address);
         holder.priceView.setText(String.valueOf(currentProduct.price));
 
         // For guests, don't allow to see the item renting popup dialog.
@@ -146,8 +146,9 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                             bundle.putInt("cost", currentProduct.price.intValue());
                             bundle.putLong("minDate", Utils.DateFormatToLong(currentProduct.fromdate));
                             bundle.putLong("maxDate", Utils.DateFormatToLong(currentProduct.todate));
-                            bundle.putInt("rating", 4);
+                            bundle.putInt("rating", Integer.parseInt(currentProduct.user.averageScore.split("\\.")[0]));
                             bundle.putInt("money", 200);
+                            bundle.putString("reviewers", currentProduct.user.reviewQuantity);
                             bundle.putInt("numOfRenting", currentProduct.rentingDates.size());
 
                             for (int i = 0; i < currentProduct.rentingDates.size(); i++) {
