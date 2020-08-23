@@ -45,6 +45,7 @@ public class Utils {
     static String productId;
     static String fromDate;
     static String toDate;
+    static int userMoney;
     static Boolean isGuest;
     static Boolean isWishlistActivity = false;
     static ProgressDialog dialog = null;
@@ -94,6 +95,7 @@ public class Utils {
     public static void setFromDate(String newFrom) {
         fromDate = newFrom;
     }
+
     public static String getToDate() {
         return toDate;
     }
@@ -101,6 +103,7 @@ public class Utils {
     public static void setToDate(String newTo) {
         toDate = newTo;
     }
+
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
     }
@@ -124,7 +127,7 @@ public class Utils {
     public static void setRentId(String newRentId) {
         rentId = newRentId;
     }
-    
+
     public static String getUserCookie(Context ctx)
     {
         return getSharedPreferences(ctx).getString(PREF_USER_COOKIE, "");
@@ -135,6 +138,29 @@ public class Utils {
         SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
         editor.putString(PREF_USER_COOKIE, userCookie);
         editor.commit();
+    }
+
+    public static int getUserMoney() {
+        return userMoney;
+    }
+
+    public static void loadUserDetails() {
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        final Call<UserRegistration> userCall = apiInterface.getCurrentUserDetails();
+        userCall.enqueue(new Callback<UserRegistration>() {
+            public void onResponse(Call <UserRegistration> userCall, Response<UserRegistration> response) {
+                if (response.code() == 200) {
+
+                    UserRegistration userDetails = response.body();
+                    String coins = userDetails.coins;
+                    userMoney = Integer.parseInt(coins);
+                }
+            }
+
+            public void onFailure(Call<UserRegistration> call, Throwable t) {
+                call.cancel();
+            }
+        });
     }
 
     public static void loadUserWishlistItems()

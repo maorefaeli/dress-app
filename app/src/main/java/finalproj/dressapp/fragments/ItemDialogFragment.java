@@ -51,6 +51,10 @@ public class ItemDialogFragment extends DialogFragment {
 
         TextView reviewers = dialogContainer.findViewById(R.id.numOfReviewerss);
 
+<<<<<<< Updated upstream
+=======
+        int numOfReviews = params.getInt("reviewers");
+>>>>>>> Stashed changes
         String reviewersText = reviewers.getText() + " " +
                 params.getInt("reviewers") +
                 " reviews";
