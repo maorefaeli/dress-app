@@ -6,7 +6,7 @@ const PendingCycle = require('../models/PendingCycle');
 const ObjectID = require('mongodb').ObjectID;
 
 // @route GET /suggestions
-// @desc Get smart suggestions for the user. Output: [{cycleId, product}]
+// @desc Get free suggestions for the user. Output: [{cycleId, product}]
 // @access Private
 router.get('/', auth.isLoggedIn, async (req, res) => {
     try {

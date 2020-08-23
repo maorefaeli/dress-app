@@ -54,14 +54,14 @@ router.post('/add', auth.isLoggedIn, async (req, res) => {
     }
 });
 
-// @route POST rents/finish/:id
+// @route POST rents/finish
 // @desc Finish an existing rent
 // @access Private
-router.post('/finish/:id', auth.isLoggedIn, async (req, res) => {
+router.post('/finish', auth.isLoggedIn, async (req, res) => {
     try {
         const userId = ObjectID(req.user.id);
-        const rentId = ObjectID(req.params.id);
-        const { score } = req.body;
+        const { score, rent } = req.body;
+        const rentId = ObjectID(rent);
 
         const rent = await Rent.findById(rentId).populate('product');
 

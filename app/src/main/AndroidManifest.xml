@@ -26,7 +26,7 @@
             android:label="My Items" />
         <activity
             android:name=".activities.SmartSuggestionsActivity"
-            android:label="Smart Suggestions" />
+            android:label="Free Suggestions" />
         <activity
             android:name=".activities.ProfileActivity"
             android:label="Profile" />
