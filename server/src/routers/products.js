@@ -48,7 +48,7 @@ router.post('/', async (req, res) => {
         }
 
         // Default to today if 'fromDate' not provided
-        fromDate = getDateComponent(parseSearch(fromDate) || Date.now());
+        fromDate = getDateComponent(fromDate ? parseSearch(fromDate) : Date.now());
 
         // Search for products that end after fromDate
         query.todate = { $gte: fromDate };
