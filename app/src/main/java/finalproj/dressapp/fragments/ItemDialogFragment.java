@@ -15,6 +15,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import finalproj.dressapp.R;
+import finalproj.dressapp.Utils;
 
 /**
  * Created by Shai on 19/05/2020.
@@ -61,6 +62,7 @@ public class ItemDialogFragment extends DialogFragment {
                         String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1)
                                 + "/" + (date.getYear() - 2000);
                         fromDate.setText(dateString);
+                        Utils.setFromDate(Utils.LongToDateFormat(minDate));
                     }
                 });
                 builder.create().show();
@@ -82,8 +84,11 @@ public class ItemDialogFragment extends DialogFragment {
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth());
+                        maxDate = calendar.getTimeInMillis();
                         String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1) + "/" + (date.getYear() - 2000);
                         toDate.setText(dateString);
+                        Utils.setToDate(Utils.LongToDateFormat(maxDate));
                     }
                 });
                 builder.create().show();

@@ -19,6 +19,7 @@ import finalproj.dressapp.Utils;
 import finalproj.dressapp.httpclient.APIClient;
 import finalproj.dressapp.httpclient.APIInterface;
 import finalproj.dressapp.httpclient.models.Product;
+import finalproj.dressapp.httpclient.models.RentProduct;
 import finalproj.dressapp.httpclient.models.WishlistProduct;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -149,6 +150,48 @@ public class HomeActivity extends DressAppActivity {
                     }
                 });
             }
+        }
+    }
+
+    public void orderItem(final View view) {
+        String fromDate = Utils.getFromDate();
+        String toDate = Utils.getToDate();
+        String productId = Utils.getProductId();
+        RentProduct rentProduct = new RentProduct(productId, fromDate, toDate);
+
+        if (fromDate == null || fromDate.isEmpty() ||
+                toDate == null || toDate.isEmpty()) {
+            Toast.makeText(getApplicationContext(),
+                    "Please enter from and to dates", Toast.LENGTH_SHORT)
+                    .show();
+        }
+        else {
+            APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+            Call <Boolean> call = apiInterface.rentItem(rentProduct);
+            call.enqueue(new Callback<Boolean>() {
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    if (response.code() == 200) {
+                        Utils.setProductId("");
+                        Utils.setFromDate("");
+                        Utils.setToDate("");
+                    } else {
+                        new AlertDialog.Builder(HomeActivity.this)
+                                .setTitle("Couldn't rent item")
+                                .setMessage(response.message())
+                                .show();
+                    }
+                }
+
+                public void onFailure(Call<Boolean> call, Throwable t) {
+                    new AlertDialog.Builder(HomeActivity.this)
+                            .setTitle("Couldn't rent item: " + productId)
+                            .setMessage(t.getMessage())
+                            .show();
+                    Utils.setProductId("");
+                    call.cancel();
+                }
+            });
         }
     }
 }

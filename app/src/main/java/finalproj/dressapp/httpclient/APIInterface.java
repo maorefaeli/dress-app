@@ -2,7 +2,7 @@ package finalproj.dressapp.httpclient;
 
 import java.util.List;
 
-//import finalproj.dressapp.httpclient.models.RentProduct;
+import finalproj.dressapp.httpclient.models.RentProduct;
 import finalproj.dressapp.httpclient.models.ServerCheck;
 import finalproj.dressapp.httpclient.models.UserCredentials;
 import finalproj.dressapp.httpclient.models.UserRegistration;
@@ -50,6 +50,9 @@ public interface APIInterface {
     @POST("products/add")
     Call<Product> doAddItem(@Body Product product);
 
+    @GET("products/close/{productid}")
+    Call<Product> closeProduct(@Path("product") String userid);
+
     @GET("users/profile")
     Call<UserRegistration> getCurrentUserDetails();
 
@@ -71,6 +74,9 @@ public interface APIInterface {
     @POST("suggestions/request")
     Call<Boolean> requestSuggestion();
 
-    // @POST("rents/add")
-    // Call<Boolean> rentItem(@Body RentProduct rentProduct);
+    @GET("rents")
+    Call<List<Product>> getRents();
+
+    @POST("rents/add")
+    Call<Boolean> rentItem(@Body RentProduct rentProduct);
 }

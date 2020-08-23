@@ -1,7 +1,9 @@
 package finalproj.dressapp.activities;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -14,7 +16,12 @@ import finalproj.dressapp.R;
 import finalproj.dressapp.RecycleViewAdapter;
 import finalproj.dressapp.Utils;
 import finalproj.dressapp.fragments.CompleteOrderDialogFragment;
+import finalproj.dressapp.httpclient.APIClient;
+import finalproj.dressapp.httpclient.APIInterface;
 import finalproj.dressapp.httpclient.models.Product;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OrdersActivity extends DressAppActivity {
     private RecycleViewAdapter mAdapter;
@@ -25,10 +32,10 @@ public class OrdersActivity extends DressAppActivity {
     private TextView noOrdersText;
 
     private void addMockProducts() {
-        Product product = new Product("Dress",
-                150, "1/1/2020", "10/01/2020", "./dress.png");
-        products.add(product);
-        showProducts();
+       Product product = new Product("Dress",
+               150, "1/1/2020", "10/01/2020", "./dress.png");
+       products.add(product);
+       showProducts();
     }
 
     @Override
@@ -43,7 +50,27 @@ public class OrdersActivity extends DressAppActivity {
         ordersContainer = findViewById(R.id.ordersContainer);
 
         noOrdersText = findViewById(R.id.noOrders);
-        addMockProducts();
+
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        Call<List<Product>> call = apiInterface.getRents();
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if (response.code() == 200) {
+                    products = response.body();
+                    showProducts();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                new AlertDialog.Builder(OrdersActivity.this)
+                        .setTitle("failure")
+                        .setMessage(t.getMessage())
+                        .show();
+                call.cancel();
+            }
+        });
     }
 
     private void showProducts() {

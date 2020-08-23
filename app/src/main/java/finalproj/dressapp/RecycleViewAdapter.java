@@ -144,6 +144,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                         public void onClick(View v) {
                             ItemDialogFragment dialogFragment = new ItemDialogFragment();
                             Bundle bundle = new Bundle();
+                            Utils.setProductId(currentProduct.id);
                             bundle.putString("description", currentProduct.name);
                             bundle.putString("imgSrc", currentProduct.image);
                             bundle.putInt("cost", currentProduct.price.intValue());

@@ -40,6 +40,9 @@ import retrofit2.Response;
 
 public class Utils {
     static SimpleDateFormat dateformatYYYYMMDD = new SimpleDateFormat("yyyy-MM-dd");
+    static String productId;
+    static String fromDate;
+    static String toDate;
     static Boolean isGuest;
     static Boolean isWishlistActivity = false;
     static ProgressDialog dialog = null;
@@ -74,6 +77,28 @@ public class Utils {
         isWishlistActivity = setWishlistActivity;
     }
 
+    public static String getProductId() {
+        return productId;
+    }
+
+    public static void setProductId(String newId) {
+        productId = newId;
+    }
+    
+    public static String getFromDate() {
+        return fromDate;
+    }
+
+    public static void setFromDate(String newFrom) {
+        fromDate = newFrom;
+    }
+    public static String getToDate() {
+        return toDate;
+    }
+
+    public static void setToDate(String newTo) {
+        toDate = newTo;
+    }
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
     }
@@ -140,28 +165,6 @@ public class Utils {
     public static List<Product> getCurrentUserWishlistItems() {
         return currentUserWishlistItems;
     }
-//    public static List<Cookie> getCookies(Context ctx)
-//    {
-//        Gson gson = new Gson();
-//        String json = getSharedPreferences(ctx).getString(PREF_COOKIES, "");
-//
-//        if (json == null || json.isEmpty()){
-//            return new ArrayList<Cookie>();
-//        }
-//        else {
-//            List<Cookie> cookies = gson.fromJson(json, ArrayList.class);
-//            return cookies;
-//        }
-//    }
-//
-//    public static void setCookies(Context ctx, List<Cookie> cookies)
-//    {
-//        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
-//        Gson gson = new Gson();
-//        String json = gson.toJson(cookies);
-//        editor.putString(PREF_COOKIES, json);
-//        editor.commit();
-//    }
 
     public static void clearUserName(final Activity activity)
     {
@@ -223,7 +226,8 @@ public class Utils {
                 currentItem.getItemId() == R.id.home ||
                 currentItem.getItemId() == R.id.profile ||
                 currentItem.getItemId() == R.id.wishList ||
-                currentItem.getItemId() == R.id.logout) {
+                currentItem.getItemId() == R.id.logout ||
+                currentItem.getItemId() == R.id.smartSuggestions) {
 
                 if (isGuest) {
                     currentItem.setVisible(false);
