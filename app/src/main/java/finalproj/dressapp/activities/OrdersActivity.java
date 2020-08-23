@@ -73,7 +73,9 @@ public class OrdersActivity extends DressAppActivity {
             ((TextView)productView.findViewById(R.id.orderTitle)).setText(product.name);
             String dates = Utils.DateFormatToShow(product.fromdate) + "-" + Utils.DateFormatToShow(product.todate);
             ((TextView) productView.findViewById(R.id.dates)).setText(dates);
-            ((TextView) productView.findViewById(R.id.address)).setText("address");
+            ((TextView) productView.findViewById(R.id.address)).setText(product.user.address);
+            String userFullName = product.user.firstName + " " + product.user.lastName;
+            ((TextView) productView.findViewById(R.id.owner)).setText(userFullName);
             productView.findViewById(R.id.finishOrder).setOnClickListener(view -> {
                 CompleteOrderDialogFragment dialogFragment = new CompleteOrderDialogFragment();
                 Bundle bundle = new Bundle();

@@ -10,4 +10,5 @@
     <color name="duskYellow">#ffc922</color>
     <color name="lightGrey">#c0c0c0</color>
     <color name="darkGrey">#666666</color>
+    <color name="buttonGrey">#c3c3c3</color>
 </resources>

@@ -73,7 +73,7 @@
                             android:id="@+id/locateButton"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:src="@drawable/gps"/>
+                            android:src="@drawable/baseline_location_on_black_18dp"/>
                     </LinearLayout>
 
                     <EditText
