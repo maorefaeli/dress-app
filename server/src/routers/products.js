@@ -29,32 +29,43 @@ const kilometersToRadian = function(kilometers){
 // @access Public
 router.get('/', async (req, res) => {
     try {
-        const { name, radius, maximumPrice, minimumRating } = req.query;
+        const { name, radius, minimumPrice, maximumPrice, fromDate, toDate, minimumRating } = req.query;
 
         const query = {};
+        const userQuery = {};
 
         if (name) {
-            query['name'] = { name: { $regex: `.*${name}.*`, $options: 'i' } };
+            query.name = { $regex: `.*${name}.*`, $options: 'i' };
+        }
+
+        if (minimumPrice) {
+            query.price = { $gte: Number(minimumPrice) };
         }
 
         if (maximumPrice) {
-            query['price'] = { $lte: Number(maximumPrice) };
+            query.price = { ...query.price, $lte: Number(maximumPrice) };
         }
 
-        const userQuery = {};
+        if (fromDate) {
+            query.fromdate = { $lte: getDateComponent(fromDate) };
+        }
+
+        if (toDate) {
+            query.todate = { $gte: getDateComponent(toDate) };
+        }
 
         if (req.user && req.user.id) {
             const userId = ObjectID(req.user.id);
 
             // Filter out own user products if logged in
-            query['user'] = { $ne: ObjectID(req.user.id)};
+            query.user = { $ne: ObjectID(req.user.id)};
 
             // For logged in user that has location, search only products of nearby users
             if (radius) {
                 const user = await User.findById(userId);
 
                 if (user.location && user.location.coordinates) {
-                    userQuery['location'] = {
+                    userQuery.location = {
                         $geoWithin : {
                             $centerSphere : [user.location.coordinates, kilometersToRadian(radius) ]
                         }
@@ -65,7 +76,7 @@ router.get('/', async (req, res) => {
 
         if (!validators.isObjectEmpty(userQuery)) {
             const users = await User.find(userQuery, 'id');
-            query['user']['$in'] = users.map(q => q._id);
+            query.user['$in'] = users.map(q => q._id);
         }
 
         let products = await Product.find(query).populate('user', 'firstName lastName averageScore reviewQuantity address') || [];
