@@ -16,9 +16,12 @@ const isRentDatesValid = (product, fromDate, toDate) => {
     if (product.fromdate > fromDate || product.todate < toDate) return false;
 
     if (product.rentingDates && product.rentingDates.length) {
-        for (let index = 0; index < product.rentingDates.length; index++) {
-            const rt = product.rentingDates[index];
-            if (!(rt.todate < fromDate && rt.fromdate > toDate)) {
+        for (const rt of product.rentingDates) {
+            // Approve only these existing orders
+            // existing (rt):           |----|               |------|
+            // new (fromDate, toDate):           |------|
+            // Any other timeline is overlapping and must be invalid
+            if (!(rt.todate < fromDate || rt.fromdate > toDate)) {
                 return false;
             }
         }
@@ -56,7 +59,8 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
     }
 
     if (!isRentDatesValid(product, newRent.fromdate, newRent.todate)) {
-        throw new Error(`Product ${product.id} is taken on specified dates ${newRent.fromdate} - ${newRent.todate}`);
+        console.log(`Product ${product.id} is taken on specified dates ${newRent.fromdate} - ${newRent.todate}`);
+        throw new Error("Product is taken on specified dates");
     }
 
     const toUser = await User.findById(product.user);

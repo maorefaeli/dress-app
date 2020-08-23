@@ -30,6 +30,7 @@ const ProductSchema = new Schema({
     },
     rentingDates: {
         type: [{
+            _id: false,
             fromdate: Date,
             todate: Date
         }],
