@@ -25,6 +25,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"/>
 
+        <TextView
+            android:id="@+id/notClothes"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:paddingTop="10dp"
+            android:text="@string/no_clothes"/>
         <Button
             android:id="@+id/addNewCloth"
             android:layout_width="45dp"

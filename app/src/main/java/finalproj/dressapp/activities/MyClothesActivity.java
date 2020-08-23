@@ -64,9 +64,13 @@ public class MyClothesActivity extends DressAppActivity {
 
                     products = response.body();
 
-                    // Specify an adapter.
-                    mAdapter = new RecycleViewAdapter(MyClothesActivity.this, MyClothesActivity.this, products);
-                    recyclerView.setAdapter(mAdapter);
+                    if (products != null && products.size() > 0) {
+                        // Specify an adapter.
+                        mAdapter = new RecycleViewAdapter(MyClothesActivity.this, MyClothesActivity.this, products);
+                        recyclerView.setAdapter(mAdapter);
+                    } else {
+                        findViewById(R.id.notClothes).setVisibility(View.VISIBLE);
+                    }
                 }
             }
 

@@ -124,6 +124,8 @@ public class SmartSuggestionsActivity extends DressAppActivity {
                     suggestionsContainer.addView(suggestionContainer);
                 }
             }
+        } else if (suggestions.size() == 0) {
+            findViewById(R.id.noSuggestions).setVisibility(View.VISIBLE);
         }
     }
 }
