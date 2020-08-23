@@ -117,7 +117,7 @@ router.get('/:id', async (req, res) => {
 // @access Private
 router.get('/user/me', auth.isLoggedIn, async (req, res) => {
     try {
-        const products = await Product.find({user:req.user.id}).populate('user', 'firstName lastName averageScore reviewQuantity address');
+        const products = await Product.find({user:req.user.id}).populate('user', 'firstName lastName averageScore reviewQuantity address').sort({_id: -1});
         return res.json(products);
     } catch (error){
         console.log(error);
