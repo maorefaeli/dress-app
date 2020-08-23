@@ -71,6 +71,7 @@
                     android:theme="@style/RatingBar"
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center"
+                    android:stepSize="1"
                     android:isIndicator="false" />
             </LinearLayout>
             <LinearLayout

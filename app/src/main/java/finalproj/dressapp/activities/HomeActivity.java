@@ -76,15 +76,12 @@ public class HomeActivity extends DressAppActivity {
         });
 
         ((TextView) findViewById(R.id.current_money)).setText("300");
-        findViewById(R.id.applySearch).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String text = ((TextView) findViewById(R.id.search)).getText().toString();
-                int minRating = (int) ((RatingBar) findViewById(R.id.ratingBar)).getRating();
-                int maxPrice = Integer.parseInt(((TextView) findViewById(R.id.maxPrice)).getText().toString());
+        findViewById(R.id.applySearch).setOnClickListener(view -> {
+            String text = ((TextView) findViewById(R.id.search)).getText().toString();
+            int minRating = (int) ((RatingBar) findViewById(R.id.ratingBar)).getRating();
+            int maxPrice = Integer.parseInt(((TextView) findViewById(R.id.maxPrice)).getText().toString());
 
-                // TODO: apply search params
-            }
+            // TODO: apply search params
         });
         toggle = Utils.setNavigation(this, (DrawerLayout) findViewById(R.id.activity_main), getSupportActionBar());
         Calendar calendar = Calendar.getInstance();

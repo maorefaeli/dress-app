@@ -87,14 +87,6 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/owner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/outline_perm_contact_calendar_black_18dp"
-                android:drawablePadding="3dp"
-                android:padding="2dp"
-                android:textSize="18sp" />
-            <TextView
                 android:id="@+id/price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
