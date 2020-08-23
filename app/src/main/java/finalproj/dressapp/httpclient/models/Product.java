@@ -1,12 +1,13 @@
 package finalproj.dressapp.httpclient.models;
 
 import com.google.gson.annotations.SerializedName;
+import finalproj.dressapp.httpclient.models.UserRegistration;
 
 import java.util.List;
 
 public class Product {
     @SerializedName("user")
-    public String user;
+    public UserRegistration user;
 
     @SerializedName("id")
     public String id;

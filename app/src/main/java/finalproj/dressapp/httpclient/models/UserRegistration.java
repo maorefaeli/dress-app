@@ -32,6 +32,12 @@ public class UserRegistration {
     @SerializedName("wishlist")
     public List<Wishlist> wishlist;
 
+    @SerializedName("reviewQuantity")
+    public String reviewQuantity;
+
+    @SerializedName("averageScore")
+    public String averageScore;
+
     public UserRegistration(String firstName, String lastName, String username, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
