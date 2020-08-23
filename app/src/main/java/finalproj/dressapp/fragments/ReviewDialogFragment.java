@@ -52,7 +52,7 @@ public class ReviewDialogFragment extends DialogFragment {
         ((TextView) dialogContainer.findViewById(R.id.itemTitle)).setText(getArguments().getString("title"));
 
         dialogContainer.findViewById(R.id.ok).setOnClickListener(view -> {
-            int rating = ratingBar.getNumStars();
+            int rating = (int) ratingBar.getRating();
             if (rating > 0) {
                 String rentId = Utils.getRentId();
                 final Activity activity = getActivity();
