@@ -71,6 +71,7 @@ public class OrdersActivity extends DressAppActivity {
     private void showProducts() {
         noOrdersText.setVisibility(products.size() == 0 ? View.VISIBLE : GONE);
         for (final RentProduct rentProduct : products) {
+            ordersContainer.removeAllViews();
             LinearLayout productView = (LinearLayout) getLayoutInflater().inflate(R.layout.order_template, null);
             ((TextView)productView.findViewById(R.id.orderTitle)).setText(rentProduct.product.name);
             String dates = Utils.DateFormatToShow(rentProduct.fromdate) + "-" + Utils.DateFormatToShow(rentProduct.todate);

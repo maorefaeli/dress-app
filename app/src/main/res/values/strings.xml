@@ -79,6 +79,7 @@
     <string name="current_money">You currently have </string>
     <string name="not_enough_money">not enough coins</string>
     <string name="noWishList">Go to Home and add your first wish!</string>
+    <string name="pleaseReview">Please leave review, at least 1 star</string>
     <string name="free">Free!</string>
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
