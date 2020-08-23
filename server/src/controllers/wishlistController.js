@@ -194,7 +194,7 @@ const removeProductFromPendingCycles = async (userId, productId) => {
                     cyclesToUpdate.push(cycle);
 
                     // If it was requested already, null it and its dates
-                    if (participant.requestedProduct.equals(productId)) {
+                    if (ObjectID(productId).equals(participant.requestedProduct)) {
                         participant.requestedProduct = null;
                         participant.fromDate = null;
                         participant.toDate = null;
@@ -356,7 +356,7 @@ exports.requestProductOnCycle = async (cycleId, userId, productId, fromDate, toD
 
             await PendingCycle.findByIdAndUpdate(cycleId, cycle);
             console.log("Approved user", userId.toString(), "request for product", product.id, "on cycle", cycle.id);
-            
+
             break;
         }
     }
