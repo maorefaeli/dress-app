@@ -15,6 +15,15 @@
             android:layout_gravity="center_horizontal"
             android:src="@drawable/app_logo"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/noWishList"
+                android:visibility="gone"
+                android:gravity="center"
+                android:textSize="22sp"
+                android:text="@string/noWishList"/>
+
             <android.support.v7.widget.RecyclerView
             android:id="@+id/my_recycler_view"
             android:scrollbars="vertical"

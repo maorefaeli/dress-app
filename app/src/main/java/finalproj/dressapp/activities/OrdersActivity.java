@@ -3,7 +3,6 @@ package finalproj.dressapp.activities;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -19,16 +18,19 @@ import finalproj.dressapp.fragments.CompleteOrderDialogFragment;
 import finalproj.dressapp.httpclient.APIClient;
 import finalproj.dressapp.httpclient.APIInterface;
 import finalproj.dressapp.httpclient.models.Product;
+import finalproj.dressapp.httpclient.models.RentProduct;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.view.View.GONE;
 
 public class OrdersActivity extends DressAppActivity {
     private RecycleViewAdapter mAdapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private LinearLayout ordersContainer;
-    private List<Product> products = new ArrayList<>();
+    private List<RentProduct> products = new ArrayList<>();
     private TextView noOrdersText;
 
     @Override
@@ -45,10 +47,10 @@ public class OrdersActivity extends DressAppActivity {
         noOrdersText = findViewById(R.id.noOrders);
 
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-        Call<List<Product>> call = apiInterface.getRents();
-        call.enqueue(new Callback<List<Product>>() {
+        Call<List<RentProduct>> call = apiInterface.getRents();
+        call.enqueue(new Callback<List<RentProduct>>() {
             @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+            public void onResponse(Call<List<RentProduct>> call, Response<List<RentProduct>> response) {
                 if (response.code() == 200) {
                     products = response.body();
                     showProducts();
@@ -56,7 +58,7 @@ public class OrdersActivity extends DressAppActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
+            public void onFailure(Call<List<RentProduct>> call, Throwable t) {
                 new AlertDialog.Builder(OrdersActivity.this)
                         .setTitle("failure")
                         .setMessage(t.getMessage())
@@ -67,19 +69,25 @@ public class OrdersActivity extends DressAppActivity {
     }
 
     private void showProducts() {
-        noOrdersText.setVisibility(products.size() == 0 ? View.VISIBLE : View.GONE);
-        for (final Product product : products) {
+        noOrdersText.setVisibility(products.size() == 0 ? View.VISIBLE : GONE);
+        for (final RentProduct rentProduct : products) {
             LinearLayout productView = (LinearLayout) getLayoutInflater().inflate(R.layout.order_template, null);
-            ((TextView)productView.findViewById(R.id.orderTitle)).setText(product.name);
-            String dates = Utils.DateFormatToShow(product.fromdate) + "-" + Utils.DateFormatToShow(product.todate);
+            ((TextView)productView.findViewById(R.id.orderTitle)).setText(rentProduct.product.name);
+            String dates = Utils.DateFormatToShow(rentProduct.fromdate) + "-" + Utils.DateFormatToShow(rentProduct.todate);
             ((TextView) productView.findViewById(R.id.dates)).setText(dates);
-            ((TextView) productView.findViewById(R.id.address)).setText(product.user.address);
-            String userFullName = product.user.firstName + " " + product.user.lastName;
+            ((TextView) productView.findViewById(R.id.address)).setText(rentProduct.user.address);
+            String userFullName = rentProduct.user.firstName + " " + rentProduct.user.lastName;
             ((TextView) productView.findViewById(R.id.owner)).setText(userFullName);
+            if (rentProduct.coins > 0) {
+                ((TextView) productView.findViewById(R.id.cost)).setText(rentProduct.coins);
+            } else {
+                productView.findViewById(R.id.cost).setVisibility(GONE);
+                productView.findViewById(R.id.freeOrder).setVisibility(View.VISIBLE);
+            }
             productView.findViewById(R.id.finishOrder).setOnClickListener(view -> {
                 CompleteOrderDialogFragment dialogFragment = new CompleteOrderDialogFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("title", product.name);
+                bundle.putString("title", rentProduct.product.name);
                 dialogFragment.setArguments(bundle);
                 dialogFragment.show(getSupportFragmentManager(), "completeOrder");
             });

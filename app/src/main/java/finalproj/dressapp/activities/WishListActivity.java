@@ -59,8 +59,12 @@ public class WishListActivity extends DressAppActivity {
                     products = response.body();
 
                     // Specify an adapter.
-                    mAdapter = new RecycleViewAdapter(WishListActivity.this, WishListActivity.this, products);
-                    recyclerView.setAdapter(mAdapter);
+                    if (products.size() > 0) {
+                        mAdapter = new RecycleViewAdapter(WishListActivity.this, WishListActivity.this, products);
+                        recyclerView.setAdapter(mAdapter);
+                    } else {
+                        findViewById(R.id.noWishList).setVisibility(View.VISIBLE);
+                    }
                 }
             }
 

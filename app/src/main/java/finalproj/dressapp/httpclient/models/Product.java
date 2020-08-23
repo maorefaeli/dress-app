@@ -1,7 +1,6 @@
 package finalproj.dressapp.httpclient.models;
 
 import com.google.gson.annotations.SerializedName;
-import finalproj.dressapp.httpclient.models.UserRegistration;
 
 import java.util.List;
 

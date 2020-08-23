@@ -73,6 +73,22 @@
                 android:drawablePadding="3dp"
                 android:padding="2dp"
                 android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/outline_monetization_on_black_18dp"
+                android:drawableTint="@color/colorCoin"/>
+
+            <TextView
+                android:id="@+id/freeOrder"
+                android:visibility="gone"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/free"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
