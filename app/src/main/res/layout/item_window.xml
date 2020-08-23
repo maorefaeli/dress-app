@@ -39,9 +39,11 @@
             android:layout_height="wrap_content"/>
         <RatingBar
             android:id="@+id/rating"
+            android:layout_marginStart="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:isIndicator="true"
+            style="@style/Widget.AppCompat.RatingBar.Small"
             android:theme="@style/RatingBar"/>
     </LinearLayout>
 
@@ -99,6 +101,14 @@
         android:drawableTint="@color/colorCoin"
         android:gravity="center_vertical" />
 
+    <TextView
+        android:id="@+id/notEnoughCoins"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/not_enough_money"
+        android:gravity="center"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -112,6 +122,7 @@
             android:text="@string/cancel"/>
 
         <Button
+            android:id="@+id/order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"

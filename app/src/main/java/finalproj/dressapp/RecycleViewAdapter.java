@@ -51,7 +51,6 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         // for any view that will be set as you render a row
         public TextView titleTextView;
         public TextView datesTextView;
-        public TextView ownerTextView;
         public TextView addressTextView;
         public TextView wishlistIcon;
         public TextView priceView;
@@ -65,7 +64,6 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
             titleTextView = (TextView) itemView.findViewById(R.id.postTitle);
             datesTextView = (TextView) itemView.findViewById(R.id.dates);
-            ownerTextView = (TextView) itemView.findViewById(R.id.owner);
             addressTextView = (TextView) itemView.findViewById(R.id.address);
             wishlistIcon = (TextView) itemView.findViewById(R.id.postTitleWishlistIcon);
             priceView = (TextView) itemView.findViewById(R.id.price);
@@ -92,8 +90,6 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         titleTextView.setText(currentProduct.name);
         TextView datesTextView = holder.datesTextView;
         datesTextView.setText(dates);
-        TextView ownerTextView = holder.ownerTextView;
-        ownerTextView.setText("Owner's name here");
         TextView addressTextView = holder.addressTextView;
         addressTextView.setText("Default Addrress, 220, Tel Aviv");
         holder.priceView.setText(String.valueOf(currentProduct.price));
@@ -152,6 +148,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                             bundle.putLong("maxDate", Utils.DateFormatToLong(currentProduct.todate));
                             bundle.putString("owner", currentProduct.name);
                             bundle.putInt("rating", 4);
+                            bundle.putInt("money", 200);
                             bundle.putInt("numOfRenting", currentProduct.rentingDates.size());
 
                             for (int i = 0; i < currentProduct.rentingDates.size(); i++) {

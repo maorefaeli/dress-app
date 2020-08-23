@@ -332,19 +332,19 @@ exports.requestProductOnCycle = async (cycleId, userId, productId, fromDate, toD
 
     const delta = validFromDate - validToDate;
     if (getAmountOfDays(delta) > MAXIMUM_DAYS_FOR_SUGGESTION_REQUEST) {
-        throw new Error('Order dates are more than', MAXIMUM_DAYS_FOR_SUGGESTION_REQUEST, 'days');
+        throw new Error(`Order dates are more than ${MAXIMUM_DAYS_FOR_SUGGESTION_REQUEST} days`);
     }
 
     if (!cycle) {
-        throw new Error('Cycle not found', cycleId.toString());
+        throw new Error(`Cycle not found ${cycleId.toString()}`);
     }
 
     if (!product) {
-        throw new Error('Product not found', productId.toString());
+        throw new Error(`Product not found ${productId.toString()}`);
     }
 
     if (!isRentDatesValid(product, validFromDate, validToDate)) {
-        throw new Error('Order is not valid. product', product.id, 'dates', validFromDate, validToDate);
+        throw new Error(`Product ${product.id} is taken on specified dates ${validFromDate} - ${validToDate}`);
     }
 
     for (const p of cycle.participants) {

@@ -7,10 +7,30 @@ const { getDateComponent, getAmountOfDays } = require('../utils/date');
 const isRentContainErrors = (rent) => {
     if (!validators.isObject(rent.user)) return 'User cannot be empty';
     if (!validators.isObject(rent.product)) return 'Product cannot be empty';
-    if (!validators.isNonEmptyString(rent.fromdate)) return 'From date cannot be empty';
-    if (!validators.isNonEmptyString(rent.todate)) return 'To date cannot be empty';
+    if (!validators.isDate(rent.fromdate)) return 'From date cannot be empty';
+    if (!validators.isDate(rent.todate)) return 'To date cannot be empty';
     return '';
 };
+
+const isRentDatesValid = (product, fromDate, toDate) => {
+    if (product.fromdate > fromDate || product.todate < toDate) return false;
+
+    if (product.rentingDates && product.rentingDates.length) {
+        for (const rt of product.rentingDates) {
+            // Approve only these existing orders
+            // existing (rt):           |----|               |------|
+            // new (fromDate, toDate):           |------|
+            // Any other timeline is overlapping and must be invalid
+            if (!(rt.todate < fromDate || rt.fromdate > toDate)) {
+                return false;
+            }
+        }
+    }
+
+    return true;  
+};
+
+exports.isRentDatesValid = isRentDatesValid;
 
 exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
     const validFromDate = getDateComponent(fromdate);
@@ -39,7 +59,8 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
     }
 
     if (!isRentDatesValid(product, newRent.fromdate, newRent.todate)) {
-        throw new Error(product.name, "is taken on specified dates");
+        console.log(`Product ${product.id} is taken on specified dates ${newRent.fromdate} - ${newRent.todate}`);
+        throw new Error("Product is taken on specified dates");
     }
 
     const toUser = await User.findById(product.user);
@@ -51,7 +72,7 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
     const coins = rentingDays * product.price;
 
     if (!isFree && coins > fromUser.coins) {
-        throw new Error('Missing', coins - fromUser.coins, 'coins. Try add it to wishlist');
+        throw new Error(`Missing ${coins - fromUser.coins} coins. Try add it to wishlist`);
     }
 
     try {
@@ -62,7 +83,7 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
         await Product.findByIdAndUpdate(productId, { $push: { rentingDates: rentingDate } });
 
         newRent = await newRent.save();
-        console.log("New rent:", rent.id);
+        console.log("New rent:", newRent.id);
 
         if (!isFree) {
             await User.findByIdAndUpdate(fromUser.id, { $inc: { coins: coins * -1 } });
@@ -72,21 +93,7 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
         
         return newRent;
     } catch (error) {
+        console.log(error);
         throw new Error('Save failed');
     }    
-};
-
-exports.isRentDatesValid = (product, fromDate, toDate) => {
-    if (product.fromdate > fromDate || product.todate < toDate) return false;
-
-    if (product.rentingDates && product.rentingDates.length) {
-        for (let index = 0; index < product.rentingDates.length; index++) {
-            const rt = product.rentingDates[index];
-            if (!(rt.todate < fromDate && rt.fromdate > toDate)) {
-                return false;
-            }
-        }
-    }
-
-    return true;  
 };

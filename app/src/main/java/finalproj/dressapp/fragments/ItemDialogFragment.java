@@ -8,6 +8,7 @@ import android.icu.util.Calendar;
 import android.icu.util.GregorianCalendar;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -35,65 +36,75 @@ public class ItemDialogFragment extends DialogFragment {
         final Dialog dialog = builder.create();
 
         Bundle params = getArguments();
+        int availableMoney = params.getInt("money");
         minDate = params.getLong("minDate");
         maxDate = params.getLong("maxDate");
+        int cost = params.getInt("cost");
 //        ((ImageView) dialogContainer.findViewById(R.id.itemImage)).setImageURI(Uri.parse(params.getString("imageSrc")));
         ((TextView) dialogContainer.findViewById(R.id.itemDescription)).setText(params.getString("description"));
-        ((TextView) dialogContainer.findViewById(R.id.cost)).setText(String.valueOf(params.getInt("cost")));
+        ((TextView) dialogContainer.findViewById(R.id.cost)).setText(String.valueOf(cost));
         ((TextView) dialogContainer.findViewById(R.id.owner)).setText(params.getString("owner"));
         ((RatingBar) dialogContainer.findViewById(R.id.rating)).setRating(params.getInt("rating"));
         final EditText fromDate = dialogContainer.findViewById(R.id.fromDate);
-        fromDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                LinearLayout dateContainer = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.date_picker, null);
-                builder.setView(dateContainer);
-
-                final DatePicker date = dateContainer.findViewById(R.id.date);
-                date.setMinDate(minDate);
-                date.setMaxDate(maxDate);
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth());
-                        minDate = calendar.getTimeInMillis();
-                        String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1)
-                                + "/" + (date.getYear() - 2000);
-                        fromDate.setText(dateString);
-                        Utils.setFromDate(Utils.LongToDateFormat(minDate));
-                    }
-                });
-                builder.create().show();
-            }
-        });
-
         final EditText toDate = dialogContainer.findViewById(R.id.toDate);
-        toDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                LinearLayout dateContainer = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.date_picker, null);
-                builder.setView(dateContainer);
 
-                final DatePicker date = dateContainer.findViewById(R.id.date);
-                date.setMinDate(minDate);
-                date.setMaxDate(maxDate);
+        if (availableMoney < cost) {
+            fromDate.setEnabled(false);
+            toDate.setEnabled(false);
+            ((Button) dialogContainer.findViewById(R.id.order)).setEnabled(false);
+            dialogContainer.findViewById(R.id.notEnoughCoins).setVisibility(View.VISIBLE);
+        } else {
+            fromDate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LinearLayout dateContainer = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.date_picker, null);
+                    builder.setView(dateContainer);
 
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth());
-                        maxDate = calendar.getTimeInMillis();
-                        String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1) + "/" + (date.getYear() - 2000);
-                        toDate.setText(dateString);
-                        Utils.setToDate(Utils.LongToDateFormat(maxDate));
-                    }
-                });
-                builder.create().show();
-            }
-        });
+                    final DatePicker date = dateContainer.findViewById(R.id.date);
+                    date.setMinDate(minDate);
+                    date.setMaxDate(maxDate);
+
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth());
+                            minDate = calendar.getTimeInMillis();
+                            String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1)
+                                    + "/" + (date.getYear() - 2000);
+                            fromDate.setText(dateString);
+                            Utils.setFromDate(Utils.LongToDateFormat(minDate));
+                        }
+                    });
+                    builder.create().show();
+                }
+            });
+
+            toDate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LinearLayout dateContainer = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.date_picker, null);
+                    builder.setView(dateContainer);
+
+                    final DatePicker date = dateContainer.findViewById(R.id.date);
+                    date.setMinDate(minDate);
+                    date.setMaxDate(maxDate);
+
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth());
+                            maxDate = calendar.getTimeInMillis();
+                            String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1) + "/" + (date.getYear() - 2000);
+                            toDate.setText(dateString);
+                            Utils.setToDate(Utils.LongToDateFormat(maxDate));
+                        }
+                    });
+                    builder.create().show();
+                }
+            });
+        }
 
         dialogContainer.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override

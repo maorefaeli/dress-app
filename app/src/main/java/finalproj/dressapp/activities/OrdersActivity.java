@@ -31,13 +31,6 @@ public class OrdersActivity extends DressAppActivity {
     private List<Product> products = new ArrayList<>();
     private TextView noOrdersText;
 
-    private void addMockProducts() {
-       Product product = new Product("Dress",
-               150, "1/1/2020", "10/01/2020", "./dress.png");
-       products.add(product);
-       showProducts();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,23 +67,20 @@ public class OrdersActivity extends DressAppActivity {
     }
 
     private void showProducts() {
-        noOrdersText.setVisibility(products.size() == 0 ? View.VISIBLE : View.INVISIBLE);
+        noOrdersText.setVisibility(products.size() == 0 ? View.VISIBLE : View.GONE);
         for (final Product product : products) {
             LinearLayout productView = (LinearLayout) getLayoutInflater().inflate(R.layout.order_template, null);
             ((TextView)productView.findViewById(R.id.orderTitle)).setText(product.name);
-            String dates = product.fromdate + "-" + product.todate;
+            String dates = Utils.DateFormatToShow(product.fromdate) + "-" + Utils.DateFormatToShow(product.todate);
             ((TextView) productView.findViewById(R.id.dates)).setText(dates);
             ((TextView) productView.findViewById(R.id.address)).setText("address");
-            ((TextView) productView.findViewById(R.id.owner)).setText(product.user);
-            productView.findViewById(R.id.finishOrder).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    CompleteOrderDialogFragment dialogFragment = new CompleteOrderDialogFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("title", product.name);
-                    dialogFragment.setArguments(bundle);
-                    dialogFragment.show(getSupportFragmentManager(), "completeOrder");
-                }
+            ((TextView) productView.findViewById(R.id.owner)).setText(product.name);
+            productView.findViewById(R.id.finishOrder).setOnClickListener(view -> {
+                CompleteOrderDialogFragment dialogFragment = new CompleteOrderDialogFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("title", product.name);
+                dialogFragment.setArguments(bundle);
+                dialogFragment.show(getSupportFragmentManager(), "completeOrder");
             });
 
             ordersContainer.addView(productView);
