@@ -29,6 +29,7 @@ import finalproj.dressapp.httpclient.models.AddRent;
 import finalproj.dressapp.httpclient.models.Product;
 import finalproj.dressapp.httpclient.models.RentProduct;
 import finalproj.dressapp.httpclient.models.SearchObject;
+import finalproj.dressapp.httpclient.models.UserRegistration;
 import finalproj.dressapp.httpclient.models.WishlistProduct;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -123,7 +124,21 @@ public class HomeActivity extends DressAppActivity {
             }
         });
 
-        ((TextView) findViewById(R.id.current_money)).setText("300");
+        final Call <UserRegistration> userCall = apiInterface.getCurrentUserDetails();
+        userCall.enqueue(new Callback<UserRegistration>() {
+            public void onResponse(Call <UserRegistration> userCall, Response <UserRegistration> response) {
+                if (response.code() == 200) {
+
+                    UserRegistration userDetails = response.body();
+                    ((TextView) findViewById(R.id.current_money)).setText(userDetails.coins);
+                }
+            }
+
+            public void onFailure(Call<UserRegistration> call, Throwable t) {
+                call.cancel();
+            }
+        });
+
         toggle = Utils.setNavigation(this, (DrawerLayout) findViewById(R.id.activity_main), getSupportActionBar());
         Calendar calendar = Calendar.getInstance();
         calendar.set(2020, 5, 10);

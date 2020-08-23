@@ -51,7 +51,6 @@ public class ProfileActivity extends DressAppActivity implements  ActivityCompat
         mEmailView = (EditText) findViewById(R.id.email);
         mMoneyView = findViewById(R.id.money);
         mLocateButton = findViewById(R.id.locateButton);
-        mMoneyView.setText("300");
 
         gpsTracker = new GPSTracker(this);
         if (!gpsTracker.getIsGPSTrackingEnabled())
@@ -93,6 +92,7 @@ public class ProfileActivity extends DressAppActivity implements  ActivityCompat
                     mLastNameView.setText(upperString);
                     mEmailView.setText(userDetails.username);
                     mAddressView.setText(userDetails.address);
+                    mMoneyView.setText(userDetails.coins);
                 }
             }
 
