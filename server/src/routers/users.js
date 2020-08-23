@@ -55,7 +55,7 @@ router.post('/edit', auth.isLoggedIn, async (req, res) => {
     try {
         const userId = req.user.id;
         const { firstName, lastName, address, longitude, latitude } = req.body;
-
+        
         if (!validators.isNonEmptyString(firstName)) {
             return res.status(400).json({"error": "First name cannot be empty"});
         }
@@ -64,15 +64,22 @@ router.post('/edit', auth.isLoggedIn, async (req, res) => {
             return res.status(400).json({"error": "Last name cannot be empty"});
         }
 
-        await User.findByIdAndUpdate(userId, {
-            firstName,
-            lastName,
-            address: address,
-            location: {
-                type: "Point",
+        const updateCommand = { firstName, lastName };
+
+        // Optional fields
+        
+        if (address) {
+            updateCommand['address'] = address;
+        }
+
+        if (longitude && latitude) {
+            updateCommand['location'] = {
+                type: 'Point',
                 coordinates: [longitude, latitude]
-            }
-        });
+            };
+        }
+
+        await User.findByIdAndUpdate(userId, updateCommand);
         return res.json(true);
         
     } catch (error){
