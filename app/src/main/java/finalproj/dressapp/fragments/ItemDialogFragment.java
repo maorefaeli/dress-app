@@ -97,7 +97,7 @@ public class ItemDialogFragment extends DialogFragment {
                     String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1) + "/" + (date.getYear() - 2000);
                     toDate.setText(dateString);
                     Utils.setToDate(Utils.LongToDateFormat(maxDate));
-                    int newCost = (int) (((maxDate - minDate) / 86400000) + 1) * cost;
+                    int newCost = (int) (((calendar.getTimeInMillis() - minDate) / 86400000) + 1) * cost;
                     costView.post(() -> costView.setText(String.valueOf(newCost)));
                 });
                 builder1.create().show();
