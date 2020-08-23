@@ -23,7 +23,7 @@
             android:label="Orders" />
         <activity
             android:name=".activities.MyClothesActivity"
-            android:label="My Clothes" />
+            android:label="My Items" />
         <activity
             android:name=".activities.SmartSuggestionsActivity"
             android:label="Smart Suggestions" />
