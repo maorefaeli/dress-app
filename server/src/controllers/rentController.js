@@ -56,7 +56,7 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
     }
 
     if (!isRentDatesValid(product, newRent.fromdate, newRent.todate)) {
-        throw new Error(product.name, "is taken on specified dates");
+        throw new Error(`Product ${product.id} is taken on specified dates ${newRent.fromdate} - ${newRent.todate}`);
     }
 
     const toUser = await User.findById(product.user);
@@ -68,7 +68,7 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
     const coins = rentingDays * product.price;
 
     if (!isFree && coins > fromUser.coins) {
-        throw new Error('Missing', coins - fromUser.coins, 'coins. Try add it to wishlist');
+        throw new Error(`Missing ${coins - fromUser.coins} coins. Try add it to wishlist`);
     }
 
     try {
