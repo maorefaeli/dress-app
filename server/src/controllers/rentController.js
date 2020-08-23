@@ -69,11 +69,18 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
     }
 
     const rentingDays = getAmountOfDays(newRent.todate - newRent.fromdate) + 1;
-    const coins = rentingDays * product.price;
-
-    if (!isFree && coins > fromUser.coins) {
+    let coins = rentingDays * product.price;
+    
+    if (isFree) {
+        // Free!
+        coins = 0;
+    
+    // If not free: Check the user has enough coins
+    } else if (coins > fromUser.coins) {
         throw new Error(`Missing ${coins - fromUser.coins} coins. Try add it to wishlist`);
     }
+
+    newRent.coins = coins;
 
     try {
         const rentingDate = {
@@ -85,6 +92,7 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
         newRent = await newRent.save();
         console.log("New rent:", newRent.id);
 
+        // Make a coins transaction between the 2 users
         if (!isFree) {
             await User.findByIdAndUpdate(fromUser.id, { $inc: { coins: coins * -1 } });
             await User.findByIdAndUpdate(toUser.id, { $inc: { coins: coins } });
