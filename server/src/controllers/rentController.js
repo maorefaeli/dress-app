@@ -68,7 +68,7 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
     const coins = rentingDays * product.price;
 
     if (!isFree && coins > fromUser.coins) {
-        throw new Error('Missing' + coins - fromUser.coins + 'coins. Try add it to wishlist');
+        throw new Error(`Missing ${coins - fromUser.coins} coins. Try add it to wishlist`);
     }
 
     try {
