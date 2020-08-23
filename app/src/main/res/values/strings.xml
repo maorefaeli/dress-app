@@ -67,6 +67,7 @@
     <string name="updateUser">Update user details</string>
     <string name="complete_order_title">Are you sure you want to complete this order?</string>
     <string name="current_money">You currently have </string>
+    <string name="not_enough_money">not enough coins</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>

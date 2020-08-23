@@ -148,6 +148,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                             bundle.putLong("maxDate", Utils.DateFormatToLong(currentProduct.todate));
                             bundle.putString("owner", currentProduct.name);
                             bundle.putInt("rating", 4);
+                            bundle.putInt("money", 200);
                             bundle.putInt("numOfRenting", currentProduct.rentingDates.size());
 
                             for (int i = 0; i < currentProduct.rentingDates.size(); i++) {
