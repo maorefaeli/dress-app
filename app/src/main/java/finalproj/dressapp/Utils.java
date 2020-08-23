@@ -32,6 +32,7 @@ import finalproj.dressapp.httpclient.APIClient;
 import finalproj.dressapp.httpclient.APIInterface;
 import finalproj.dressapp.httpclient.models.MyAppContext;
 import finalproj.dressapp.httpclient.models.Product;
+import finalproj.dressapp.httpclient.models.UserRegistration;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,6 +48,7 @@ public class Utils {
     static Boolean isWishlistActivity = false;
     static ProgressDialog dialog = null;
     static List<Product> currentUserWishlistItems;
+    static UserRegistration userReg;
     static final String PREF_USER_NAME = "username";
     // static final String PREF_USER_ID = "userid";
     static final String PREF_USER_COOKIE = "usercookie";
@@ -115,6 +117,29 @@ public class Utils {
         editor.commit();
     }
 
+    public static UserRegistration getUserById(String userId) {
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        Call<UserRegistration> call = apiInterface.getUserDetails(userId);
+        call.enqueue(new Callback<UserRegistration>() {
+            @Override
+            public void onResponse(Call<UserRegistration> call, Response<UserRegistration> response) {
+                if (response.code() == 200) {
+                    userReg = response.body();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserRegistration> call, Throwable t) {
+                new AlertDialog.Builder(MyAppContext.getContext())
+                        .setTitle("Couldn't get current user's wishlist items")
+                        .setMessage(t.getMessage())
+                        .show();
+                call.cancel();
+            }
+        });
+
+        return userReg;
+    }
     // public static String getUserId(Context ctx)
     // {
     //     return getSharedPreferences(ctx).getString(PREF_USER_ID, "");
