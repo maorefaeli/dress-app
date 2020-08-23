@@ -38,6 +38,7 @@ router.post('/register', async (req, res) => {
             firstName,
             lastName,
             password: User.encryptPassword(password),
+            coins: 300,
         });
 
         await user.save();
@@ -67,7 +68,7 @@ router.post('/edit', auth.isLoggedIn, async (req, res) => {
         const updateCommand = { firstName, lastName };
 
         // Optional fields
-        
+
         if (address) {
             updateCommand['address'] = address;
         }
