@@ -29,7 +29,7 @@ const kilometersToRadian = function(kilometers){
 // @access Public
 router.post('/', async (req, res) => {
     try {
-        const { name, radius, minimumPrice, maximumPrice, fromDate, toDate, minimumRating } = req.body;
+        let { name, radius, minimumPrice, maximumPrice, fromDate, toDate, minimumRating } = req.body;
 
         const query = {};
         const userQuery = {};
@@ -46,12 +46,15 @@ router.post('/', async (req, res) => {
             query.price = { ...query.price, $lte: Number(maximumPrice) };
         }
 
-        if (fromDate) {
-            query.fromdate = { $lte: getDateComponent(fromDate) };
-        }
+        // Default to today if 'fromDate' not provided
+        fromDate = getDateComponent(fromDate || Date.now());
+
+        // Search for products that end after fromDate
+        query.todate = { $gte: fromDate };
 
         if (toDate) {
-            query.todate = { $gte: getDateComponent(toDate) };
+            // Search for products that start before toDate
+            query.fromdate = { $lte: getDateComponent(toDate) };
         }
 
         if (req.user && req.user.id) {
@@ -79,7 +82,8 @@ router.post('/', async (req, res) => {
             query.user['$in'] = users.map(q => q._id);
         }
 
-        let products = await Product.find(query).populate('user', 'firstName lastName averageScore reviewQuantity address') || [];
+        // Sort by _id descending: which will return the newly created products first
+        let products = await Product.find(query).populate('user', 'firstName lastName averageScore reviewQuantity address').sort({_id: -1}) || [];
 
         if (minimumRating) {
             products = products.filter(p => p.user.averageScore >= minimumRating);
