@@ -4,14 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-class RentingDate {
-    @SerializedName("fromdate")
-    public String fromDate;
-
-    @SerializedName("todate")
-    public String toDate;
-}
-
 public class Product {
     @SerializedName("user")
     public String user;

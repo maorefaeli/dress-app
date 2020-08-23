@@ -4,6 +4,7 @@ import finalproj.dressapp.activities.ProfileActivity;
 import finalproj.dressapp.fragments.ItemDialogFragment;
 import finalproj.dressapp.httpclient.models.MyAppContext;
 import finalproj.dressapp.httpclient.models.Product;
+import finalproj.dressapp.httpclient.models.RentingDate;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -150,6 +151,14 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                             bundle.putLong("maxDate", Utils.DateFormatToLong(currentProduct.todate));
                             bundle.putString("owner", currentProduct.name);
                             bundle.putInt("rating", 4);
+                            bundle.putInt("numOfRenting", currentProduct.rentingDates.size());
+
+                            for (int i = 0; i < currentProduct.rentingDates.size(); i++) {
+                                RentingDate rentingDate = currentProduct.rentingDates.get(i);
+                                bundle.putLong("startRent" + i, Utils.DateFormatToLong(rentingDate.fromDate));
+                                bundle.putLong("endRent" + i, Utils.DateFormatToLong(rentingDate.toDate));
+                            }
+
                             dialogFragment.setArguments(bundle);
                             dialogFragment.show(mCallingActivity.getFragmentManager(), "ItemDialog");
                         }
