@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.List;
@@ -36,9 +37,9 @@ public class HomeActivity extends DressAppActivity {
         setContentView(R.layout.activity_home);
 
         Utils.loadUserWishlistItems();
-        
+
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-        Call <List<Product>> call = apiInterface.getAllItems();
+        Call<List<Product>> call = apiInterface.getAllItems();
         call.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
@@ -65,9 +66,9 @@ public class HomeActivity extends DressAppActivity {
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
                 new AlertDialog.Builder(HomeActivity.this)
-                    .setTitle("failure")
-                    .setMessage(t.getMessage())
-                    .show();
+                        .setTitle("failure")
+                        .setMessage(t.getMessage())
+                        .show();
                 call.cancel();
             }
         });
@@ -83,7 +84,7 @@ public class HomeActivity extends DressAppActivity {
         // For guests, go back to login screen.
         if (Utils.getGuestStatus()) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);        
+            startActivity(intent);
         }
         // For users, go back to the android home screen.
         else {
@@ -94,25 +95,26 @@ public class HomeActivity extends DressAppActivity {
         }
     }
 
-    public void onAddToWishlist(final View view)
-    {
+    public void onAddToWishlist(final View view) {
         // Only allow wishlist function for logged in users.
         if (!Utils.getGuestStatus()) {
             final TextView mWishlistIcon = view.findViewById(R.id.postTitleWishlistIcon);
-            final WishlistProduct wishlistProduct = new WishlistProduct((String) ((View)view.getParent()).getTag());
+            final WishlistProduct wishlistProduct = new WishlistProduct((String) ((View) view.getParent()).getTag());
             final Boolean isInWishlist = (Boolean) view.getTag();
             view.setTag(!isInWishlist);
 
             // Adding the item to the user's wishlist.
-            if (!isInWishlist){
+            if (!isInWishlist) {
                 APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-                Call <Boolean> call = apiInterface.addToWishlist(wishlistProduct);
+                Call<Boolean> call = apiInterface.addToWishlist(wishlistProduct);
                 call.enqueue(new Callback<Boolean>() {
                     @Override
                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                         if (response.code() == 200) {
-                            mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26_full, 0); }
-                            Utils.loadUserWishlistItems();
+                            mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26_full, 0);
+                        }
+                        Toast.makeText(getBaseContext(), "Added to wish list!", Toast.LENGTH_LONG).show();
+                        Utils.loadUserWishlistItems();
                     }
 
                     public void onFailure(Call<Boolean> call, Throwable t) {
@@ -127,25 +129,26 @@ public class HomeActivity extends DressAppActivity {
             // Removing the item from the user's wishlist.
             else {
                 APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-                Call <Boolean> call = apiInterface.removeFromWishlist(wishlistProduct);
+                Call<Boolean> call = apiInterface.removeFromWishlist(wishlistProduct);
                 call.enqueue(new Callback<Boolean>() {
                     @Override
                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                         if (response.code() == 200) {
                             mWishlistIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icons8_heart_26, 0);
+                            Toast.makeText(getBaseContext(), "Removed from wish list!", Toast.LENGTH_LONG).show();
                             Utils.loadUserWishlistItems();
-                         }
+                        }
                     }
 
                     public void onFailure(Call<Boolean> call, Throwable t) {
                         new AlertDialog.Builder(HomeActivity.this)
-                            .setTitle("Couldn't delete item: " + wishlistProduct.product + " from wishlist.")
-                            .setMessage(t.getMessage())
-                            .show();
+                                .setTitle("Couldn't delete item: " + wishlistProduct.product + " from wishlist.")
+                                .setMessage(t.getMessage())
+                                .show();
                         call.cancel();
                     }
                 });
             }
         }
-    }  
+    }
 }

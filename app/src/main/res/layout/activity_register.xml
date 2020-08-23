@@ -1,25 +1,14 @@
-<!-- <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activities.RegisterActivity">
-    
-
-</android.support.constraint.ConstraintLayout> -->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".activities.RegisterActivity">`
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".activities.RegisterActivity">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -32,78 +21,75 @@
         android:id="@+id/registerScreen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:text="Registration"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        android:layout_gravity="center"/>
-    <TextView
-        android:id="@+id/firstNameTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="First Name"/>
+        android:text="@string/register"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
     <EditText
         android:id="@+id/firstName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:ems="10"/>
-    <TextView
-        android:id="@+id/lastNameTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Last Name"/>
+        android:layout_marginStart="10dp"
+        android:ems="10"
+        android:hint="@string/firstName"
+        android:singleLine="true" />
+
     <EditText
         android:id="@+id/lastName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:ems="10"/>        
-    <TextView
-        android:id="@+id/emailTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Email" />
-    <AutoCompleteTextView
+        android:layout_marginStart="10dp"
+        android:ems="10"
+        android:hint="@string/lastName"
+        android:singleLine="true" />
+
+    <EditText
         android:id="@+id/email"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:ems="10" />
-    <TextView
-        android:id="@+id/passwordTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Password" />
+        android:layout_marginStart="10dp"
+        android:ems="10"
+        android:hint="@string/prompt_email"
+        android:nextFocusForward="@id/password"
+        android:singleLine="true" />
+
     <EditText
         android:id="@+id/password"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:ems="10"
+        android:hint="@string/prompt_password"
         android:inputType="textPassword"
-        android:ems="10" />
-    <TextView
-        android:id="@+id/passwordConfirmTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Confirm Password" />
+        android:singleLine="true" />
+
     <EditText
         android:id="@+id/confirmPassword"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:ems="10"
+        android:hint="@string/prompt_confirm_password"
         android:inputType="textPassword"
-        android:ems="10" />        
+        android:singleLine="true" />
+
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="Register" />
-    <TextView android:id="@+id/linkToLogin"
+
+    <TextView
+        android:id="@+id/linkToLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Already a member? Login here" 
         android:gravity="center"
-        android:textSize="20dp"
+        android:onClick="test"
+        android:text="Already a member? Login here"
         android:textColor="#3882c2"
-        android:onClick="test"/>
+        android:textSize="20dp" />
 </LinearLayout>

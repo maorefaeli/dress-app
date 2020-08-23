@@ -34,7 +34,7 @@ import finalproj.dressapp.R;
 public class LoginActivity extends AppCompatActivity {
     
     // UI references.
-    private AutoCompleteTextView mEmailView;
+    private EditText mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         else
         {
             setContentView(R.layout.activity_login);
-            mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+            mEmailView = findViewById(R.id.email);
 
             mPasswordView = (EditText) findViewById(R.id.password);
             mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
