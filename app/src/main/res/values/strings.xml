@@ -60,7 +60,9 @@
     <string name="ok">OK</string>
     <string name="title_activity_wish_list">WishListActivity</string>
     <string name="login">Login</string>
-    <string name="radius">Radius:</string>
+    <string name="radius">Radius (KM)</string>
+    <string name="rating">Rating</string>
+    <string name="maxPrice">Max price</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
