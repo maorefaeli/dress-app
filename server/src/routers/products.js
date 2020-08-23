@@ -10,8 +10,6 @@ const Product = require('../models/Product');
 const User = require('../models/User');
 const WishlistController = require('../controllers/wishlistController');
 
-const DEFAULT_SEARCH_SPHERE_KM = 100;
-
 const isProductContainErrors = (product) => {
     //if (!validators.isNonEmptyString(product.user)) return 'User cannot be empty';
     if (!validators.isNonEmptyString(product.name)) return 'Name cannot be empty';
@@ -31,9 +29,19 @@ const kilometersToRadian = function(kilometers){
 // @access Public
 router.get('/', async (req, res) => {
     try {
-        const { location } = req.query;
+        const { name, radius, maximumPrice, minimumRating } = req.query;
 
         const query = {};
+
+        if (name) {
+            query['name'] = { name: { $regex: `.*${name}.*`, $options: 'i' } };
+        }
+
+        if (maximumPrice) {
+            query['price'] = { $lte: Number(maximumPrice) };
+        }
+
+        const userQuery = {};
 
         if (req.user && req.user.id) {
             const userId = ObjectID(req.user.id);
@@ -42,22 +50,30 @@ router.get('/', async (req, res) => {
             query['user'] = { $ne: ObjectID(req.user.id)};
 
             // For logged in user that has location, search only products of nearby users
-            const user = await User.findById(userId);
+            if (radius) {
+                const user = await User.findById(userId);
 
-            if (user.location && user.location.coordinates) {
-                const users = await User.find({
-                    location : {
+                if (user.location && user.location.coordinates) {
+                    userQuery['location'] = {
                         $geoWithin : {
-                            $centerSphere : [user.location.coordinates, kilometersToRadian(location || DEFAULT_SEARCH_SPHERE_KM) ]
+                            $centerSphere : [user.location.coordinates, kilometersToRadian(radius) ]
                         }
-                    }
-                }, 'id');
-
-                query['user']['$in'] = users.map(q => q._id);
+                    };
+                }
             }
-            
         }
-        const products = await Product.find(query).populate('user', 'firstName lastName averageScore reviewQuantity address');
+
+        if (!validators.isObjectEmpty(userQuery)) {
+            const users = await User.find(userQuery, 'id');
+            query['user']['$in'] = users.map(q => q._id);
+        }
+
+        let products = await Product.find(query).populate('user', 'firstName lastName averageScore reviewQuantity address') || [];
+
+        if (minimumRating) {
+            products = products.filter(p => p.user.averageScore >= minimumRating);
+        }
+
         return res.json(products);
     } catch (error){
         console.log(error);
