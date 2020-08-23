@@ -7,8 +7,8 @@ const { getDateComponent, getAmountOfDays } = require('../utils/date');
 const isRentContainErrors = (rent) => {
     if (!validators.isObject(rent.user)) return 'User cannot be empty';
     if (!validators.isObject(rent.product)) return 'Product cannot be empty';
-    if (!validators.isNonEmptyString(rent.fromdate)) return 'From date cannot be empty';
-    if (!validators.isNonEmptyString(rent.todate)) return 'To date cannot be empty';
+    if (!validators.isDate(rent.fromdate)) return 'From date cannot be empty';
+    if (!validators.isDate(rent.todate)) return 'To date cannot be empty';
     return '';
 };
 
