@@ -39,7 +39,15 @@ router.get('/', auth.isLoggedIn, async (req, res) => {
     try {
         let result = [];
 
-        const user = await User.findById(req.user.id).populate('wishlist.products');
+        const user = await User.findById(req.user.id).populate({
+            path: 'wishlist.products',
+            model: 'Product',
+            populate: {
+                path: 'user',
+                model: 'User',
+                select: 'firstName lastName averageScore reviewQuantity address'
+            }
+        });
         if (user.wishlist) {
             for (const wish of user.wishlist) {
                 result = [...result, ...wish.products];

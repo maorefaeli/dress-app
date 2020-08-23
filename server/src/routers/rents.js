@@ -15,8 +15,10 @@ const RentController = require('../controllers/rentController');
 // @access Private
 router.get('/', auth.isLoggedIn, async (req, res) => {
     try {
-        const userRents = await Rent.find({ user: ObjectID(req.user.id), isFinished: { $ne: true } }) || [];
-        return res.json(userRents);
+        const userRents = await Rent.find({ user: ObjectID(req.user.id), isFinished: { $ne: true } })
+            .populate('user', 'firstName lastName averageScore reviewQuantity address')
+            .populate('product');
+        return res.json(userRents || []);
     } catch (error) {
         console.log(error);
         req.status(400).json({"error":"Problem getting user rents"});
@@ -28,8 +30,10 @@ router.get('/', auth.isLoggedIn, async (req, res) => {
 // @access Public
 router.get('/history/:id', async (req, res) => {
     try {
-        const rentingHistory = await Rent.find({ product: ObjectID(req.params.id) }) || [];
-        return res.json(rentingHistory);
+        const rentingHistory = await Rent.find({ product: ObjectID(req.params.id) })
+            .populate('user', 'firstName lastName averageScore reviewQuantity address')
+            .populate('product');
+        return res.json(rentingHistory || []);
     } catch (error) {
         console.log(error);
         req.status(400).json({"error":"Problem getting product renting history"});

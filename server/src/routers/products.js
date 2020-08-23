@@ -57,7 +57,7 @@ router.get('/', async (req, res) => {
             }
             
         }
-        const products = await Product.find(query);
+        const products = await Product.find(query).populate('user', 'firstName lastName averageScore reviewQuantity address');
         return res.json(products);
     } catch (error){
         console.log(error);
@@ -83,7 +83,7 @@ router.get('/:id', async (req, res) => {
 // @access Private
 router.get('/user/me', auth.isLoggedIn, async (req, res) => {
     try {
-        const products = await Product.find({user:req.user.id});
+        const products = await Product.find({user:req.user.id}).populate('user', 'firstName lastName averageScore reviewQuantity address');
         return res.json(products);
     } catch (error){
         console.log(error);
@@ -96,7 +96,7 @@ router.get('/user/me', auth.isLoggedIn, async (req, res) => {
 // @access Private
 router.get('/user/:user', auth.isLoggedIn, async (req, res) => {
     try {
-        const products = await Product.find({user: req.params.user});
+        const products = await Product.find({user: req.params.user}).populate('user', 'firstName lastName averageScore reviewQuantity address');
         return res.json(products);
     } catch (error){
         console.log(error);
@@ -126,8 +126,8 @@ router.post('/add', auth.isLoggedIn, async (req, res) => {
             return res.status(400).json({ error });
         }
 
-        newProduct = await newProduct.save();
-        res.json(newProduct);
+        await newProduct.save();
+        res.json(true);
     } catch (e) {
         console.log(e);
         error = 'Problem saving product';
@@ -156,9 +156,9 @@ router.post('/close/:id', auth.isLoggedIn, async (req, res) => {
             closeDate = new Date(Math.max(...product.rentingDates.map(rt => rt.todate)));
         }
         
-        const newProduct = await Product.findByIdAndUpdate(productId, { todate: closeDate }, { new: true });
+        await Product.findByIdAndUpdate(productId, { todate: closeDate }, { new: true });
         close.log("Product", product.id, "todate changed to", closeDate);
-        res.json(newProduct);
+        res.json(true);
     } catch (e) {
         console.log(e);
         error = 'Problem saving product';
@@ -216,7 +216,7 @@ router.post('/:id', auth.isLoggedIn, async (req, res) => {
             return res.status(400).json({ error });
         }
 
-        const newProduct = await Product.findByIdAndUpdate(productId, product, { new: true });
+        const newProduct = await Product.findByIdAndUpdate(productId, product, { new: true }).populate('user', 'firstName lastName averageScore reviewQuantity address');
         return res.json(newProduct);
     } catch (error){
         console.log(error);

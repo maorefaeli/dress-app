@@ -18,8 +18,16 @@ router.get('/', auth.isLoggedIn, async (req, res) => {
             participants: {
                 $elemMatch: { user: userId, requestedProduct: null }
             }
-        }).populate('participants.products') || [];
-
+        }).populate({
+            path: 'participants.products',
+            model: 'Product',
+            populate: {
+                path: 'user',
+                model: 'User',
+                select: 'firstName lastName averageScore reviewQuantity address'
+            }
+        })
+        
         cycles.forEach(cycle => {
             for (const participant of cycle.participants) {
                 if (participant.user.equals(userId)) {
