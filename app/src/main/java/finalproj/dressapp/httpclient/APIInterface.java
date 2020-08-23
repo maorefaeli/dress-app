@@ -10,6 +10,7 @@ import finalproj.dressapp.httpclient.models.UserRegistration;
 import finalproj.dressapp.httpclient.models.SearchObject;
 import finalproj.dressapp.httpclient.models.Product;
 import finalproj.dressapp.httpclient.models.WishlistProduct;
+import finalproj.dressapp.httpclient.models.OrderReview;
 import finalproj.dressapp.Utils;
 
 import retrofit2.Call;
@@ -81,4 +82,7 @@ public interface APIInterface {
 
     @POST("rents/add")
     Call<Boolean> rentItem(@Body AddRent addRent);
+
+    @POST("rents/finish")
+    Call<Boolean> rentFinish(@Body OrderReview orderReview);
 }

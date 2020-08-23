@@ -89,6 +89,7 @@ public class OrdersActivity extends DressAppActivity {
                 CompleteOrderDialogFragment dialogFragment = new CompleteOrderDialogFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("title", rentProduct.product.name);
+                Utils.setRentId(rentProduct.id);
                 dialogFragment.setArguments(bundle);
                 dialogFragment.show(getSupportFragmentManager(), "completeOrder");
             });
