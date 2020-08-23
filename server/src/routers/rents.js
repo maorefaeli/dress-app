@@ -4,7 +4,6 @@ const auth = require('../utils/auth');
 const ObjectID = require('mongodb').ObjectID;
 const keys = require('../config/keys');
 
-
 // Load models
 const Rent = require('../models/Rent');
 const User = require('../models/User');

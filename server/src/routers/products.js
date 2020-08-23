@@ -14,8 +14,8 @@ const isProductContainErrors = (product) => {
     //if (!validators.isNonEmptyString(product.user)) return 'User cannot be empty';
     if (!validators.isNonEmptyString(product.name)) return 'Name cannot be empty';
     if (!validators.isPositiveNumber(product.price)) return 'Price must be positive';
-    if (!product.fromdate) return 'fromdate cannot be empty';
-    if (!product.todate) return 'fromdate cannot be empty';
+    if (!validators.isDate(product.fromdate)) return 'From date cannot be empty';
+    if (!validators.isDate(product.todate)) return 'To date cannot be empty';
     return '';
 };
 
@@ -168,6 +168,30 @@ router.post('/add', auth.isLoggedIn, async (req, res) => {
     }
 });
 
+const getMinFreeDateForClosing = (product) => {
+    // First try fromdate
+    let closeDate = product.fromdate;
+
+    // Find latest date the product is already rented
+    if (product.rentingDates && product.rentingDates.length) {
+        closeDate = new Date(Math.max(...product.rentingDates.map(rt => rt.todate)));
+    }
+
+    return closeDate;
+};
+
+const getMaxFreeDateForOpening = (product) => {
+    // First try todate
+    const openDate = product.todate;
+
+    // Find first date the product is already rented
+    if (product.rentingDates && product.rentingDates.length) {
+        openDate = new Date(Math.min(...product.rentingDates.map(rt => rt.fromdate)));
+    }
+
+    return openDate;
+};
+
 // @route POST /products/close
 // @desc Close products for future orders
 // @access Private
@@ -178,46 +202,27 @@ router.post('/close/:id', auth.isLoggedIn, async (req, res) => {
         const product = await Product.findById(productId);
 
         if (!product.user.equals(userId)) {
-            return res.status(401).json({"error": "Product not belongs to user"});
+            return res.status(401).json({ error: "Product not belongs to user" });
         }
 
-        // Try close the product as soon as possible
-        let closeDate = product.fromdate;
+        const closeDate = getMinFreeDateForClosing(product);
 
-        // Find latest date the product is already rented
-        if (product.rentingDates && product.rentingDates.length) {
-            closeDate = new Date(Math.max(...product.rentingDates.map(rt => rt.todate)));
+        // Decide if delete or close the product for future orders
+        if (closeDate = product.fromDate) {
+            // Delete the product since it has never been ordered
+            await Product.findByIdAndRemove(productId);
+            await WishlistController.handleProductDeletion(productId);
+            console.log("Deleting product", product.id);
+        } else {
+            await Product.findByIdAndUpdate(productId, { todate: closeDate });
+            close.log("Update product", product.id, ": todate changed to", closeDate);
         }
         
-        await Product.findByIdAndUpdate(productId, { todate: closeDate }, { new: true });
-        close.log("Product", product.id, "todate changed to", closeDate);
         res.json(true);
     } catch (e) {
         console.log(e);
         error = 'Problem saving product';
         res.status(400).json({ error });
-    }
-});
-
-//  @route DELETE /products/:id
-//  @desc Delete specific product
-//  @access Private
-router.delete('/:id', auth.isLoggedIn, async (req, res) => {
-    try {
-        const userId = ObjectID(req.user.id);
-        const productId = req.params.id;
-
-        const product = await Product.findById(productId);
-        if (!product.user.equals(userId)) {
-            return res.status(401).json({"error": "Product not belongs to user"});
-        }
-
-        await Product.findByIdAndRemove(productId);
-        await WishlistController.handleProductDeletion(productId);
-        return res.json(true);
-    } catch (error){
-        console.log(error);
-        res.status(400).json({"error":"Problem removing product"});
     }
 });
 
@@ -236,7 +241,6 @@ router.post('/:id', auth.isLoggedIn, async (req, res) => {
         }
 
         product = {
-            user: userId,
             name,
             price,
             image,
@@ -247,6 +251,16 @@ router.post('/:id', auth.isLoggedIn, async (req, res) => {
         const error = isProductContainErrors(product);
         if (error) {
             return res.status(400).json({ error });
+        }
+
+        const minDateForClosing = getMinFreeDateForClosing(product);
+        if (minDateForClosing > product.todate) {
+            return res.status(400).json({ error: `Product is rented until ${minDateForClosing.toDateString()}` });
+        }
+
+        const maxDateForOpening = getMaxFreeDateForOpening(product);
+        if (maxDateForOpening < product.fromdate) {
+            return res.status(400).json({ error: `Product is first rented on ${maxDateForOpening.toDateString()}` });
         }
 
         const newProduct = await Product.findByIdAndUpdate(productId, product, { new: true }).populate('user', 'firstName lastName averageScore reviewQuantity address');
