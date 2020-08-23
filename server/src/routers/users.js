@@ -4,6 +4,7 @@ const validators = require('../utils/validators');
 const auth = require('../utils/auth');
 const User = require('../models/User');
 const keys = require('../config/keys');
+const UserController = require('../controllers/userController');
 
 // @route POST users/register
 // @desc Register user
@@ -90,22 +91,13 @@ router.post('/edit', auth.isLoggedIn, async (req, res) => {
     }
 });
 
-const getUserById = async (userId) => {
-    const user = await User.findById(userId);
-    delete user.username;
-    delete user.password;
-    delete user.wishlist;
-    delete user.location;
-    return user;
-}
-
 //  @route GET users/profile
 //  @desc Get logged in user profile
 //  @access Private
 router.get('/profile', auth.isLoggedIn, async (req, res) => {
     try {
-        return res.json(await getUserById(req.user.id));
-    } catch (error){
+        return res.json(await User.findById(req.user.id).select(UserController.fullUserFields));
+    } catch (error) {
         console.log(error);
         res.status(400).json({"error":"Problem getting profile"})
     }
@@ -116,7 +108,7 @@ router.get('/profile', auth.isLoggedIn, async (req, res) => {
 //  @access Public
 router.get('/profile/:id', async (req, res) => {
     try {
-        return res.json(await getUserById(req.params.id));
+        return res.json(await User.findById(req.user.id).select(UserController.partialUserFields));
     } catch (error){
         console.log(error);
         res.status(400).json({"error":"Problem getting profile"})

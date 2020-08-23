@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require('../utils/auth');
 const WishlistController = require('../controllers/wishlistController');
 const User = require('../models/User');
+const UserController = require('../controllers/userController');
 
 // @route POST /wishlist/add
 // @desc Add new product to wishlist
@@ -45,7 +46,7 @@ router.get('/', auth.isLoggedIn, async (req, res) => {
             populate: {
                 path: 'user',
                 model: 'User',
-                select: 'firstName lastName averageScore reviewQuantity address'
+                select: UserController.partialUserFields
             }
         });
         if (user.wishlist) {

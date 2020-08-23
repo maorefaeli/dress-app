@@ -51,6 +51,7 @@ public class ItemDialogFragment extends DialogFragment {
 
         TextView reviewers = dialogContainer.findViewById(R.id.numOfReviewerss);
 
+        int numOfReviews = params.getInt("reviewers");
         String reviewersText = reviewers.getText() + " " +
                 params.getInt("reviewers") +
                 " reviews";

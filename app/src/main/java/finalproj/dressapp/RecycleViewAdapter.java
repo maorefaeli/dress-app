@@ -1,5 +1,18 @@
 package finalproj.dressapp;
 
+import finalproj.dressapp.activities.MyClothesActivity;
+import finalproj.dressapp.activities.ProfileActivity;
+import finalproj.dressapp.fragments.ItemDialogFragment;
+import finalproj.dressapp.httpclient.APIClient;
+import finalproj.dressapp.httpclient.APIInterface;
+import finalproj.dressapp.httpclient.models.MyAppContext;
+import finalproj.dressapp.httpclient.models.Product;
+import finalproj.dressapp.httpclient.models.RentingDate;
+import finalproj.dressapp.httpclient.models.UserRegistration;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -130,8 +143,12 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                 // Don't allow the item popup in wishlist view.
                 if (!mIsWishlist) {
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
+
+                        int userMoney;
+
                         @Override
                         public void onClick(View v) {
+                            userMoney = Utils.getUserMoney();
                             ItemDialogFragment dialogFragment = new ItemDialogFragment();
                             Bundle bundle = new Bundle();
                             Utils.setProductId(currentProduct.id);
@@ -141,8 +158,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                             bundle.putLong("minDate", Utils.DateFormatToLong(currentProduct.fromdate));
                             bundle.putLong("maxDate", Utils.DateFormatToLong(currentProduct.todate));
                             bundle.putInt("rating", currentProduct.user.averageScore);
-
-                            bundle.putInt("money", 200);
+                            bundle.putInt("money", userMoney); 
                             bundle.putInt("reviewers", currentProduct.user.reviewQuantity);
                             bundle.putInt("numOfRenting", currentProduct.rentingDates.size());
 

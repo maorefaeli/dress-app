@@ -8,6 +8,7 @@ const keys = require('../config/keys');
 const Rent = require('../models/Rent');
 const User = require('../models/User');
 const RentController = require('../controllers/rentController');
+const UserController = require('../controllers/userController');
 
 // @route GET rents/
 // @desc Get all user rents
@@ -30,7 +31,7 @@ router.get('/', auth.isLoggedIn, async (req, res) => {
 router.get('/history/:id', async (req, res) => {
     try {
         const rentingHistory = await Rent.find({ product: ObjectID(req.params.id) })
-            .populate('user', 'firstName lastName averageScore reviewQuantity address')
+            .populate('user', UserController.partialUserFields)
             .populate('product');
         return res.json(rentingHistory || []);
     } catch (error) {
@@ -74,11 +75,15 @@ router.post('/finish', auth.isLoggedIn, async (req, res) => {
         // Close order
         await Rent.findByIdAndUpdate(rentId, { isFinished: true, score });
 
-        // Update product's owner rating
-        await User.findByIdAndUpdate(rentEntity.product.user, { $inc: { reviewQuantity: 1, reviewSum: score } });
-
         // Reward user for give a review
         await User.findByIdAndUpdate(userId, { $inc: { coins: keys.coinsRewardForReview } });
+
+        // Update product's owner rating
+        const user = await User.findById(rentEntity.product.user);
+        const reviewQuantity = user.reviewQuantity + 1;
+        const reviewSum = user.reviewSum + score;
+        const averageScore = reviewSum / reviewQuantity;
+        await User.findByIdAndUpdate(rentEntity.product.user, { reviewQuantity, reviewSum, averageScore });
 
         console.log("Rent", rentEntity.id, "was closed");
 

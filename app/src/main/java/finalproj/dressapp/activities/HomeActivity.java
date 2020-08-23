@@ -49,6 +49,7 @@ public class HomeActivity extends DressAppActivity {
         setContentView(R.layout.activity_home);
 
         Utils.loadUserWishlistItems();
+        Utils.loadUserDetails();
         fillSearchFields();
 
         AtomicLong minDateAvailable = new AtomicLong(System.currentTimeMillis());
@@ -250,7 +251,7 @@ public class HomeActivity extends DressAppActivity {
                                 .show();
                     } else {
                         new AlertDialog.Builder(HomeActivity.this)
-                                .setTitle("Couldn't rent item.")
+                                .setTitle("Product is taken on specified dates.")
                                 .setMessage(response.message())
                                 .show();
                     }

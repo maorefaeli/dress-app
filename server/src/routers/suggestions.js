@@ -4,6 +4,7 @@ const auth = require('../utils/auth');
 const WishlistController = require('../controllers/wishlistController');
 const PendingCycle = require('../models/PendingCycle');
 const ObjectID = require('mongodb').ObjectID;
+const UserController = require('../controllers/userController');
 
 // @route GET /suggestions
 // @desc Get free suggestions for the user. Output: [{cycleId, product}]
@@ -24,7 +25,7 @@ router.get('/', auth.isLoggedIn, async (req, res) => {
             populate: {
                 path: 'user',
                 model: 'User',
-                select: 'firstName lastName averageScore reviewQuantity address'
+                select: UserController.partialUserFields
             }
         })
         
