@@ -42,7 +42,8 @@ public class ItemDialogFragment extends DialogFragment {
         int cost = params.getInt("cost");
 //        ((ImageView) dialogContainer.findViewById(R.id.itemImage)).setImageURI(Uri.parse(params.getString("imageSrc")));
         ((TextView) dialogContainer.findViewById(R.id.itemDescription)).setText(params.getString("description"));
-        ((TextView) dialogContainer.findViewById(R.id.cost)).setText(String.valueOf(cost));
+        TextView costView = dialogContainer.findViewById(R.id.cost);
+        costView.setText(String.valueOf(cost));
         ((TextView) dialogContainer.findViewById(R.id.owner)).setText(params.getString("owner"));
         ((RatingBar) dialogContainer.findViewById(R.id.rating)).setRating(params.getInt("rating"));
         final EditText fromDate = dialogContainer.findViewById(R.id.fromDate);
@@ -106,6 +107,8 @@ public class ItemDialogFragment extends DialogFragment {
                             String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1) + "/" + (date.getYear() - 2000);
                             toDate.setText(dateString);
                             Utils.setToDate(Utils.LongToDateFormat(maxDate));
+                            int newCost = (int) (((maxDate - minDate) / 86400000) + 1) * cost;
+                            costView.post(() -> costView.setText(String.valueOf(newCost)));
                         }
                     });
                     builder.create().show();
