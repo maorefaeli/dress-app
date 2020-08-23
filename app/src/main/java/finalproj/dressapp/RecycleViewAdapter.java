@@ -1,6 +1,5 @@
 package finalproj.dressapp;
-<<<<<<< Updated upstream
-=======
+
 import finalproj.dressapp.activities.MyClothesActivity;
 import finalproj.dressapp.activities.ProfileActivity;
 import finalproj.dressapp.fragments.ItemDialogFragment;
@@ -13,7 +12,6 @@ import finalproj.dressapp.httpclient.models.UserRegistration;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
->>>>>>> Stashed changes
 
 import android.app.Activity;
 import android.app.AlertDialog;
