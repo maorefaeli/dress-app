@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ import finalproj.dressapp.Utils;
 import finalproj.dressapp.httpclient.APIClient;
 import finalproj.dressapp.httpclient.APIInterface;
 import finalproj.dressapp.httpclient.models.Product;
+import finalproj.dressapp.httpclient.models.WishlistProduct;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -72,54 +74,71 @@ public class SmartSuggestionsActivity extends DressAppActivity {
                     final EditText fromDate = suggestionContainer.findViewById(R.id.fromDate);
                     final AtomicLong minDate = new AtomicLong(0);
                     final AtomicLong maxDate = new AtomicLong(0);
-                    fromDate.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
-                            LinearLayout dateContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.date_picker, null);
-                            builder.setView(dateContainer);
+                    fromDate.setOnClickListener(v -> {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
+                        LinearLayout dateContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.date_picker, null);
+                        builder.setView(dateContainer);
 
-                            final DatePicker date = dateContainer.findViewById(R.id.date);
-                            minDate.set(Math.max(Utils.DateFormatToLong(suggestion.fromdate), System.currentTimeMillis()));
-                            maxDate.set(Utils.DateFormatToLong(suggestion.todate));
-                            date.setMinDate(minDate.get());
-                            date.setMaxDate(maxDate.get());
+                        final DatePicker date = dateContainer.findViewById(R.id.date);
+                        minDate.set(Math.max(Utils.DateFormatToLong(suggestion.fromdate), System.currentTimeMillis()));
+                        maxDate.set(Utils.DateFormatToLong(suggestion.todate));
+                        date.setMinDate(minDate.get());
+                        date.setMaxDate(maxDate.get());
 
-                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth());
-                                    minDate.set(calendar.getTimeInMillis());
-                                    String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1)
-                                            + "/" + (date.getYear() - 2000);
-                                    fromDate.setText(dateString);
-                                }
-                            });
-                            builder.create().show();
-                        }
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth());
+                                minDate.set(calendar.getTimeInMillis());
+                                String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1)
+                                        + "/" + (date.getYear() - 2000);
+                                fromDate.setText(dateString);
+                            }
+                        });
+                        builder.create().show();
                     });
 
                     final EditText toDate = suggestionContainer.findViewById(R.id.toDate);
-                    toDate.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
-                            LinearLayout dateContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.date_picker, null);
-                            builder.setView(dateContainer);
+                    toDate.setOnClickListener(v -> {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
+                        LinearLayout dateContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.date_picker, null);
+                        builder.setView(dateContainer);
 
-                            final DatePicker date = dateContainer.findViewById(R.id.date);
-                            date.setMinDate(minDate.get());
-                            date.setMaxDate(maxDate.get());
+                        final DatePicker date = dateContainer.findViewById(R.id.date);
+                        date.setMinDate(minDate.get());
+                        date.setMaxDate(maxDate.get());
 
-                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1) + "/" + (date.getYear() - 2000);
-                                    toDate.setText(dateString);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1) + "/" + (date.getYear() - 2000);
+                                toDate.setText(dateString);
+                            }
+                        });
+                        builder.create().show();
+                    });
+                    suggestionContainer.findViewById(R.id.remove).setOnClickListener(view -> {
+                        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+                        WishlistProduct wishlistProduct = new WishlistProduct(suggestion.id);
+                        Call<Boolean> call = apiInterface.removeFromWishlist(wishlistProduct);
+                        call.enqueue(new Callback<Boolean>() {
+                            @Override
+                            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                                if (response.code() == 200) {
+                                    Toast.makeText(getBaseContext(), "Removed from wish list!", Toast.LENGTH_LONG).show();
+                                    suggestions.remove(suggestion);
+                                    suggestionsContainer.removeView(suggestionContainer);
                                 }
-                            });
-                            builder.create().show();
-                        }
+                            }
+
+                            public void onFailure(Call<Boolean> call, Throwable t) {
+                                new AlertDialog.Builder(SmartSuggestionsActivity.this)
+                                        .setTitle("Couldn't delete item: " + wishlistProduct.product + " from wishlist.")
+                                        .setMessage(t.getMessage())
+                                        .show();
+                                call.cancel();
+                            }
+                        });
                     });
                     suggestionsContainer.addView(suggestionContainer);
                 }
