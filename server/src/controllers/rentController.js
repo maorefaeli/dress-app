@@ -83,7 +83,7 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
         await Product.findByIdAndUpdate(productId, { $push: { rentingDates: rentingDate } });
 
         newRent = await newRent.save();
-        console.log("New rent:", rent.id);
+        console.log("New rent:", newRent.id);
 
         if (!isFree) {
             await User.findByIdAndUpdate(fromUser.id, { $inc: { coins: coins * -1 } });
@@ -93,6 +93,7 @@ exports.addRent = async (userId, productId, fromdate, todate, isFree) => {
         
         return newRent;
     } catch (error) {
+        console.log(error);
         throw new Error('Save failed');
     }    
 };
