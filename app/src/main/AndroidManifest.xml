@@ -23,14 +23,16 @@
             android:label="Orders" />
         <activity
             android:name=".activities.MyClothesActivity"
-            android:label="My Clothes" />
+            android:label="My Items" />
         <activity
             android:name=".activities.SmartSuggestionsActivity"
             android:label="Smart Suggestions" />
         <activity
             android:name=".activities.ProfileActivity"
             android:label="Profile" />
-        <activity android:name=".activities.RegisterActivity" />
+        <activity
+            android:name=".activities.RegisterActivity"
+            android:label="Registration" />
         <activity
             android:name=".activities.LoginActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
