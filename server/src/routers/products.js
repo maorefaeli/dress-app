@@ -30,6 +30,7 @@ const kilometersToRadian = function(kilometers){
 router.post('/', async (req, res) => {
     try {
         let { name, radius, minimumPrice, maximumPrice, fromDate, toDate, minimumRating } = req.body;
+        console.log('Search', name, radius, minimumPrice, maximumPrice, fromDate, toDate, minimumRating)
 
         const query = {};
         const userQuery = {};
