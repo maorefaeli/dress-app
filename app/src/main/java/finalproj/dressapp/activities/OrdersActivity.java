@@ -79,7 +79,8 @@ public class OrdersActivity extends DressAppActivity {
             String userFullName = rentProduct.user.firstName + " " + rentProduct.user.lastName;
             ((TextView) productView.findViewById(R.id.owner)).setText(userFullName);
             if (rentProduct.coins > 0) {
-                ((TextView) productView.findViewById(R.id.cost)).setText(rentProduct.coins);
+                TextView textNew = ((TextView) productView.findViewById(R.id.cost));
+                textNew.setText(String.valueOf(rentProduct.coins));
             } else {
                 productView.findViewById(R.id.cost).setVisibility(GONE);
                 productView.findViewById(R.id.freeOrder).setVisibility(View.VISIBLE);
