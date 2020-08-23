@@ -61,12 +61,13 @@ router.post('/finish', auth.isLoggedIn, async (req, res) => {
     try {
         const userId = ObjectID(req.user.id);
         const { score, rent } = req.body;
+
         const rentId = ObjectID(rent);
 
-        const rent = await Rent.findById(rentId).populate('product');
+        const rentEntity = await Rent.findById(rentId).populate('product');
 
         // Check rent belongs to logged in user
-        if (!rent.user.equals(userId)) {
+        if (!rentEntity.user.equals(userId)) {
             return res.status(401).json({"error": "Rent not belongs to user"});
         }
 
@@ -74,12 +75,12 @@ router.post('/finish', auth.isLoggedIn, async (req, res) => {
         await Rent.findByIdAndUpdate(rentId, { isFinished: true, score });
 
         // Update product's owner rating
-        await User.findByIdAndUpdate(rent.product.user, { $inc: { reviewQuantity: 1, reviewSum: score } });
+        await User.findByIdAndUpdate(rentEntity.product.user, { $inc: { reviewQuantity: 1, reviewSum: score } });
 
         // Reward user for give a review
         await User.findByIdAndUpdate(userId, { $inc: { coins: keys.coinsRewardForReview } });
 
-        console.log("Rent", rent.id, "was closed");
+        console.log("Rent", rentEntity.id, "was closed");
 
         res.json(true);
     } catch (e) {
