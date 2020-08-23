@@ -48,6 +48,13 @@ public class ItemDialogFragment extends DialogFragment {
         final EditText fromDate = dialogContainer.findViewById(R.id.fromDate);
         final EditText toDate = dialogContainer.findViewById(R.id.toDate);
 
+        TextView reviewers = dialogContainer.findViewById(R.id.numOfReviewers);
+        String numOfReviews = params.getString("reviewers").isEmpty() ? "0" : params.get("reviewers").toString();
+        String reviewersText = reviewers.getText() + " " +
+                numOfReviews +
+                " reviews";
+        reviewers.setText(reviewersText);
+
         if (availableMoney < cost) {
             fromDate.setEnabled(false);
             toDate.setEnabled(false);
