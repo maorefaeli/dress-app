@@ -16,8 +16,16 @@ const UserController = require('../controllers/userController');
 router.get('/', auth.isLoggedIn, async (req, res) => {
     try {
         const userRents = await Rent.find({ user: ObjectID(req.user.id), isFinished: { $ne: true } })
-            .populate('user', 'firstName lastName averageScore reviewQuantity address')
-            .populate('product');
+            .populate('user', UserController.partialUserFields)
+            .populate({
+                path: 'product',
+                model: 'Product',
+                populate: {
+                    path: 'user',
+                    model: 'User',
+                    select: UserController.partialUserFields
+                }
+            });
         return res.json(userRents || []);
     } catch (error) {
         console.log(error);
@@ -32,7 +40,15 @@ router.get('/history/:id', async (req, res) => {
     try {
         const rentingHistory = await Rent.find({ product: ObjectID(req.params.id) })
             .populate('user', UserController.partialUserFields)
-            .populate('product');
+            .populate({
+                path: 'product',
+                model: 'Product',
+                populate: {
+                    path: 'user',
+                    model: 'User',
+                    select: UserController.partialUserFields
+                }
+            });
         return res.json(rentingHistory || []);
     } catch (error) {
         console.log(error);
