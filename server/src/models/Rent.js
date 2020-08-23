@@ -19,6 +19,11 @@ const RentSchema = new Schema({
     },
     todate: {
         type: Date,
+        required: true,
+        default: 0,
+    },
+    coins: {
+        type: Number,
         required: true
     },
     isFinished: {
