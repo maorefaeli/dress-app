@@ -10,8 +10,22 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import finalproj.dressapp.Utils;
+import finalproj.dressapp.httpclient.models.MyAppContext;
+
+import java.util.List;
 
 import finalproj.dressapp.R;
+import finalproj.dressapp.activities.OrdersActivity;
+import finalproj.dressapp.httpclient.APIClient;
+import finalproj.dressapp.httpclient.APIInterface;
+import finalproj.dressapp.httpclient.models.RentProduct;
+import finalproj.dressapp.httpclient.models.OrderReview;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ReviewDialogFragment extends DialogFragment {
     private RatingBar ratingBar;
@@ -42,7 +56,28 @@ public class ReviewDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 int rating = ratingBar.getNumStars();
-                // send rating to server
+                String rentId = Utils.getRentId();
+                OrderReview orderReview = new OrderReview(rentId, rating);
+                APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+                Call<Boolean> call = apiInterface.rentFinish(orderReview);
+                call.enqueue(new Callback<Boolean>() {
+                    @Override
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        if (response.code() == 200) {
+                            Toast.makeText(MyAppContext.getContext(), "Thank you for the feedback! You got 10 coins.", Toast.LENGTH_LONG).show();
+                            Utils.setRentId("");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Boolean> call, Throwable t) {
+                        new AlertDialog.Builder(MyAppContext.getContext())
+                                .setTitle("failure")
+                                .setMessage(t.getMessage())
+                                .show();
+                        call.cancel();
+                    }
+                });
 
                 dialog.dismiss();
             }

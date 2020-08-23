@@ -41,6 +41,7 @@ import retrofit2.Response;
 
 public class Utils {
     static SimpleDateFormat dateformatYYYYMMDD = new SimpleDateFormat("yyyy-MM-dd");
+    static String rentId;
     static String productId;
     static String fromDate;
     static String toDate;
@@ -116,18 +117,14 @@ public class Utils {
         editor.commit();
     }
 
-    // public static String getUserId(Context ctx)
-    // {
-    //     return getSharedPreferences(ctx).getString(PREF_USER_ID, "");
-    // }
-    
-    // public static void setUserId(Context ctx, String userid) 
-    // {
-    //     SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
-    //     editor.putString(PREF_USER_ID, userid);
-    //     editor.commit();
-    // }
+    public static String getRentId(){
+        return rentId;
+    }
 
+    public static void setRentId(String newRentId) {
+        rentId = newRentId;
+    }
+    
     public static String getUserCookie(Context ctx)
     {
         return getSharedPreferences(ctx).getString(PREF_USER_COOKIE, "");

@@ -9,6 +9,9 @@ import finalproj.dressapp.httpclient.models.Product;
 import java.util.Date;
 
 public class RentProduct {
+    @SerializedName("id")
+    public String id;
+
     @SerializedName("product")
     public ProductNotPopulated product;
 
