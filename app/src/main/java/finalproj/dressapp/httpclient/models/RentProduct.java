@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class RentProduct {
     @SerializedName("product")
-    public Product product;
+    public ProductNotPopulated product;
 
     @SerializedName("user")
     public UserRegistration user;
