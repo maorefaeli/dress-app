@@ -330,6 +330,8 @@ exports.requestProductOnCycle = async (cycleId, userId, productId, fromDate, toD
     const validFromDate = getDateComponent(fromDate);
     const validToDate = getDateComponent(toDate);
 
+    console.log("request suggestion", productId, fromDate, toDate);
+
     const delta = validFromDate - validToDate;
     if (getAmountOfDays(delta) > MAXIMUM_DAYS_FOR_SUGGESTION_REQUEST) {
         throw new Error(`Order dates are more than ${MAXIMUM_DAYS_FOR_SUGGESTION_REQUEST} days`);

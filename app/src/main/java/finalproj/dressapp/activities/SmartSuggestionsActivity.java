@@ -36,6 +36,8 @@ import retrofit2.Response;
 public class SmartSuggestionsActivity extends DressAppActivity {
     private List<Product> suggestions = new ArrayList<>();
     private LinearLayout suggestionsContainer;
+    long startDateLong;
+    long endDateLong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +98,7 @@ public class SmartSuggestionsActivity extends DressAppActivity {
                                 String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1)
                                         + "/" + (date.getYear() - 2000);
                                 fromDate.setText(dateString);
+                                startDateLong = calendar.getTimeInMillis();
                             }
                         });
                         builder.create().show();
@@ -114,6 +117,8 @@ public class SmartSuggestionsActivity extends DressAppActivity {
                         builder.setPositiveButton("OK", (dialog, which) -> {
                             String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1) + "/" + (date.getYear() - 2000);
                             toDate.setText(dateString);
+                            Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth());
+                            endDateLong = calendar.getTimeInMillis();
                         });
                         builder.create().show();
                     });
@@ -144,7 +149,7 @@ public class SmartSuggestionsActivity extends DressAppActivity {
 
                     suggestionContainer.findViewById(R.id.placeRequest).setOnClickListener(view -> {
                         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-                        AddRent rentProduct = new AddRent(suggestion.id, fromDate.getText().toString(), toDate.getText().toString());
+                        AddRent rentProduct = new AddRent(suggestion.id, String.valueOf(startDateLong), String.valueOf(endDateLong));
                         Call <Boolean> call = apiInterface.requestSuggestion(rentProduct);
                         call.enqueue(new Callback<Boolean>() {
                             @Override
