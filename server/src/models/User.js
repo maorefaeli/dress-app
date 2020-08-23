@@ -47,6 +47,11 @@ const UserSchema = new Schema({
         required: false,
         default: 0
     },
+    averageScore: {
+        type: Number,
+        required: false,
+        default: 0
+    },
     coins: {
         type: Number,
         required: false,
@@ -81,9 +86,9 @@ UserSchema.set('toJSON', {
     transform: function (doc, ret) { delete ret._id }
 });
 
-UserSchema.virtual('averageScore').get(function () {
-    return this.reviewQuantity ? this.reviewSum / this.reviewQuantity : 0;
-});
+// UserSchema.virtual('averageScore').get(function () {
+//     return this.reviewQuantity ? this.reviewSum / this.reviewQuantity : 0;
+// });
 
 UserSchema.index({ username: 1 }, { unique: true });
 UserSchema.index({ 'wishlist.user': 1 });
