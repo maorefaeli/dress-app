@@ -13,45 +13,39 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
             android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:padding="10dp"
-                android:src="@drawable/app_logo" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/search"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:hint="@string/search"
+                    android:paddingTop="10dp" />
 
                 <TextView
                     android:id="@+id/current_money"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
+                    android:layout_marginStart="10dp"
                     android:drawableEnd="@drawable/outline_monetization_on_black_18dp"
                     android:drawablePadding="3dp"
                     android:drawableTint="@color/duskYellow"
                     android:paddingTop="15dp"
                     android:textSize="22sp" />
-
-                <EditText
-                    android:id="@+id/search"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:hint="@string/search"
-                    android:paddingTop="10dp" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bottom_border"
             android:gravity="center_horizontal">
 
             <LinearLayout
@@ -75,6 +69,75 @@
                     android:isIndicator="false"
                     android:stepSize="1"
                     android:theme="@style/RatingBar" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/minDate" />
+
+                <EditText
+                    android:id="@+id/minDate"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:calendarViewShown="false"
+                    android:datePickerMode="spinner"
+                    android:gravity="center"
+                    android:inputType="datetime"
+                    android:textIsSelectable="true" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/maxDate"/>
+
+                <EditText
+                    android:id="@+id/maxDate"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:calendarViewShown="false"
+                    android:datePickerMode="spinner"
+                    android:gravity="center"
+                    android:inputType="datetime"
+                    android:textIsSelectable="true" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bottom_border"
+            android:gravity="center_horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/minPrice" />
+
+                <EditText
+                    android:id="@+id/minPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:inputType="number" />
             </LinearLayout>
 
             <LinearLayout

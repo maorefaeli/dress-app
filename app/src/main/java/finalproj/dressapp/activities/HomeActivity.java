@@ -2,17 +2,23 @@ package finalproj.dressapp.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SyncRequest;
+import android.icu.util.GregorianCalendar;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 import finalproj.dressapp.R;
 import finalproj.dressapp.RecycleViewAdapter;
@@ -39,6 +45,44 @@ public class HomeActivity extends DressAppActivity {
         setContentView(R.layout.activity_home);
 
         Utils.loadUserWishlistItems();
+
+        AtomicLong minDateAvailable = new AtomicLong(System.currentTimeMillis());
+
+        EditText minDate = findViewById(R.id.minDate);
+        minDate.setOnClickListener((View.OnClickListener) view -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LinearLayout dateContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.date_picker, null);
+            builder.setView(dateContainer);
+
+            final DatePicker date = dateContainer.findViewById(R.id.date);
+            date.setMinDate(minDateAvailable.get());
+
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                android.icu.util.Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth());
+                minDateAvailable.set(calendar.getTimeInMillis());
+                String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1)
+                        + "/" + (date.getYear() - 2000);
+                minDate.setText(dateString);
+            });
+            builder.create().show();
+        });
+
+        EditText maxDate = findViewById(R.id.maxDate);
+        maxDate.setOnClickListener(view -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LinearLayout dateContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.date_picker, null);
+            builder.setView(dateContainer);
+
+            final DatePicker date = dateContainer.findViewById(R.id.date);
+            date.setMinDate(minDateAvailable.get());
+
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1)
+                        + "/" + (date.getYear() - 2000);
+                maxDate.setText(dateString);
+            });
+            builder.create().show();
+        });
 
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         Call<List<Product>> call = apiInterface.getAllItems();
@@ -83,6 +127,7 @@ public class HomeActivity extends DressAppActivity {
             int maxPrice = price.isEmpty() ? 0 : Integer.parseInt(price);
             String radius = ((TextView) findViewById(R.id.radius)).getText().toString();
             int maxRadius = radius.isEmpty() ? 0 : Integer.parseInt(radius);
+
             // TODO: apply search params
         });
         toggle = Utils.setNavigation(this, (DrawerLayout) findViewById(R.id.activity_main), getSupportActionBar());
