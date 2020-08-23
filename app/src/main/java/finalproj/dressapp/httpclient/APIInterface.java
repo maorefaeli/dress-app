@@ -43,9 +43,6 @@ public interface APIInterface {
     @POST("products/")
     Call<List<Product>> getAllItems(@Body SearchObject searchObject);
 
-    @POST("products/{id}")
-    Call<Product> getProductById(@Path("id") String productId);
-
     @GET("products/user/me")
     Call<List<Product>> getAllMyItems();
 
