@@ -233,8 +233,8 @@ router.post('/close/:id', auth.isLoggedIn, async (req, res) => {
 router.post('/edit', auth.isLoggedIn, async (req, res) => {
     try {
         const userId = ObjectID(req.user.id);
-        const productId = ObjectID(req.params.id);
         const { id, name, price, fromdate, todate } = req.body;
+        const productId = ObjectID(id);
 
         let product = await Product.findById(productId);
         if (!product.user.equals(userId)) {
