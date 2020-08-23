@@ -8,6 +8,9 @@ import finalproj.dressapp.httpclient.models.Product;
 import finalproj.dressapp.httpclient.models.Wishlist;
 
 public class UserRegistration {
+    @SerializedName("id")
+    public String id;
+
     @SerializedName("firstName")
     public String firstName;
 

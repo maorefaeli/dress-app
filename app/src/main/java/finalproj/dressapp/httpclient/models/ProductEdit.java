@@ -4,10 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Product {
-    @SerializedName("user")
-    public UserModel user;
-
+public class ProductEdit {
     @SerializedName("id")
     public String id;
 
@@ -26,14 +23,12 @@ public class Product {
     @SerializedName("image")
     public String image;
 
-    @SerializedName("rentingDates")
-    public List<RentingDate> rentingDates;
-
-    public Product(String productName, Number price, String fromDate, String toDate, String image) {
+    public ProductEdit(String newId, String productName, Number price, String fromDate, String toDate) {
+        this.id = newId;
         this.name = productName;
         this.price = price;
         this.fromdate = fromDate;
         this.todate = toDate;    
-        this.image = image;
+        // this.image = image;
     }
 }

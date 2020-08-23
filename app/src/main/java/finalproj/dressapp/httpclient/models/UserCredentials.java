@@ -6,7 +6,7 @@ public class UserCredentials {
     @SerializedName("username")
     public String username;
 
-    @SerializedName("password")
+    @SerializedName("password") 
     public String password;
 
     public UserCredentials(String username, String password) {

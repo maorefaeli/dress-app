@@ -9,6 +9,7 @@ import finalproj.dressapp.httpclient.models.UserCredentials;
 import finalproj.dressapp.httpclient.models.UserRegistration;
 import finalproj.dressapp.httpclient.models.SearchObject;
 import finalproj.dressapp.httpclient.models.Product;
+import finalproj.dressapp.httpclient.models.ProductEdit;
 import finalproj.dressapp.httpclient.models.WishlistProduct;
 import finalproj.dressapp.httpclient.models.OrderReview;
 import finalproj.dressapp.Utils;
@@ -52,6 +53,9 @@ public interface APIInterface {
 
     @POST("products/add")
     Call<Boolean> doAddItem(@Body Product product);
+
+    @POST("products/edit")
+    Call<Boolean> doEditProduct(@Body ProductEdit productEdit);
 
     @GET("products/close/{productid}")
     Call<Product> closeProduct(@Path("product") String userid);
