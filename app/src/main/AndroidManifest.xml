@@ -43,7 +43,7 @@
         <activity
             android:name=".activities.HomeActivity"
             android:icon="@drawable/app_logo"
-            android:label="Dress App" />
+            android:label="Home" />
     </application>
 
 </manifest>

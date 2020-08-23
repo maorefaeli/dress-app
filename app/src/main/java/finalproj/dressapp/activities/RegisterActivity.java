@@ -30,7 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText mLastNameView;
     private EditText mPasswordView;
     private EditText mConfirmPassView;
-    private AutoCompleteTextView mEmailView;
+    private EditText mEmailView;
     private TextView mLinkToLogin;
     private Button mRegister;
 
@@ -47,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
         mLastNameView = (EditText) findViewById(R.id.lastName);
         mPasswordView = (EditText) findViewById(R.id.password);
         mConfirmPassView = (EditText) findViewById(R.id.confirmPassword);
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView = findViewById(R.id.email);
         mLinkToLogin = (TextView) findViewById(R.id.linkToLogin);
 
         mLinkToLogin.setOnClickListener(new OnClickListener() {
