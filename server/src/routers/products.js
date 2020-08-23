@@ -74,6 +74,8 @@ router.get('/', async (req, res) => {
             products = products.filter(p => p.user.averageScore >= minimumRating);
         }
 
+        console.log('Returned', products.length, 'products on search');
+
         return res.json(products);
     } catch (error){
         console.log(error);
