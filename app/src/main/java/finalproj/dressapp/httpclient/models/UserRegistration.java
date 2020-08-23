@@ -38,6 +38,9 @@ public class UserRegistration {
     @SerializedName("averageScore")
     public String averageScore;
 
+    @SerializedName("coins")
+    public String coins;
+
     public UserRegistration(String firstName, String lastName, String username, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
