@@ -28,4 +28,4 @@ exports.isFunction = isFunction;
 
 exports.isPromise = (value) => !!value && isFunction(value.then) && isFunction(value.catch);
 
-exports.isObjectEmpty = (value) => Object.keys(obj).length === 0;
+exports.isObjectEmpty = (value) => Object.keys(value).length === 0;
