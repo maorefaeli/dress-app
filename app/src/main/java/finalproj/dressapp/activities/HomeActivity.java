@@ -25,6 +25,7 @@ import finalproj.dressapp.RecycleViewAdapter;
 import finalproj.dressapp.Utils;
 import finalproj.dressapp.httpclient.APIClient;
 import finalproj.dressapp.httpclient.APIInterface;
+import finalproj.dressapp.httpclient.models.AddRent;
 import finalproj.dressapp.httpclient.models.Product;
 import finalproj.dressapp.httpclient.models.RentProduct;
 import finalproj.dressapp.httpclient.models.SearchObject;
@@ -210,7 +211,8 @@ public class HomeActivity extends DressAppActivity {
         String fromDate = Utils.getFromDate();
         String toDate = Utils.getToDate();
         String productId = Utils.getProductId();
-        RentProduct rentProduct = new RentProduct(productId, fromDate, toDate);
+
+        AddRent rentProduct = new AddRent(productId, fromDate, toDate);
 
         if (fromDate == null || fromDate.isEmpty() ||
                 toDate == null || toDate.isEmpty()) {
@@ -228,9 +230,12 @@ public class HomeActivity extends DressAppActivity {
                         Utils.setProductId("");
                         Utils.setFromDate("");
                         Utils.setToDate("");
+                        Toast.makeText(getApplicationContext(),
+                                "Order has been placed!", Toast.LENGTH_SHORT)
+                                .show();
                     } else {
                         new AlertDialog.Builder(HomeActivity.this)
-                                .setTitle("Couldn't rent item")
+                                .setTitle("Couldn't rent item.")
                                 .setMessage(response.message())
                                 .show();
                     }
@@ -238,7 +243,7 @@ public class HomeActivity extends DressAppActivity {
 
                 public void onFailure(Call<Boolean> call, Throwable t) {
                     new AlertDialog.Builder(HomeActivity.this)
-                            .setTitle("Couldn't rent item: " + productId)
+                            .setTitle("Couldn't rent item.")
                             .setMessage(t.getMessage())
                             .show();
                     Utils.setProductId("");
