@@ -87,7 +87,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableEnd="@drawable/outline_monetization_on_black_18dp"
-        android:drawableTint="@color/colorCoin"
+        android:drawableTint="@color/duskYellow"
         android:gravity="center_vertical"
         android:hint="@string/cost" />
 
