@@ -209,7 +209,7 @@ const getMaxFreeDateForOpening = (product) => {
     return openDate;
 };
 
-// @route POST /products/close
+// @route POST /products/close/:id
 // @desc Close products for future orders
 // @access Private
 router.post('/close/:id', auth.isLoggedIn, async (req, res) => {
@@ -224,16 +224,8 @@ router.post('/close/:id', auth.isLoggedIn, async (req, res) => {
 
         const closeDate = getMinFreeDateForClosing(product);
 
-        // Decide if delete or close the product for future orders
-        if (closeDate = product.fromDate) {
-            // Delete the product since it has never been ordered
-            await Product.findByIdAndRemove(productId);
-            await WishlistController.handleProductDeletion(productId);
-            console.log("Deleting product", product.id);
-        } else {
-            await Product.findByIdAndUpdate(productId, { todate: closeDate });
-            close.log("Update product", product.id, ": todate changed to", closeDate);
-        }
+        await Product.findByIdAndUpdate(productId, { todate: closeDate });
+        console.log("Update product", product.id, ": todate changed to", closeDate);
         
         res.json(true);
     } catch (e) {

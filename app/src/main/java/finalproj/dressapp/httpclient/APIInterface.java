@@ -48,8 +48,8 @@ public interface APIInterface {
     @GET("products/user/me")
     Call<List<Product>> getAllMyItems();
 
-    @GET("products/user/{userid}")
-    Call<List<Product>> getAllSpecificUserItems(@Path("username") String userid);
+    @GET("products/user/{user}")
+    Call<List<Product>> getAllSpecificUserItems(@Path("user") String userid);
 
     @POST("products/add")
     Call<Boolean> doAddItem(@Body Product product);
@@ -57,8 +57,8 @@ public interface APIInterface {
     @POST("products/edit")
     Call<Boolean> doEditProduct(@Body ProductEdit productEdit);
 
-    @GET("products/close/{productid}")
-    Call<Product> closeProduct(@Path("product") String userid);
+    @POST("products/close/{id}")
+    Call<Product> closeProduct(@Path("id") String productId);
 
     @GET("users/profile")
     Call<UserRegistration> getCurrentUserDetails();
