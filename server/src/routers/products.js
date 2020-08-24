@@ -252,8 +252,8 @@ router.post('/edit', auth.isLoggedIn, async (req, res) => {
         product = {
             name,
             price,
-            fromdate: getDateComponent(fromdate),
-            todate: getDateComponent(todate)
+            fromdate: getDateComponent(Number(fromdate)),
+            todate: getDateComponent(Number(todate))
         };
 
         const error = isProductContainErrors(product);
