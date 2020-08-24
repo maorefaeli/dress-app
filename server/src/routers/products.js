@@ -229,11 +229,11 @@ router.post('/close/:id', auth.isLoggedIn, async (req, res) => {
         await Product.findByIdAndUpdate(productId, { todate: closeDate });
         console.log("Update product", product.id, ": todate changed to", closeDate);
         
-        res.json(true);
+        return res.json(true);
     } catch (e) {
         console.log(e);
         error = 'Problem saving product';
-        res.status(400).json({ error });
+        return res.status(400).json({ error });
     }
 });
 
@@ -280,7 +280,7 @@ router.post('/edit', auth.isLoggedIn, async (req, res) => {
         return res.json(true);
     } catch (error){
         console.log(error);
-        res.status(400).json({"error":"Problem editing product"});
+        return res.status(400).json({"error":"Problem editing product"});
     }
 });
 
