@@ -9,7 +9,8 @@ import restProvider from 'ra-data-simple-rest';
 
 //const dataProvider = jsonServerProvider("https://jsonplaceholder.typicode.com");
 // const dataProvider = jsonServerProvider("https://dress-app.herokuapp.com");
-const dataProvider = restProvider("http://localhost:3000");
+// const dataProvider = restProvider("http://localhost:3000");
+const dataProvider = restProvider("https://dress-app.herokuapp.com");
 
 class App extends Component {
   render() {
