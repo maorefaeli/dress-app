@@ -7,7 +7,7 @@ export const UserList = props => (
             <EmailField source="username" label="Email"/>
             <FunctionField label="Name" render={record => `${record.firstName || ''} ${record.lastName || ''}`} />
             <TextField source="address" label="Address" />
-            <NumberField source="averageScore" label="Rating" />
+            <FunctionField label="Rating" render={record => `${record.averageScore} / 5`} />
             <NumberField source="reviewQuantity" label="Review Quantity" />
             <NumberField source="coins" label="Coins" />
         </Datagrid>
