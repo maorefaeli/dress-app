@@ -33,6 +33,10 @@ const RentSchema = new Schema({
     score: {
         type: Number,
         required: false
+    },
+    inDispute: {
+        type: Boolean,
+        required: false
     }
 });
 
