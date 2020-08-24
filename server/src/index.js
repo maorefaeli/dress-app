@@ -5,6 +5,7 @@ const session = require('express-session');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const MongoStore = require('connect-mongo')(session);
+const cors = require('cors');
 const morgan = require('morgan');
 const keys = require('./config/keys');
 
@@ -72,6 +73,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(morgan('dev'))
 app.disable('x-powered-by');
+app.use(cors());
 
 // Load all routers
 app.use(require('./routers'));

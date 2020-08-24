@@ -25,6 +25,21 @@ const kilometersToRadian = function(kilometers){
     return kilometers / earthRadiusInKilometers;
 };
 
+
+router.get('/', async (req, res) => {
+    try {
+        const all = await Product.find().populate('user').sort({_id: -1});
+        res.set("x-total-count", all.length);
+        res.set("Content-Range", all.length);
+        res.header('Access-Control-Expose-Headers', 'X-Total-Count');
+        res.header('Access-Control-Expose-Headers', 'Content-Range');
+        return res.json(all);
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({error});
+    }
+});
+
 // @route POST /products
 // @desc Search for products
 // @access Public

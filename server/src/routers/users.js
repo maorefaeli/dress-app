@@ -6,6 +6,20 @@ const User = require('../models/User');
 const keys = require('../config/keys');
 const UserController = require('../controllers/userController');
 
+router.get('/', async (req, res) => {
+    try {
+        const all = await User.find().sort({_id: -1});
+        res.set("x-total-count", all.length);
+        res.set("Content-Range", all.length);
+        res.header('Access-Control-Expose-Headers', 'X-Total-Count');
+        res.header('Access-Control-Expose-Headers', 'Content-Range');
+        return res.json(all);
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({error});
+    }
+});
+
 // @route POST users/register
 // @desc Register user
 // @access Public

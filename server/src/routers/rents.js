@@ -10,20 +10,66 @@ const User = require('../models/User');
 const RentController = require('../controllers/rentController');
 const UserController = require('../controllers/userController');
 
+router.get('/all', async (req, res) => {
+    try {
+        const all = await Rent.find().populate('user', UserController.fullUserFields)
+        .populate({
+            path: 'product',
+            model: 'Product',
+            populate: {
+                path: 'user',
+                model: 'User',
+                select: UserController.fullUserFields
+            }
+        }).sort({_id: -1});
+        res.set("x-total-count", all.length);
+        res.set("Content-Range", all.length);
+        res.header('Access-Control-Expose-Headers', 'X-Total-Count');
+        res.header('Access-Control-Expose-Headers', 'Content-Range');
+        return res.json(all);
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({error});
+    }
+});
+
+router.get('/disputes', async (req, res) => {
+    try {
+        const all = await Rent.find({ inDispute: true }).populate('user', UserController.fullUserFields)
+        .populate({
+            path: 'product',
+            model: 'Product',
+            populate: {
+                path: 'user',
+                model: 'User',
+                select: UserController.fullUserFields
+            }
+        }).sort({_id: -1});
+        res.set("x-total-count", all.length);
+        res.set("Content-Range", all.length);
+        res.header('Access-Control-Expose-Headers', 'X-Total-Count');
+        res.header('Access-Control-Expose-Headers', 'Content-Range');
+        return res.json(all);
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({error});
+    }
+});
+
 // @route GET rents/
 // @desc Get all user rents
 // @access Private
 router.get('/', auth.isLoggedIn, async (req, res) => {
     try {
         const userRents = await Rent.find({ user: ObjectID(req.user.id) })
-            .populate('user', UserController.partialUserFields)
+            .populate('user', UserController.fullUserFields)
             .populate({
                 path: 'product',
                 model: 'Product',
                 populate: {
                     path: 'user',
                     model: 'User',
-                    select: UserController.partialUserFields
+                    select: UserController.fullUserFields
                 }
             }).sort({isFinished: 1, _id: -1});
         return res.json(userRents || []);
@@ -39,14 +85,14 @@ router.get('/', auth.isLoggedIn, async (req, res) => {
 router.get('/history/:id', async (req, res) => {
     try {
         const rentingHistory = await Rent.find({ product: ObjectID(req.params.id) })
-            .populate('user', UserController.partialUserFields)
+            .populate('user', UserController.fullUserFields)
             .populate({
                 path: 'product',
                 model: 'Product',
                 populate: {
                     path: 'user',
                     model: 'User',
-                    select: UserController.partialUserFields
+                    select: UserController.fullUserFields
                 }
             }).sort({isFinished: 1, _id: -1});
         return res.json(rentingHistory || []);
