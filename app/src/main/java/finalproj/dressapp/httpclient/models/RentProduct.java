@@ -27,6 +27,12 @@ public class RentProduct {
     @SerializedName("coins")
     public int coins;
 
+    @SerializedName("score")
+    public int score;
+
+    @SerializedName("isFinished")
+    public boolean isFinished;
+
     @SerializedName("inDispute")
     public boolean inDispute;
 
