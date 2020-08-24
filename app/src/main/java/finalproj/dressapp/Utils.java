@@ -46,6 +46,10 @@ public class Utils {
     static String fromDate;
     static String toDate;
     static int userMoney;
+    static String userEmail;
+    static String userAddress;
+    static String userFirstName;
+    static String userLastName;
     static Boolean isGuest;
     static Boolean isWishlistActivity = false;
     static ProgressDialog dialog = null;
@@ -144,6 +148,19 @@ public class Utils {
         return userMoney;
     }
 
+    public static String getUserEmail() {
+        return userEmail;
+    }
+    public static String getUserAddress() {
+        return userAddress;
+    }
+    public static String getUserFirstName() {
+        return userFirstName;
+    }
+    public static String getUserLastName() {
+        return userLastName;
+    }
+
     public static void loadUserDetails() {
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         final Call<UserRegistration> userCall = apiInterface.getCurrentUserDetails();
@@ -154,6 +171,10 @@ public class Utils {
                     UserRegistration userDetails = response.body();
                     String coins = userDetails.coins;
                     userMoney = Integer.parseInt(coins);
+                    userEmail = userDetails.username;
+                    userAddress = userDetails.address;
+                    userFirstName = userDetails.firstName;
+                    userLastName = userDetails.lastName;
                 }
             }
 

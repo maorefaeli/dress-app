@@ -38,7 +38,7 @@ public class APIClient {
             OkHttpClient client = builder.build();
 
             retrofit = new Retrofit.Builder()
-                    //.baseUrl("http://192.168.1.14:3000/")
+                    //.baseUrl("http://10.0.0.22:3000/")
                     .baseUrl("https://dress-app.herokuapp.com/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)

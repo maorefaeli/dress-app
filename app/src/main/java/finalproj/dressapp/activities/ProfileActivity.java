@@ -77,33 +77,13 @@ public class ProfileActivity extends DressAppActivity implements  ActivityCompat
                 }
             }
         });
-        
-        final String userEmail = Utils.getUserName(getApplicationContext());
-        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-        final Call <UserRegistration> call = apiInterface.getCurrentUserDetails();
-        call.enqueue(new Callback<UserRegistration>() {
-            public void onResponse(Call <UserRegistration> call, Response <UserRegistration> response) {
-                if (response.code() == 200) {
-
-                    UserRegistration userDetails = response.body();
-                    String upperString = userDetails.firstName.substring(0, 1).toUpperCase() + userDetails.firstName.substring(1).toLowerCase();
-                    mFirstNameView.setText(upperString);
-                    upperString = userDetails.lastName.substring(0, 1).toUpperCase() + userDetails.lastName.substring(1).toLowerCase();
-                    mLastNameView.setText(upperString);
-                    mEmailView.setText(userDetails.username);
-                    mAddressView.setText(userDetails.address);
-                    mMoneyView.setText(userDetails.coins);
-                }
-            }
-
-            public void onFailure(Call<UserRegistration> call, Throwable t) {
-                new AlertDialog.Builder(ProfileActivity.this)
-                    .setTitle("Could not get user details for: " + userEmail)
-                    .setMessage(t.getMessage())
-                    .show();
-                call.cancel();
-            }
-        });
+        String upperString = Utils.getUserFirstName().substring(0, 1).toUpperCase() + Utils.getUserFirstName().substring(1).toLowerCase();
+        mFirstNameView.setText(upperString);
+        upperString = Utils.getUserLastName().substring(0, 1).toUpperCase() + Utils.getUserLastName().substring(1).toLowerCase();
+        mLastNameView.setText(upperString);
+        mEmailView.setText(Utils.getUserName(getApplicationContext()));
+        mAddressView.setText(Utils.getUserAddress());
+        mMoneyView.setText(Integer.toString(Utils.getUserMoney()));
     }
 
     public void updateUserDetails(View view) {
@@ -155,6 +135,7 @@ public class ProfileActivity extends DressAppActivity implements  ActivityCompat
                     if (response.code() == 200) {
                         Boolean didUpdate = response.body();
                         if (didUpdate) {
+                            Utils.loadUserDetails();
                             Toast.makeText(getApplicationContext(),
                                     "Profile updated!", Toast.LENGTH_SHORT)
                                     .show();
