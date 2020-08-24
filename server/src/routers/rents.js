@@ -61,6 +61,7 @@ router.get('/disputes', async (req, res) => {
 // @access Private
 router.get('/', auth.isLoggedIn, async (req, res) => {
     try {
+        console.log("get all user rents", req.user.id);
         const userRents = await Rent.find({ user: ObjectID(req.user.id) })
             .populate('user', UserController.fullUserFields)
             .populate({
@@ -72,6 +73,9 @@ router.get('/', auth.isLoggedIn, async (req, res) => {
                     select: UserController.fullUserFields
                 }
             }).sort({isFinished: 1, _id: -1});
+
+        console.log("returned", (userRents || []).length, "results for user", req.user.id);
+
         return res.json(userRents || []);
     } catch (error) {
         console.log(error);
