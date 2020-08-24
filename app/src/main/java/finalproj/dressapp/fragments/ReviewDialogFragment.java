@@ -115,7 +115,7 @@ public class ReviewDialogFragment extends DialogFragment {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                 if (response.code() == 200) {
-                    Toast.makeText(MyAppContext.getContext(), "Thank you for the feedback! You got 10 coins.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MyAppContext.getContext(), "+10 coins", Toast.LENGTH_LONG).show();
                     Utils.setRentId("");
                     Utils.loadUserDetails();
                     activity.recreate();

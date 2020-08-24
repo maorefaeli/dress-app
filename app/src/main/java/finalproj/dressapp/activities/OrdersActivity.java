@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -71,8 +72,8 @@ public class OrdersActivity extends DressAppActivity {
 
     private void showProducts() {
         noOrdersText.setVisibility(products.size() == 0 ? View.VISIBLE : GONE);
+        ordersContainer.removeAllViews();
         for (final RentProduct rentProduct : products) {
-            ordersContainer.removeAllViews();
             LinearLayout productView = (LinearLayout) getLayoutInflater().inflate(R.layout.order_template, null);
             ((TextView)productView.findViewById(R.id.orderTitle)).setText(rentProduct.product.name);
             String dates = Utils.DateFormatToShow(rentProduct.fromdate) + "-" + Utils.DateFormatToShow(rentProduct.todate);
@@ -95,6 +96,9 @@ public class OrdersActivity extends DressAppActivity {
             } else if (rentProduct.isFinished) {
                 finishButton.setText(R.string.finished);
                 finishButton.setEnabled(true);
+                RatingBar ratingBar = productView.findViewById(R.id.ratingBar);
+                ratingBar.setVisibility(View.VISIBLE);
+                ratingBar.setRating(rentProduct.score);
             } else {
                 finishButton.setOnClickListener(view -> {
                     CompleteOrderDialogFragment dialogFragment = new CompleteOrderDialogFragment();
