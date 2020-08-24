@@ -214,8 +214,10 @@ const getMaxFreeDateForOpening = (product) => {
 // @access Private
 router.post('/close/:id', auth.isLoggedIn, async (req, res) => {
     try {
+
         const userId = ObjectID(req.user.id);
         const productId = ObjectID(req.params.id);
+        console.log("closing product:", userId.toString(), "for user", productId.toString());
         const product = await Product.findById(productId);
 
         if (!product.user.equals(userId)) {
