@@ -112,7 +112,9 @@ router.get('/history/:id', async (req, res) => {
 router.post('/add', auth.isLoggedIn, async (req, res) => {
     try {
         const { product, fromdate, todate } = req.body;
+        console.log("Ask for rent", product, fromdate, todate);
         await RentController.addRent(req.user.id, product, fromdate, todate);
+        console.log("Rented", product, fromdate, todate);
         res.json(true);
     } catch (e) {
         console.log(e);
