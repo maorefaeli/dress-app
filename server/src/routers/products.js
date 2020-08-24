@@ -63,10 +63,6 @@ router.post('/', async (req, res) => {
             query.price = { ...query.price, $lte: Number(maximumPrice) };
         }
 
-        if (minimumRating) {
-            query.averageScore = { $gte: Number(minimumRating) };
-        }
-
         // Default to today if 'fromDate' not provided
         fromDate = getDateComponent(fromDate ? parseSearch(fromDate) : Date.now());
 
@@ -96,6 +92,10 @@ router.post('/', async (req, res) => {
                     };
                 }
             }
+        }
+
+        if (minimumRating) {
+            userQuery.averageScore = { $gte: Number(minimumRating) };
         }
 
         if (!validators.isObjectEmpty(userQuery)) {
