@@ -235,7 +235,7 @@ router.post('/close/:id', auth.isLoggedIn, async (req, res) => {
     }
 });
 
-//  @route POST /products/:id
+//  @route POST /products/edit
 //  @desc Edit specific product
 //  @access Private
 router.post('/edit', auth.isLoggedIn, async (req, res) => {
@@ -243,6 +243,8 @@ router.post('/edit', auth.isLoggedIn, async (req, res) => {
         const userId = ObjectID(req.user.id);
         const { id, name, price, fromdate, todate } = req.body;
         const productId = ObjectID(id);
+
+        console.log("edit product:", id, name, price, fromdate, todate);
 
         let product = await Product.findById(productId);
         if (!product.user.equals(userId)) {
