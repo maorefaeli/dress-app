@@ -274,6 +274,7 @@ router.post('/edit', auth.isLoggedIn, async (req, res) => {
         }
 
         await Product.findByIdAndUpdate(productId, product);
+        console.log("product was edited:", product.id, product.name, product.price, product.fromdate, product.todate);
         return res.json(true);
     } catch (error){
         console.log(error);
