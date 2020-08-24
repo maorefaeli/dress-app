@@ -15,8 +15,11 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import finalproj.dressapp.R;
 import finalproj.dressapp.Utils;
+import okhttp3.internal.Util;
 
 /**
  * Created by Shai on 19/05/2020.
@@ -97,7 +100,7 @@ public class ItemDialogFragment extends DialogFragment {
                     Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDayOfMonth());
                     String dateString = date.getDayOfMonth() + "/" + (date.getMonth() + 1) + "/" + (date.getYear() - 2000);
                     toDate.setText(dateString);
-                    Utils.setToDate(Utils.LongToDateFormat(maxDate));
+                    Utils.setToDate(Utils.LongToDateFormat(calendar.getTimeInMillis()));
                     int newCost = (int) (((calendar.getTimeInMillis() - minDate) / 86400000) + 1) * cost;
                     costView.post(() -> costView.setText(String.valueOf(newCost)));
                 });
