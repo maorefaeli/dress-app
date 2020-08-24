@@ -58,7 +58,7 @@ public interface APIInterface {
     Call<Boolean> doEditProduct(@Body ProductEdit productEdit);
 
     @POST("products/close/{id}")
-    Call<Product> closeProduct(@Path("id") String productId);
+    Call<Boolean> closeProduct(@Path("id") String productId);
 
     @GET("users/profile")
     Call<UserRegistration> getCurrentUserDetails();
