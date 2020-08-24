@@ -111,4 +111,26 @@ router.post('/finish', auth.isLoggedIn, async (req, res) => {
     }
 });
 
+// @route POST rents/add
+// @desc Add rent
+// @access Private
+router.post('/dispute/:id', auth.isLoggedIn, async (req, res) => {
+    try {
+        const rentId = req.params.id;
+        const rent = await Rent.findById(rentId);
+        if (!rent.user.equals(req.user.id)) {
+            throw new Error('Order not belongs to user');
+        }
+        
+        await Rent.findByIdAndUpdate(rentId, { inDispute: true });
+        console.log('Open dispute for rent', rent.id);
+
+        res.json(true);
+    } catch (e) {
+        console.log(e);
+        error = 'Problem open dispute: ' + e.message;
+        res.status(400).json({ error });
+    }
+});
+
 module.exports = router;

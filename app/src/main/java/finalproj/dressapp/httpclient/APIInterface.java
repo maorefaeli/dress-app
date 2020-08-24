@@ -89,4 +89,7 @@ public interface APIInterface {
 
     @POST("rents/finish")
     Call<Boolean> rentFinish(@Body OrderReview orderReview);
+
+    @GET("rents/dispute/{id}")
+    Call<Boolean> disputeOrder(@Path("id") String rentId);
 }

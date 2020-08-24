@@ -27,6 +27,9 @@ public class RentProduct {
     @SerializedName("coins")
     public int coins;
 
+    @SerializedName("inDispute")
+    public boolean inDispute;
+
     public RentProduct(String product, String fromdate, String todate) {
         this.product.id = product;
         this.fromdate = fromdate;
