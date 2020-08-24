@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -86,14 +87,24 @@ public class OrdersActivity extends DressAppActivity {
                 productView.findViewById(R.id.cost).setVisibility(GONE);
                 productView.findViewById(R.id.freeOrder).setVisibility(View.VISIBLE);
             }
-            productView.findViewById(R.id.finishOrder).setOnClickListener(view -> {
-                CompleteOrderDialogFragment dialogFragment = new CompleteOrderDialogFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("title", rentProduct.product.name);
-                Utils.setRentId(rentProduct.id);
-                dialogFragment.setArguments(bundle);
-                dialogFragment.show(getSupportFragmentManager(), "completeOrder");
-            });
+
+            Button finishButton = productView.findViewById(R.id.finishOrder);
+            if (rentProduct.inDispute) {
+                finishButton.setText(R.string.inDispute);
+                finishButton.setEnabled(false);
+            } else if (rentProduct.isFinished) {
+                finishButton.setText(R.string.finished);
+                finishButton.setEnabled(true);
+            } else {
+                finishButton.setOnClickListener(view -> {
+                    CompleteOrderDialogFragment dialogFragment = new CompleteOrderDialogFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", rentProduct.product.name);
+                    Utils.setRentId(rentProduct.id);
+                    dialogFragment.setArguments(bundle);
+                    dialogFragment.show(getSupportFragmentManager(), "completeOrder");
+                });
+            }
 
             ordersContainer.addView(productView);
         }

@@ -41,6 +41,7 @@
     <string name="no_clothes">No clothes yet…</string>
     <string name="no_suggestions">No suggestions yet ): \nTry adding items to your wish list</string>
     <string name="finish_order">Finish order</string>
+    <string name="finished">Finished</string>
     <string name="clothes">My Items</string>
     <string name="home">Home</string>
     <string name="profile">Profile</string>
@@ -68,6 +69,7 @@
     <string name="minDate">Min date</string>
     <string name="maxDate">Max date</string>
     <string name="outOf">Out of</string>
+    <string name="inDispute">In dispute</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>

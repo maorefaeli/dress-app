@@ -66,8 +66,24 @@ public class ReviewDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-                // TODO: send request to server
+                Call<Boolean> call = apiInterface.disputeOrder(Utils.getRentId());
+                call.enqueue(new Callback<Boolean>() {
+                    @Override
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        if (response.code() == 200) {
+                            Toast.makeText(getContext(),
+                                    "Opened Dispute!",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(Call<Boolean> call, Throwable t) {
+                        Toast.makeText(getContext(),
+                                "Cannot open dispute right now, please try again later",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle(R.string.disputeOpened)
                         .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
