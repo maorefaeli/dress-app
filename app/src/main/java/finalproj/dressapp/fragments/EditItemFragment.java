@@ -1,5 +1,6 @@
 package finalproj.dressapp.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.icu.util.Calendar;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 
@@ -18,7 +20,11 @@ import finalproj.dressapp.R;
 import finalproj.dressapp.Utils;
 import finalproj.dressapp.httpclient.APIClient;
 import finalproj.dressapp.httpclient.APIInterface;
+import finalproj.dressapp.httpclient.models.Product;
 import finalproj.dressapp.httpclient.models.ProductEdit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class EditItemFragment extends DialogFragment {
     private long minDate;
@@ -69,6 +75,7 @@ public class EditItemFragment extends DialogFragment {
 
         final EditText toDate = dialogContainer.findViewById(R.id.toDate);
         StringBuilder newToDate = new StringBuilder( dateFormat.format( params.getLong("maxDate") ) );
+        maxDate = params.getLong("maxDate");
         toDate.setText(newToDate.toString());
         toDate.setOnClickListener(v -> {
             AlertDialog.Builder builder12 = new AlertDialog.Builder(getContext());
@@ -89,13 +96,52 @@ public class EditItemFragment extends DialogFragment {
 
         dialogContainer.findViewById(R.id.cancel).setOnClickListener(v -> dialog.dismiss());
 
+        Activity activity = getActivity();
         dialogContainer.findViewById(R.id.ok).setOnClickListener(v -> {
-            dialog.dismiss();
-
             APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
             ProductEdit productEdit = new ProductEdit(Utils.getProductId(), itemDescription.getText().toString(),
                     Integer.parseInt(cost.getText().toString()), String.valueOf(minDate), String.valueOf(maxDate));
-            apiInterface.doEditProduct(productEdit);
+            Call<Boolean> call = apiInterface.doEditProduct(productEdit);
+            call.enqueue(new Callback<Boolean>() {
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    if (response.code() == 200) {
+                        dialog.dismiss();
+                        Toast.makeText(getContext(), "Edit Successfully", Toast.LENGTH_LONG).show();
+                        activity.recreate();
+                    } else {
+                        Toast.makeText(getContext(), "Cannot edit right not", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Boolean> call, Throwable t) {
+                    Toast.makeText(getContext(), "Cannot edit right not", Toast.LENGTH_LONG).show();
+                }
+            });
+        });
+
+        dialogContainer.findViewById(R.id.disable).setOnClickListener(v -> {
+            APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+            Call<Boolean> call = apiInterface.closeProduct(params.getString("itemId"));
+            call.enqueue(new Callback<Boolean>() {
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    if (response.code() == 200) {
+                        dialog.dismiss();
+                        Toast.makeText(activity, "Closed item for future orders!", Toast.LENGTH_LONG).show();
+                        activity.recreate();
+                    } else {
+                        Toast.makeText(activity, "Cannot close item right noe", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Boolean> call, Throwable t) {
+                    Toast.makeText(activity, "Cannot close item right now", Toast.LENGTH_LONG).show();
+                }
+            });
+            dialog.dismiss();
         });
 
         return dialog;

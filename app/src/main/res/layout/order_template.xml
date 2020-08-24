@@ -78,8 +78,10 @@
                 android:id="@+id/cost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/outline_monetization_on_black_18dp"
-                android:drawableTint="@color/colorCoin"/>
+                android:textSize="18sp"
+                android:gravity="center_vertical"
+                android:drawableStart="@drawable/outline_monetization_on_black_18dp"
+                android:drawableTint="@color/duskYellow"/>
 
             <TextView
                 android:id="@+id/freeOrder"
