@@ -15,7 +15,7 @@ const UserController = require('../controllers/userController');
 // @access Private
 router.get('/', auth.isLoggedIn, async (req, res) => {
     try {
-        const userRents = await Rent.find({ user: ObjectID(req.user.id), isFinished: { $ne: true } })
+        const userRents = await Rent.find({ user: ObjectID(req.user.id) })
             .populate('user', UserController.partialUserFields)
             .populate({
                 path: 'product',
@@ -25,7 +25,7 @@ router.get('/', auth.isLoggedIn, async (req, res) => {
                     model: 'User',
                     select: UserController.partialUserFields
                 }
-            });
+            }).sort({isFinished: 1, _id: -1});
         return res.json(userRents || []);
     } catch (error) {
         console.log(error);
@@ -48,7 +48,7 @@ router.get('/history/:id', async (req, res) => {
                     model: 'User',
                     select: UserController.partialUserFields
                 }
-            });
+            }).sort({isFinished: 1, _id: -1});
         return res.json(rentingHistory || []);
     } catch (error) {
         console.log(error);
@@ -85,7 +85,11 @@ router.post('/finish', auth.isLoggedIn, async (req, res) => {
 
         // Check rent belongs to logged in user
         if (!rentEntity.user.equals(userId)) {
-            return res.status(401).json({"error": "Rent not belongs to user"});
+            return res.status(401).json({"error": "Order not belongs to user"});
+        }
+
+        if (rent.isFinished) {
+            return res.status(400).json({error: "Order already finished"});
         }
 
         // Close order
@@ -119,7 +123,11 @@ router.post('/dispute/:id', auth.isLoggedIn, async (req, res) => {
         const rentId = req.params.id;
         const rent = await Rent.findById(rentId);
         if (!rent.user.equals(req.user.id)) {
-            throw new Error('Order not belongs to user');
+            return res.status(401).json({error: "Order not belongs to user"});
+        }
+
+        if (rent.isFinished) {
+            return res.status(400).json({error: "Order already finished"});
         }
         
         await Rent.findByIdAndUpdate(rentId, { inDispute: true });
@@ -128,8 +136,7 @@ router.post('/dispute/:id', auth.isLoggedIn, async (req, res) => {
         res.json(true);
     } catch (e) {
         console.log(e);
-        error = 'Problem open dispute: ' + e.message;
-        res.status(400).json({ error });
+        res.status(400).json({ error: 'Problem open dispute' });
     }
 });
 
