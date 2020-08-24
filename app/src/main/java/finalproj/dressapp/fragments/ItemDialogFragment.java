@@ -45,7 +45,8 @@ public class ItemDialogFragment extends DialogFragment {
         TextView costView = dialogContainer.findViewById(R.id.cost);
         costView.setText(String.valueOf(cost));
         ((TextView) dialogContainer.findViewById(R.id.owner)).setText(params.getString("owner"));
-        ((RatingBar) dialogContainer.findViewById(R.id.rating)).setRating(params.getInt("rating"));
+        Float itemRating = Float.parseFloat(params.getString("rating"));
+        ((RatingBar) dialogContainer.findViewById(R.id.rating)).setRating(itemRating);
         final EditText fromDate = dialogContainer.findViewById(R.id.fromDate);
         final EditText toDate = dialogContainer.findViewById(R.id.toDate);
 

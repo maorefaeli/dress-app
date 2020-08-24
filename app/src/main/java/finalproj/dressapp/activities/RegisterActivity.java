@@ -159,6 +159,9 @@ public class RegisterActivity extends AppCompatActivity {
                                         if (didLogin) {
                                             Utils.setGuestStatus(false);
                                             Utils.setUserName(getApplicationContext(), finalEmail);
+                                            Utils.setUserFirstName(firstName);
+                                            Utils.setUserLastName(lastName);
+                                            Utils.setUserMoney(300);
                                             Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
                                             startActivity(intent);
                                             finish();

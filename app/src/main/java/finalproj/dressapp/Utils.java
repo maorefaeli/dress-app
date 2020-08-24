@@ -148,17 +148,48 @@ public class Utils {
         return userMoney;
     }
 
+    public static void setUserMoney(int newUserMoney) {
+        userMoney = newUserMoney;
+    }
+
     public static String getUserEmail() {
         return userEmail;
     }
+
+    public static void setUserEmail(String newUserEmail) {
+        userEmail = newUserEmail;
+    }
+
     public static String getUserAddress() {
         return userAddress;
     }
+
+    public static void setUserAddress(String newUserAddress) {
+        userAddress = newUserAddress;
+    }
+
     public static String getUserFirstName() {
         return userFirstName;
     }
+
+    public static void setUserFirstName(String newUserFirstName) {
+        userFirstName = newUserFirstName;
+    }
+
     public static String getUserLastName() {
         return userLastName;
+    }
+
+    public static void setUserLastName(String newUserLastName) {
+        userLastName = newUserLastName;
+    }
+
+    public static void clearUserDetails() {
+        userMoney = 0;
+        userEmail = "";
+        userAddress = "";
+        userFirstName = "";
+        userLastName = "";
     }
 
     public static void loadUserDetails() {
@@ -346,8 +377,9 @@ public class Utils {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                 if (response.code() == 200) {
-                    Boolean didLogin = response.body();
-                    if (didLogin) {
+                    Boolean didLogout = response.body();
+                    if (didLogout) {
+                        clearUserDetails();
                     }
                 }
             }

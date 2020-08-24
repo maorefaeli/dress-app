@@ -251,8 +251,8 @@ public class HomeActivity extends DressAppActivity {
                                 .show();
                     } else {
                         new AlertDialog.Builder(HomeActivity.this)
-                                .setTitle("Product is taken on specified dates.")
-                                .setMessage(response.message())
+                                .setTitle("Couldn't rent item.")
+                                .setMessage("Product is taken on specified dates.")
                                 .show();
                     }
                 }

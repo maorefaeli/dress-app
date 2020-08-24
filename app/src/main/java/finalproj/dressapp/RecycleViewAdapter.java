@@ -137,7 +137,8 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                         bundle.putInt("cost", currentProduct.price.intValue());
                         bundle.putLong("minDate", Utils.DateFormatToLong(currentProduct.fromdate));
                         bundle.putLong("maxDate", Utils.DateFormatToLong(currentProduct.todate));
-                        bundle.putInt("rating", currentProduct.user.averageScore);
+                        String averageScore = Double.toString(currentProduct.user.averageScore);
+                        bundle.putString("rating", averageScore);
                         bundle.putInt("money", userMoney);
                         bundle.putInt("reviewers", currentProduct.user.reviewQuantity);
                         bundle.putInt("numOfRenting", currentProduct.rentingDates.size());
@@ -188,7 +189,8 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                             bundle.putInt("cost", currentProduct.price.intValue());
                             bundle.putLong("minDate", Utils.DateFormatToLong(currentProduct.fromdate));
                             bundle.putLong("maxDate", Utils.DateFormatToLong(currentProduct.todate));
-                            bundle.putInt("rating", currentProduct.user.averageScore);
+                            String averageScore = Double.toString(currentProduct.user.averageScore);
+                            bundle.putString("rating", averageScore);
                             bundle.putInt("money", userMoney); 
                             bundle.putInt("reviewers", currentProduct.user.reviewQuantity);
                             bundle.putInt("numOfRenting", currentProduct.rentingDates.size());

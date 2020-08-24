@@ -18,7 +18,7 @@ public class UserModel {
     public String lastName;
 
     @SerializedName("averageScore")
-    public int averageScore;
+    public float averageScore;
 
     @SerializedName("reviewQuantity")
     public int reviewQuantity;

@@ -77,10 +77,16 @@ public class ProfileActivity extends DressAppActivity implements  ActivityCompat
                 }
             }
         });
-        String upperString = Utils.getUserFirstName().substring(0, 1).toUpperCase() + Utils.getUserFirstName().substring(1).toLowerCase();
-        mFirstNameView.setText(upperString);
-        upperString = Utils.getUserLastName().substring(0, 1).toUpperCase() + Utils.getUserLastName().substring(1).toLowerCase();
-        mLastNameView.setText(upperString);
+        String firstName = Utils.getUserFirstName();
+        if (firstName != null && !firstName.isEmpty()) {
+            firstName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+        }
+        mFirstNameView.setText(firstName);
+        String lastName = Utils.getUserLastName();
+        if (lastName != null && !lastName.isEmpty()) {
+            lastName = lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
+        }
+        mLastNameView.setText(lastName);
         mEmailView.setText(Utils.getUserName(getApplicationContext()));
         mAddressView.setText(Utils.getUserAddress());
         mMoneyView.setText(Integer.toString(Utils.getUserMoney()));
@@ -88,7 +94,9 @@ public class ProfileActivity extends DressAppActivity implements  ActivityCompat
 
     public void updateUserDetails(View view) {
         Utils.showPopupProgressSpinner(this, true, "Just a moment...");
-        
+
+        Utils.loadUserDetails();
+
         Boolean cancel = false;
         View focusView = null;
 
