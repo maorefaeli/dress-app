@@ -89,6 +89,7 @@
         android:drawableEnd="@drawable/outline_monetization_on_black_18dp"
         android:drawableTint="@color/duskYellow"
         android:gravity="center_vertical"
+        android:inputType="number"
         android:hint="@string/cost" />
 
     <LinearLayout
